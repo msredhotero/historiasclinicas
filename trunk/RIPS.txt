@@ -1,0 +1,6 @@
+*******CT 	= Archivo de control
+*******AF 	= Archivo de las transacciones
+*******US 	= Archivo de usuarios de los servicios de salud
+*******AD 	= Archivo de descripción agrupada de los servicios de salud prestados
+*******AC 	= Archivo de consulta
+

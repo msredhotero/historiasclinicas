@@ -1,0 +1,3 @@
+tabla laborales
+tabla oficio
+tabla capacitacion
