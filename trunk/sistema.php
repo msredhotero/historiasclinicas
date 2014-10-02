@@ -180,7 +180,7 @@ $(function(){
 				<div class="h_title">&#8250; Panel de CUPS</div>
 				<ul>
 					<li class="b1"><a class="icon config" href="" onclick="dibujarFormularioCups();return false;">Ingresar Cups</a></li>
-					<li class="b2"><a class="icon report" href="" onclick="mostrarFormularioGenHC();return false;">Consultar Cups</a></li>
+					<li class="b2"><a class="icon report" href="" onclick="consultarTodosCups();return false;">Consultar Cups</a></li>
 				</ul>
 			</div>
             <?php

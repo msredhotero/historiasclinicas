@@ -2159,6 +2159,50 @@ if($accion == 'dibujarFormularioModificarusuario')
 	$usuario->dibujarFormularioModificarusuario($id);
 }
 
+if($accion == 'listarCups')
+{
+	require '../clases/cups.php';
+	$cups=new cups;
+	$cups->listarCups();
+}
+
+if ($accion == 'dibujarFormularioModificarCups')
+{
+	$idCups = $_GET['id'];
+	require '../clases/cups.php';
+	$cups=new cups;
+	$cups->dibujarFormularioModificarCups($idCups);
+}
+
+if ($accion == 'modificarcups')
+{
+	$idCups=$_GET["idCups"];
+	$codigo=$_GET["codigo"];
+	$nombre=$_GET["nombre"];
+	
+	require '../clases/cups.php';
+	$cups=new cups;
+	$cups->actualizarDatos($idCups,$codigo,$nombre);
+}
+
+
+if($accion == 'eliminarCups')
+{
+	$id=$_GET['id'];
+	require '../clases/cups.php';
+	$cups=new cups;
+	$cups->eliminarDatos($id);
+}
+
+if ($accion == 'ingresarNuevoCups')
+{
+	$codigo=$_GET["codigo"];
+	$nombre=$_GET["nombre"];
+	
+	require '../clases/cups.php';
+	$cups=new cups;
+	$cups->insertarDatos($codigo,$nombre);
+}
 if($accion == 'modificarusuario')
 {
 	$idUsuario=$_GET["idUsuario"];

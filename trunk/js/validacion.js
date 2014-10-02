@@ -4156,6 +4156,36 @@ function consultarTodosusuario()
 	})
 }
 
+
+function consultarTodosCups()
+{
+
+	$.ajax({
+		type:"POST",
+		url:"librerias/funciones.php?accion=listarCups",
+		dataType:"text",
+		data:$(this).serialize(),
+		success:function(response){
+			$("#main").html(response);
+		}
+	})
+}
+
+function dibujarFormularioModificarCups(id)
+{
+	$.ajax({
+		type:"POST",
+		url:"librerias/funciones.php?accion=dibujarFormularioModificarCups&id="+id,
+		dataType:"text",
+		data:$(this).serialize(),
+		success:function(response){
+			$("#main").html(response);
+		}
+	})
+	
+}
+
+
 function dibujarFormularioModificarusuario(id)
 {
 
@@ -4170,6 +4200,58 @@ function dibujarFormularioModificarusuario(id)
 	})
 }
 
+function modificarcups()
+{
+	var idCups=$("#idCups").val();
+	var codigo=$("#codigo").val();
+	var nombre=$("#nombre").val();
+	
+	$.ajax({
+		type:"POST",
+		url:"librerias/funciones.php?accion=modificarcups"
+		+"&idCups="+idCups
+		+"&codigo="+codigo
+		+"&nombre="+nombre,
+		dataType:"text",
+		data:$(this).serialize(),
+		success:function(response){
+			alert(response);
+		}
+	})
+}
+
+
+function eliminarCups(id)
+{
+    if (confirm("¿Desea eliminar éste Cups?"))
+    {
+        $.ajax({
+    		type:"POST",
+    		url:"librerias/funciones.php?accion=eliminarCups&id="+id,
+    		dataType:"text",
+    		data:$(this).serialize(),
+    		success:function(response){
+    			$("#main").html(response);
+    		}
+    	})
+    }
+}
+
+function ingresarNuevoCups()
+{
+	var nombre=$("#nombre").val();
+	var codigo=$("#codigo").val();
+	
+	$.ajax({
+    		type:"POST",
+    		url:"librerias/funciones.php?accion=ingresarNuevoCups&codigo="+codigo+"&nombre="+nombre,
+    		dataType:"text",
+    		data:$(this).serialize(),
+    		success:function(response){
+    			$("#main").html(response);
+    		}
+    	})
+}
 function modificarusuario()
 {
 	var idUsuario=$("#idUsuario").val();
