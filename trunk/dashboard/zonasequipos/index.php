@@ -196,11 +196,13 @@ if ($_SESSION['refroll_predio'] != 1) {
             </div>
             <br>
             <hr>
+            <div class=" hidden">
             <h4>Prioridades de Turnos</h4>
             <div class="help-block">
             	* Recuerde que cero 0, significa que no puede jugar en ese horario
             </div>
-            <div class="row">
+            </div>
+            <div class="row hidden">
             
             	<?php
 					$i = 0;
