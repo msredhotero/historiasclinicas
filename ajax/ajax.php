@@ -57,6 +57,30 @@ eliminarSedes($serviciosFunciones);
 break;
 
 /* Fin */
+/* PARA Horarios */
+case 'insertarHorarios':
+insertarHorarios($serviciosFunciones);
+break;
+case 'modificarHorarios':
+modificarHorarios($serviciosFunciones);
+break;
+case 'eliminarHorarios':
+eliminarHorarios($serviciosFunciones);
+break;
+
+/* Fin */
+/* PARA Canchas */
+case 'insertarCanchas':
+insertarCanchas($serviciosFunciones);
+break;
+case 'modificarCanchas':
+modificarCanchas($serviciosFunciones);
+break;
+case 'eliminarCanchas':
+eliminarCanchas($serviciosFunciones);
+break;
+
+/* Fin */
 
 	/* para los torneos */
 	case 'insertarTorneo':
@@ -297,6 +321,64 @@ function toArray($query)
     }
     return $res;
 }
+
+/* PARA Canchas */
+function insertarCanchas($serviciosCanchas) {
+$cancha = $_POST['cancha'];
+$res = $serviciosCanchas->insertarCanchas($cancha);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarCanchas($serviciosCanchas) {
+$id = $_POST['id'];
+$cancha = $_POST['cancha'];
+$res = $serviciosCanchas->modificarCanchas($id,$cancha);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarCanchas($serviciosCanchas) {
+$id = $_POST['id'];
+$res = $serviciosCanchas->eliminarCanchas($id);
+echo $res;
+}
+
+/* Fin */ 
+
+/* PARA Horarios */
+function insertarHorarios($serviciosHorarios) {
+$horario = $_POST['horario'];
+$reftipotorneo = $_POST['reftipotorneo'];
+$res = $serviciosHorarios->insertarHorarios($horario,$reftipotorneo);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarHorarios($serviciosHorarios) {
+$id = $_POST['id'];
+$horario = $_POST['horario'];
+$reftipotorneo = $_POST['reftipotorneo'];
+$res = $serviciosHorarios->modificarHorarios($id,$horario,$reftipotorneo);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarHorarios($serviciosHorarios) {
+$id = $_POST['id'];
+$res = $serviciosHorarios->eliminarHorarios($id);
+echo $res;
+}
+
+/* Fin */ 
 
 
 /* PARA Sedes */

@@ -89,7 +89,7 @@ class Servicios {
                 </thead>
                 <tbody id="'.$idresultados.'">
 
-                	'.utf8_encode($cadRows).'
+                	'.$cadRows.'
                 </tbody>
             </table>
 			<div style="margin-bottom:85px; margin-right:60px;"></div>
@@ -626,6 +626,36 @@ class Servicios {
 		}	
 	}
 
+
+function insertarCanchas($cancha) {
+$sql = "insert into tbcanchas(idcancha,cancha)
+values ('','".utf8_decode($cancha)."')";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarCanchas($id,$cancha) {
+$sql = "update tbcanchas
+set
+cancha = '".utf8_decode($cancha)."'
+where idcancha =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarCanchas($id) {
+$sql = "delete from tbcanchas where idcancha =".$id;
+$res = $this->query($sql,0);
+return $res;
+} 
+
+function traerCanchasPorId($id) {
+$sql = "select idcancha,cancha from tbcanchas where idcancha =".$id;
+$res = $this->query($sql,0);
+return $res;
+} 
 
 	function TraerCanchas() {
 		$sql = "select idcancha, cancha from tbcanchas order by idcancha";
@@ -1218,6 +1248,53 @@ return $res;
 }
 
 /* Fin */	
+
+
+/* PARA Horarios */
+
+function insertarHorarios($horario,$reftipotorneo) {
+$sql = "insert into tbhorarios(idhorario,horario,reftipotorneo)
+values ('','".$horario."',".$reftipotorneo.")";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarHorarios($id,$horario,$reftipotorneo) {
+$sql = "update tbhorarios
+set
+horario = '".$horario."',reftipotorneo = ".$reftipotorneo."
+where idhorario =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarHorarios($id) {
+$sql = "delete from tbhorarios where idhorario =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerHorariosNuevo() {
+$sql = "select h.idhorario,h.horario,tt.descripciontorneo 
+			from tbhorarios h
+			inner join tbtipotorneo tt on tt.idtipotorneo = h.reftipotorneo
+			order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerHorariosPorIdNuevo($id) {
+$sql = "select idhorario,horario,reftipotorneo from tbhorarios where idhorario =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+/* Fin */
+
 	
 	
 	function query($sql,$accion) {

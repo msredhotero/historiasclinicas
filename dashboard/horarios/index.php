@@ -1,5 +1,6 @@
 <?php
 
+
 session_start();
 
 if (!isset($_SESSION['usua_predio']))
@@ -8,97 +9,65 @@ if (!isset($_SESSION['usua_predio']))
 } else {
 
 
-include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funciones.php');
+include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
-include ('../../includes/funcionesJugadores.php');
 include ('../../includes/funcionesEquipos.php');
-include ('../../includes/funcionesGrupos.php');
-include ('../../includes/funcionesZonasEquipos.php');
-include ('../../includes/generadorfixturefijo.php');
 
+$serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosFunciones = new Servicios();
-$serviciosJugadores = new ServiciosJ();
-$serviciosEquipos	= new ServiciosE();
-$serviciosGrupos	= new ServiciosG();
-$serviciosZonasEquipos	= new ServiciosZonasEquipos();
-$Generar = new GenerarFixture();
+$serviciosEquipos 	= new ServiciosE();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Fixture",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
-
-
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Equipos",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbfixture";
+$tabla 			= "tbhorarios";
 
-$lblCambio	 	= array("reftorneoge_a","resultado_a","reftorneoge_b","resultado_b","fechajuego","refFecha","cancha");
-$lblreemplazo	= array("Zona-Equipo 1","Resultado 1","Zona-Equipo 2","Resultado 2","Fecha Juego","Fecha","Cancha");
+$lblCambio	 	= array("reftipotorneo");
+$lblreemplazo	= array("Tipo Torneo");
 
-$resZonasEquipos 	= $serviciosZonasEquipos->TraerEquiposZonas();
+$resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
 
 $cadRef = '';
-while ($rowTT = mysql_fetch_array($resZonasEquipos)) {
-	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].' - '.$rowTT[2].'</option>';
+while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
+	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';
 	
 }
 
-
-$resFechas 	= $serviciosFunciones->TraerFecha();
-
-$cadRef2 = '';
-while ($rowZ = mysql_fetch_array($resFechas)) {
-	$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.$rowZ[1].'</option>';
-	
-}
-
-$resCanchas 	= $serviciosFunciones->TraerCanchas();
-
-$cadRef3 = '';
-while ($rowC = mysql_fetch_array($resCanchas)) {
-	$cadRef3 = $cadRef3.'<option value="'.$rowC[0].'">'.$rowC[1].'</option>';
-	
-}
-
-
-$resHorarios 	= $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
-
-$cadRef4 = '';
-while ($rowH = mysql_fetch_array($resHorarios)) {
-	$cadRef4 = $cadRef4.'<option value="'.$rowH[0].'">'.$rowH[1].'</option>';
-	
-}
-
-
-$refdescripcion = array(0 => $cadRef,1=>$cadRef,2=>$cadRef2,3=>$cadRef3,4=>$cadRef4);
-$refCampo	 	= array("reftorneoge_a","reftorneoge_b","refFecha","cancha","Hora"); 
+$refdescripcion = array(0 => $cadRef);
+$refCampo[] 	= "reftipotorneo"; 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Equipo 1</th>
-				<th>Resultado 1</th>
-				<th>Resultado 2</th>
-				<th>Equipo 2</th>
-				<th>Zona</th>
-				<th>Fecha Juego</th>
-				<th>Fecha</th>
-				<th>Hora</th>";
+$cabeceras 		= "	<th>Horario</th>
+				<th>Tipo Torneo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),8);
 
-$fixtureGenerardo = $Generar->Generar(38,19);
+
+$formulario 	= $serviciosFunciones->camposTabla("insertarHorarios",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->traerHorariosNuevo(),2);
+
+
+
+if ($_SESSION['refroll_predio'] != 1) {
+
+} else {
+
+	
+}
 
 
 ?>
@@ -133,13 +102,8 @@ $fixtureGenerardo = $Generar->Generar(38,19);
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-timepicker.css">
+	<link rel="stylesheet" href="../../css/bootstrap-timepicker.css">
     <script src="../../js/bootstrap-timepicker.min.js"></script>
-	<style type="text/css">
-		
-  
-		
-	</style>
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -156,107 +120,48 @@ $fixtureGenerardo = $Generar->Generar(38,19);
 
 <body>
 
- 
-<?php echo $resMenu; ?>
+ <?php echo $resMenu; ?>
 
 <div id="content">
 
-<h3>Fixture</h3>
+<h3>Horarios</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga del Fixture</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Horarios</p>
         	
         </div>
     	<div class="cuerpoBox">
-    		<form class="form-inline formulario" role="form">
-            <div class="row" style="margin-left:25px; margin-right:25px;">
-    		<?php 
-			//die(var_dump($fixtureGenerardo));
-			
-			for ($i=0;$i<=8;$i++) {
-			echo '<div class="form-group col-md-12">
-				<div class="panel panel-default">
-					  <div class="panel-heading">
-						<h3 class="panel-title">Fecha '.($i + 1).'</h3>
-					  </div>
-					  <div class="panel-body">
-					  <div class="form-group col-md-3">
-					  	<label>Equipo A</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Horario</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Cancha</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Equipo B</label>
-					  </div>';
-			foreach ($fixtureGenerardo as $item) {
-				$lstEquipos = explode("***",$item[$i]);
-				
-				echo '
-					  	<div class="form-group col-md-3">
-						<select id="equipo" name="equipo" class="form-control">
-                                
-                                <option value="'.$lstEquipos[2].'">'.$lstEquipos[0].'</option>
-                                '.$cadRef.'
-                         </select>
-						 </div>
-						 
-						 <div class="form-group col-md-3">
-						<select id="equipo" name="equipo" class="form-control">
-                                
-                                '.$cadRef4.'    
-                         </select>
-						 </div>
-						 
-						 
-						  <div class="form-group col-md-3">
-						<select id="equipo" name="equipo" class="form-control">
-                                '.$cadRef3.'
-                         </select>
-						 </div>
-						 
-						 
-						 <div class="form-group col-md-3">
-						<select id="equipo" name="equipo" class="form-control">
-                                <option value="'.$lstEquipos[3].'">'.$lstEquipos[1].'</option>
-                                '.$cadRef.' 
-                         </select>
-						 </div>';
-			}
-			echo '</div>
-					</div></div>';
-			}
-
-			
-			
-			?>
+        	<form class="form-inline formulario" role="form">
+        	<div class="row">
+			<?php echo $formulario; ?>
             </div>
             
-            <div class="row" style="margin-left:25px; margin-right:25px;">
-                <div class="alert"> </div>
-                <div id="load"> </div>
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
             </div>
+            
             <div class="row">
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
                         <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
                     </li>
-
                 </ul>
                 </div>
             </div>
             </form>
     	</div>
     </div>
-
+    
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Fixture Cargados</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Horarios Cargados</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -264,26 +169,31 @@ $fixtureGenerardo = $Generar->Generar(38,19);
     	</div>
     </div>
     
+    
+
+    
+    
    
 </div>
 
 
 </div>
-<div id="dialog2" title="Eliminar Fixture">
+<div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el fixture?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Horarios?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el fixture se perderan todos los datos de este</p>
+        <p><strong>Importante: </strong>Si elimina el equipo se perderan todos los datos de este</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
 <script src="../../js/bootstrap-datetimepicker.es.js"></script>
 
-
-
 <script type="text/javascript">
+
 $(document).ready(function(){
 	$('#timepicker2').timepicker({
 		minuteStep: 15,
@@ -291,22 +201,35 @@ $(document).ready(function(){
 		showMeridian: false,
 		defaultTime: false
 		});
-	 <?php 
-		echo $serviciosHTML->validacion($tabla);
+		
+	$('#example').dataTable({
+		"order": [[ 0, "asc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
 	
-	?>
-	
-	$('#chequearF').click( function() {
-		url = "chequear.php";
-		$(location).attr('href',url);
-	});
-	
-	$('#conductaF').click( function() {
-		url = "conductafixture.php";
-		$(location).attr('href',url);
-	});
-	
-	 $('.varborrar').click(function(event){
+		$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -319,7 +242,7 @@ $(document).ready(function(){
 			alert("Error, vuelva a realizar la acción.");	
 		  }
 	});//fin del boton eliminar
-
+	
 	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -342,7 +265,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarFixture'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarHorarios'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -368,6 +291,13 @@ $(document).ready(function(){
 		 
 		 
 	 		}); //fin del dialogo para eliminar
+			
+	<?php 
+		echo $serviciosHTML->validacion($tabla);
+	
+	?>
+	
+
 	
 	
 	//al enviar el formulario
@@ -400,7 +330,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Fixture</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Horario</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -408,20 +338,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											//url = "index.php";
-											var a = $('#reftorneoge_a option:selected').html();
-											var b = $('#reftorneoge_b option:selected').html();
-											a = a.split(' - ');
-											b = b.split(' - ');
-											
-											$('#resultados').prepend('<tr><td>' + a[1] + '</td><td></td><td></td><td>' + 
-																		+ b[1] + '</td><td>' + 
-																		a[0] + '</td><td>' + 
-																		$('#fechajuego option:selected').html() + '</td><td>' + 
-																		$('#reffecha option:selected').html() + '</td><td>' + 
-																		$('#hora option:selected').html() + '</td><td style="color:#f00;">Nuevo</td></tr>').fadeIn(300);
-											
-											//$(location).attr('href',url);
+											url = "index.php";
+											$(location).attr('href',url);
                                             
 											
                                         } else {
@@ -439,7 +357,6 @@ $(document).ready(function(){
 			});
 		}
     });
-	
 
 });
 </script>
@@ -456,8 +373,6 @@ $('.form_date').datetimepicker({
 	format: 'dd/mm/yyyy'
 });
 </script>
-
-
 <?php } ?>
 </body>
 </html>
