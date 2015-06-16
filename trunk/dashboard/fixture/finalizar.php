@@ -96,11 +96,29 @@ $cabeceras 		= "	<th>Equipo 1</th>
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),8);
+
 
 $fixtureGenerardo = $Generar->Generar(38,19);
 
-//die(var_dump($fixtureGenerardo));
+$array = $Generar->devolverCantFilas(38,19);
+
+$filas = $array["filas"] * $array["columnas"];
+
+$fecha = 1;
+for ($i=1; $i<=$filas;$i++) {
+	
+	$date = explode("/",$_POST["datepicker".$fecha]);
+	$nuevaFecha = $date[2]."-".$date[1]."-".$date[0];
+	$serviciosZonasEquipos->insertarFixture($_POST["equipoa".$i],"",$_POST["equipob".$i],"",$nuevaFecha,22+$fecha,$_POST["horario".$i],$_POST["cancha".$i]);
+	//echo "aaaaaaaaaaaaaaaaaaaaaaa".$nuevaFecha;
+	if (($i % 5) == 0) {
+		$fecha += 1;
+	}
+}
+
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),8);
+
+header('Location: generarfixture.php');
 ?>
 
 <!DOCTYPE HTML>
@@ -212,96 +230,7 @@ $fixtureGenerardo = $Generar->Generar(38,19);
         	
         </div>
     	<div class="cuerpoBox">
-    		<form class="form-inline formulario" role="form" method="post" action="finalizar.php">
-            <div class="row" style="margin-left:25px; margin-right:25px;">
-    		<?php 
-			//die(var_dump($fixtureGenerardo));
-			$total = 1;
-			for ($i=0;$i<=8;$i++) {
-			echo '<div class="form-group col-md-12">
-				
-				<div class="panel panel-default">
-					  <div class="panel-heading">
-						<h3 class="panel-title">Fecha '.($i + 1).'</h3>
-					  </div>
-					  <div class="panel-body">
-					  <div class="form-group col-md-3">
-					  	<label>Equipo A</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Horario</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Cancha</label>
-					  </div>
-					  <div class="form-group col-md-3">
-					  	<label>Equipo B</label>
-					  </div>';
-			foreach ($fixtureGenerardo as $item) {
-				$lstEquipos = explode("***",$item[$i]);
-				
-				echo '
-					  	<div class="form-group col-md-3">
-						<select id="equipoa'.$total.'" name="equipoa'.$total.'" class="form-control">
-                                
-                                <option value="'.$lstEquipos[2].'">'.$lstEquipos[0].'</option>
-                                '.$cadRef.'
-                         </select>
-						 </div>
-						 
-						 <div class="form-group col-md-3">
-						<select id="horario'.$total.'" name="horario'.$total.'" class="form-control">
-                                
-                                '.$cadRef4.'    
-                         </select>
-						 </div>
-						 
-						 
-						  <div class="form-group col-md-3">
-						<select id="cancha'.$total.'" name="cancha'.$total.'" class="form-control">
-                                '.$cadRef3.'
-                         </select>
-						 </div>
-						 
-						 
-						 <div class="form-group col-md-3">
-						<select id="equipob'.$total.'" name="equipob'.$total.'" class="form-control">
-                                <option value="'.$lstEquipos[3].'">'.$lstEquipos[1].'</option>
-                                '.$cadRef.' 
-                         </select>
-						 </div>';
-						 $total += 1;
-			}
-			echo '
-				
-				
-				Fecha Juego '.($i + 1).' <input type="text" id="datepicker'.($i + 1).'" name="datepicker'.($i + 1).'" value="'.date('d/m/Y').'" />
-				
-				</div>
-					</div></div>
-					';
-			}
-			echo '<input type="hidden" id="cantfechas" name="cantfechas" value="'.($i + 1).'" />';
-			echo '<input type="hidden" id="total" name="total" value="'.$total.'" />';
-			
-			?>
-            </div>
-            
-            <div class="row" style="margin-left:25px; margin-right:25px;">
-                <div class="alert"> </div>
-                <div id="load"> </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                <ul class="list-inline" style="margin-top:15px;">
-                    <li>
-                        <button type="submit" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
-                    </li>
-
-                </ul>
-                </div>
-            </div>
-            </form>
+    		<h1>Fixture Generado Correctamente</h1>
     	</div>
     </div>
 

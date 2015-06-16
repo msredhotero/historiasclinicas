@@ -69,8 +69,41 @@ function traerEquipos($idtorneo, $idZona) {
 	return $res2;
 }
 
+function devolverCantFilas($idtorneo, $idZona) {
+	$equipo = $this->traerEquipos($idtorneo, $idZona);
+	
+	$cadFixture = '';
+	$arEquipos = array();
+	$arEquiposId = array();
+	
+	if ((mysql_num_rows($equipo)%2) == 1) {
+		$cantidadEquipos = mysql_num_rows($equipo)+1;
+		for ($p=0;$p<mysql_num_rows($equipo);$p++) {
+			$arEquipos[$p] = mysql_result($equipo,$p,0);
+			$arEquiposId[$p] = mysql_result($equipo,$p,1);
+		}
+		$arEquipos[$cantidadEquipos-1] = "borrar";
+		$arEquiposId[$cantidadEquipos-1] = 0;
+	} else {
+		$cantidadEquipos = mysql_num_rows($equipo);
+		for ($p=0;$p<mysql_num_rows($equipo);$p++) {
+			$arEquipos[$p] = mysql_result($equipo,$p,0);
+			$arEquiposId[$p] = mysql_result($equipo,$p,1);
+		}
+	}
+	
+	//var_dump($arEquipos);
+	
+	
+	
+	$columnas	= $cantidadEquipos - 1;
+	$filas		= $cantidadEquipos / 2;
+	
+	return array("columnas"=>$columnas,"filas"=> $filas);
+}
+
 function Generar($idtorneo, $idZona) {
-$equipo = $this->traerEquipos($idtorneo, $idZona);
+	$equipo = $this->traerEquipos($idtorneo, $idZona);
 
 
 
