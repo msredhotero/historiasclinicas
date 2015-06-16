@@ -102,10 +102,111 @@ function devolverCantFilas($idtorneo, $idZona) {
 	return array("columnas"=>$columnas,"filas"=> $filas);
 }
 
+
+
+function TraerTodoFixture($idtorneo, $idZona) {
+		$sql = "select 
+			fi.idfixture,
+			(select e.nombre 
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_a) as equipoa,
+					(case when fi.resultado_a is null then (select
+												(case when sum(gg.goles) is null then (case when fi.chequeado = 1 then 0 else null end) else sum(gg.goles) end)
+												from		tbgoleadores gg
+												where gg.reffixture = fi.idfixture and gg.refequipo = (select tge.refequipo 
+																										from dbtorneoge tge
+																										inner 
+																										join dbtorneos t
+																										on tge.reftorneo = t.idtorneo and t.activo = true
+																										inner 
+																										join dbequipos e
+																										on e.idequipo = tge.refequipo
+																										inner 
+																										join dbgrupos g
+																										on g.idgrupo = tge.refgrupo
+																										where tge.idtorneoge = fi.reftorneoge_a))
+				else fi.resultado_a end) as resultadoa,
+					(case when fi.resultado_b is null then (select
+															(case when sum(gg.goles) is null then (case when fi.chequeado = 1 then 0 else null end) else sum(gg.goles) end)
+															from		tbgoleadores gg
+															where gg.reffixture = fi.idfixture and gg.refequipo = (select tge.refequipo 
+						from dbtorneoge tge
+						inner 
+						join dbtorneos t
+						on tge.reftorneo = t.idtorneo and t.activo = true
+						inner 
+						join dbequipos e
+						on e.idequipo = tge.refequipo
+						inner 
+						join dbgrupos g
+						on g.idgrupo = tge.refgrupo
+						where tge.idtorneoge = fi.reftorneoge_b))
+							else fi.resultado_b end) as resultadob,
+			(select e.nombre 
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_b) as equipob,
+			
+			(select g.nombre
+			        from dbtorneoge tge
+			        inner 
+			        join dbtorneos t
+			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        inner 
+			        join dbequipos e
+			        on e.idequipo = tge.refequipo
+			        inner 
+			        join dbgrupos g
+			        on g.idgrupo = tge.refgrupo
+			        where tge.idtorneoge = fi.reftorneoge_b) as zona,   
+			fi.fechajuego,
+			f.tipofecha as fecha,
+			fi.hora,
+			g.nombre
+					from dbfixture as fi
+					        inner 
+					        join tbfechas AS f
+					        on fi.reffecha = f.idfecha
+					        inner 
+					        join dbtorneoge tge
+					        on tge.idtorneoge = fi.reftorneoge_b
+					        inner 
+					        join dbtorneos t
+					        on tge.reftorneo = t.idtorneo and t.activo = true
+							inner
+							join		tbtipotorneo tp
+							on			tp.idtipotorneo = t.reftipotorneo
+					        inner 
+					        join dbgrupos g
+					        on g.idgrupo = tge.refgrupo
+							
+							where	t.idtorneo = ".$idtorneo." and tge.refgrupo = ".$idZona."
+							
+					 order by g.nombre,f.tipofecha,fi.hora";
+		 return $this-> query($sql,0);
+	}
+
 function Generar($idtorneo, $idZona) {
 	$equipo = $this->traerEquipos($idtorneo, $idZona);
 
-
+	$res = $this->TraerTodoFixture($idtorneo,$idZona);
 
 $cadFixture = '';
 $arEquipos = array();
@@ -138,34 +239,31 @@ $fixture = array();
 
 $fixtureNum = array();
 
+if (mysql_num_rows($res)<1) {
+
 $k = $cantidadEquipos;
 $m = 2;
 
 for ($i=1;$i<=$filas;$i++) {
 	$m = $i + 1;
-	//$k = $k - 1;
+
 	if ($i >2) {
 		$k = $k - 1;
 	}
-	//echo 'esta es k:'.$k."<br>";
+
 	for ($j=1;$j<=$columnas;$j++) {
 		
 		if (($i == 1) && ($j == 1)) {
 			$fixture[$i-1][$j-1] = $arEquipos[0]."***".$arEquipos[1]."***".$arEquiposId[0]."***".$arEquiposId[1];
 			$fixtureNum[$i-1][$j-1] = "1***2";
-			//echo 'bien';
+
 		} else {
 			if ($i == 1) {
-				//echo 'bien'.($cantidadEquipos+1-$j);
+
 				$fixture[$i-1][$j-1] = $arEquipos[0]."***".$arEquipos[$cantidadEquipos+1-$j]."***".$arEquiposId[0]."***".$arEquiposId[$cantidadEquipos+1-$j];
-				//$fixtureNum[$i-1][$j-1] = "1***".($cantidadEquipos+2-$j);	
 					
 			} else {
-				//echo 'bien'.($k-$i+1)."<br>";
-				//echo 'esta es m:'.$m."<br>";
-				//echo 'esta es j:'.$j."<br>";
-				//echo 'mal'.($m)."<br>";
-				//echo 'esta es i:'.$i."<br>";
+
 				$fixture[$i-1][$j-1] = $arEquipos[$k-1]."***".$arEquipos[$m-1]."***".$arEquiposId[$k-1]."***".$arEquiposId[$m-1];
 				$fixtureNum[$i-1][$j-1] = ($k)."***".($m);
 				$k = $k - 1;
@@ -187,6 +285,8 @@ for ($i=1;$i<=$filas;$i++) {
 		
 		
 	}	
+}
+
 }
 
 return $fixture;

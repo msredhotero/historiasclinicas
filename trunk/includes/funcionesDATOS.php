@@ -278,6 +278,7 @@ class ServiciosDatos {
 				where tge.refgrupo = '.$zona.'
 				and tp.idtipotorneo = '.$idtorneo.'
 				and fi.reffecha <= '.$idfecha.' 
+				and t.activo = 1
 				UNION all
 				
 				SELECT
@@ -332,6 +333,7 @@ class ServiciosDatos {
 				where tge.refgrupo = '.$zona.'
 				and tp.idtipotorneo = '.$idtorneo.'
 				and fi.reffecha <= '.$idfecha.' 
+				and t.activo = 1
 				) as r
 				inner
 				join	(select refequipo,puntos as puntos from tbconducta where reffecha ='.$idfecha.') fp

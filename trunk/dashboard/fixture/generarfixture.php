@@ -192,6 +192,12 @@ $fixtureGenerardo = $Generar->Generar(38,19);
 	$( "#datepicker12" ).datepicker({ minDate: "", maxDate: "+13M +10D" });
 	$( "#datepicker13" ).datepicker({ minDate: "", maxDate: "+14M +10D" });
 	$( "#datepicker14" ).datepicker({ minDate: "", maxDate: "+15M +10D" });
+	$( "#datepicker15" ).datepicker({ minDate: "", maxDate: "+16M +10D" });
+	$( "#datepicker16" ).datepicker({ minDate: "", maxDate: "+17M +10D" });
+	$( "#datepicker17" ).datepicker({ minDate: "", maxDate: "+18M +10D" });
+	$( "#datepicker18" ).datepicker({ minDate: "", maxDate: "+19M +10D" });
+	$( "#datepicker19" ).datepicker({ minDate: "", maxDate: "+20M +10D" });
+	$( "#datepicker20" ).datepicker({ minDate: "", maxDate: "+21M +10D" });
   });
   </script>
 
@@ -217,6 +223,7 @@ $fixtureGenerardo = $Generar->Generar(38,19);
     		<?php 
 			//die(var_dump($fixtureGenerardo));
 			$total = 1;
+			if (count($fixtureGenerardo)>0) {
 			for ($i=0;$i<=8;$i++) {
 			echo '<div class="form-group col-md-12">
 				
@@ -283,7 +290,9 @@ $fixtureGenerardo = $Generar->Generar(38,19);
 			}
 			echo '<input type="hidden" id="cantfechas" name="cantfechas" value="'.($i + 1).'" />';
 			echo '<input type="hidden" id="total" name="total" value="'.$total.'" />';
-			
+			} else {
+				echo '<h2>Ya fue Cargado el Fixture completo para este torneo';	
+			}
 			?>
             </div>
             
@@ -295,7 +304,10 @@ $fixtureGenerardo = $Generar->Generar(38,19);
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
+                    	<?php if (count($fixtureGenerardo)>0) { ?>
                         <button type="submit" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
+                        <?php } ?>
+                        <button type="button" class="btn btn-default" id="volver" style="margin-left:0px;">Volver</button>
                     </li>
 
                 </ul>
@@ -349,6 +361,11 @@ $(document).ready(function(){
 	
 	$('#chequearF').click( function() {
 		url = "chequear.php";
+		$(location).attr('href',url);
+	});
+	
+	$('#volver').click( function() {
+		url = "index.php";
 		$(location).attr('href',url);
 	});
 	
@@ -422,7 +439,7 @@ $(document).ready(function(){
 	
 	
 	//al enviar el formulario
-    $('#cargar').click(function(){
+    $('#cargar2').click(function(){
 		
 		if (validador() == "")
         {
@@ -494,32 +511,7 @@ $(document).ready(function(){
 
 });
 </script>
-<script type="text/javascript">
-	$(".form_date1").datetimepicker({
-		language:  "es",
-		weekStart: 1,
-		todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0,
-		format: "dd/mm/yyyy"
-	});
-	</script>
-    <script type="text/javascript">
-	$(".form_date2").datetimepicker({
-		language:  "es",
-		weekStart: 1,
-		todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0,
-		format: "dd/mm/yyyy"
-	});
-	</script>
+
 
 
 <?php } ?>
