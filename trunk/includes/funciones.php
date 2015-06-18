@@ -763,16 +763,7 @@ function TraerTorneosClientes() {
 		return $this-> query($sql,0);
 	}
 
-function cambiarTorneo($idtipotorneo,$idtorneo) {
-	
-	$resTP = $this->TraerTorneoPorTipoTorneo($idtipotorneo);
-	session_start();
-	$_SESSION['torneo_predio'] = mysql_result($resTP,0,4);
-	
-	$_SESSION['idtorneo_predio'] = $idtipotorneo;
-	
-	return true;
-}
+
 	
 	
 function deshactivarTorneos($idtorneo,$idtipotorneo) {
@@ -790,12 +781,25 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	
 	function TraerTorneoPorTipoTorneo($idtipotorneo) {
 		$sql = "select t.idtorneo,t.nombre,t.fechacreacion,t.activo,tt.descripciontorneo from dbtorneos t
-				inner join
+				right join
 				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
 				where tt.idtipotorneo = ".$idtipotorneo;
-		return $this-> query($sql,0);
+		$res = $this-> query($sql,0);
+
+			return $res;	
+
+		
 	}
+	function cambiarTorneo($idtipotorneo,$idtorneo) {
 	
+		$resTP = $this->TraerTorneoPorTipoTorneo($idtipotorneo);
+		session_start();
+		$_SESSION['torneo_predio'] = mysql_result($resTP,0,4);
+		
+		$_SESSION['idtorneo_predio'] = $idtipotorneo;
+		
+		return true;
+	}
 	
 	
 	function insertarTorneo($nombre,$fechacrea,$activo,$reftipotorneo,$refsede) {

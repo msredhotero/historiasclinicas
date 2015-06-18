@@ -191,6 +191,12 @@ if ($_SESSION['refroll_predio'] != 1) {
         </div>
     	<div class="cuerpoBox">
         	<div class="row">
+            <?php if (mysql_num_rows($resTipoTorneo)<1) { ?>
+            <div class="alert alert-danger" style="margin:15px;">
+            	<h4>No hay un torneo cargado para este Tipo de Torneo: <?php echo $_SESSION['torneo_predio']; ?></h4>
+                <p>Debera ir al menu, seleccionar "Torneos" y cargar un torneo con este tipo, para poder asignarle equipos</p>
+            </div>
+            <?php } ?>
             <form class="form-inline formulario" role="form">
     		<?php echo $formulario; ?>
             </div>

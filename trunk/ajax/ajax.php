@@ -1242,7 +1242,8 @@ function traerTorneoPorTipoTorneo($serviciosFunciones) {
 
 function cambiarTorneo($serviciosFunciones) {
 	$idtipotorneo		=	$_POST['reftipotorneo'];
-	$idtorneo			=	$_POST['reftorneo'];
+	$idtorneo = '';
+	//$idtorneo			=	$_POST['reftorneo'];
 	
 	$res = $serviciosFunciones->cambiarTorneo($idtipotorneo,$idtorneo);
 	//echo $res;
@@ -1348,10 +1349,10 @@ function buscarJugadores($serviciosJugadores) {
 	//////////////////////////////////////////////////////busquedajugadores/////////////////////
 	$cad3 = $cad3.'
 				<div class="col-md-12">
-				<div class="panel panel-info">
+				<div class="panel panel-success">
                                 <div class="panel-heading">
                                 	<h3 class="panel-title">Resultado de la Busqueda</h3>
-                                	<img src="../../imagenes/logo2-chico.png" style="float:right;margin-top:-21px; width:26px; height:24px;">
+                                	
                                 </div>
                                 <div class="panel-body-predio" style="padding:5px 20px;">
                                 	';
@@ -1371,11 +1372,11 @@ function buscarJugadores($serviciosJugadores) {
 						<tbody>';
 	while ($rowJ = mysql_fetch_array($res)) {
 		$cad3 .= '<tr>
-					<td>'.utf8_encode($rowJ[1]).'</td>
-					<td>'.utf8_encode($rowJ[2]).'</td>
-					<td>'.utf8_encode($rowJ[3]).'</td>
-					<td>'.utf8_encode($rowJ[4]).'</td>
-					<td>'.utf8_encode($rowJ[5]).'</td>
+					<td>'.$rowJ[1].'</td>
+					<td>'.$rowJ[2].'</td>
+					<td>'.$rowJ[3].'</td>
+					<td>'.$rowJ[4].'</td>
+					<td>'.$rowJ[5].'</td>
 					<td>
 								
 							<div class="btn-group">
