@@ -22,7 +22,7 @@ class ServiciosJ {
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where e.nombre like '%".$busqueda."%'
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido,' ',j.nombre)";
 				break;
 			case '2':
 				$sql = "select j.idjugador,
@@ -36,7 +36,7 @@ class ServiciosJ {
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where concat(j.apellido,' ',j.nombre) like '%".$busqueda."%'
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido,' ',j.nombre)";
 				break;
 			case '3':
 				$sql = "select j.idjugador,
@@ -50,7 +50,7 @@ class ServiciosJ {
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where j.dni like '%".$busqueda."%'
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido,' ',j.nombre)";
 				break;
 			case '4':
 				$sql = "select j.idjugador,
@@ -64,7 +64,7 @@ class ServiciosJ {
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where j.invitado = ".$busqueda."
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido,' ',j.nombre)";
 				break;
 			case '5':
 				$sql = "select j.idjugador,
@@ -78,7 +78,7 @@ class ServiciosJ {
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where j.expulsado = ".$busqueda."
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido,' ',j.nombre)";
 				break;
 		
 		}

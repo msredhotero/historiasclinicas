@@ -24,6 +24,7 @@ if (isset($_GET["id"])) {
 
 $resTorneos = $serviciosDatos->TraerFixturePorZonaTorneo(1,19,23);
 $resGoles = $serviciosDatos->Goleadores(1,19,23);
+$resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles(1,19,23);
 
 
 ?>
