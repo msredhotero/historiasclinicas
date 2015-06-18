@@ -26,6 +26,31 @@ class Servicios {
 	function camposTablaView($cabeceras,$datos,$cantidad) {
 		$cadView = '';
 		$cadRows = '';
+		
+		switch ($cantidad) {
+			case 99:
+				$cantidad = 5;
+				$classMod = 'varmodificargoleadores';
+				$classEli = 'varborrargoleadores';
+				$idresultados = "resultadosgoleadores";
+				$adicional = "";
+				break;
+			case 98:
+				$cantidad = 8;
+				$classMod = 'varmodificar';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				$adicional = '<li>
+                                        <a href="javascript:void(0)" class="estadistica" id="****">Cargar Estadist.</a>
+                                        </li>';
+				break;
+			default:
+				$classMod = 'varmodificar';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				$adicional = "";
+		}
+		/*
 		if ($cantidad == 99) {
 				$cantidad = 5;
 				$classMod = 'varmodificargoleadores';
@@ -36,6 +61,7 @@ class Servicios {
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 			}
+			*/
 		while ($row = mysql_fetch_array($datos)) {
 			$cadsubRows = '';
 			$cadRows = $cadRows.'
@@ -71,7 +97,7 @@ class Servicios {
                                         <li>
                                         <a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
                                         </li>
-										
+										'.str_replace("****",$row[0],$adicional).'
                                     </ul>
                                 </div>
                             </td>

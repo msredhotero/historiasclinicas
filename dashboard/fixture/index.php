@@ -98,7 +98,7 @@ $cabeceras 		= "	<th>Equipo 1</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarFixture",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),8);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),98);
 
 
 
@@ -259,7 +259,7 @@ $(document).ready(function(){
 		$(location).attr('href',url);
 	});
 	
-	 $('.varborrar').click(function(event){
+	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -272,6 +272,22 @@ $(document).ready(function(){
 			alert("Error, vuelva a realizar la acción.");	
 		  }
 	});//fin del boton eliminar
+	
+	
+	$('.estadistica').click(function(event){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			url = "../estadisticas/estadisticas.php?id="+usersid;
+			$(location).attr('href',url);
+
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error, vuelva a realizar la acción.");	
+		  }
+	});//fin del boton estadisticas
+	
 
 	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");

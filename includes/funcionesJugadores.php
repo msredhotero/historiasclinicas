@@ -94,7 +94,7 @@ class ServiciosJ {
 		$sql = "select j.idjugador,concat(j.apellido,' ',j.nombre) as apyn,j.dni,e.nombre,(case when j.invitado = 1 then 'Si' else 'No' end) as invitado from dbjugadores j
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
-				order by e.nombre,j.apyn";
+				order by e.nombre,concat(j.apellido, ', ',j.nombre)";
 		return $this->query($sql,0);
 	}
 	
@@ -113,7 +113,7 @@ class ServiciosJ {
 					from
 					(
 					select j.idjugador,
-						j.apyn,
+						concat(j.apellido, ', ',j.nombre) as apyn,
 						j.dni ,
 						j.invitado,
 						(case when s.refjugador is null then '0' else '1' end) as suspendido,
@@ -137,7 +137,7 @@ class ServiciosJ {
 					from
 					(
 					select j.idjugador,
-						j.apyn,
+						concat(j.apellido, ', ',j.nombre) as apyn,
 						j.dni ,
 						j.invitado,
 						(case when s.refjugador is null then '0' else '1' end) as suspendido
@@ -149,7 +149,7 @@ class ServiciosJ {
 					
 					
 					select j.idjugador,
-						j.apyn,
+						concat(j.apellido, ', ',j.nombre) as apyn,
 						j.dni ,
 						j.invitado,
 						(case when s.refjugador is null then '0' else '1' end) as suspendido
@@ -201,14 +201,16 @@ class ServiciosJ {
 
 
 	function insertarJugadores($apellido,$nombre,$idequipo,$dni,$invitado,$expulsado,$email,$facebook) {
-	$sql = "insert into dbjugadores(idjugador,apellido,nombre,idequipo,dni,invitado,expulsado,email,facebook)
-	values ('','".utf8_decode($apellido)."','".utf8_decode($nombre)."',".$idequipo.",".$dni.",".$invitado.",".$expulsado.",'".utf8_decode($email)."','".utf8_decode($facebook)."')";
-	if ($this->existeJugador($dni,$idequipo) == 0) {
+		$sql = "insert into dbjugadores(idjugador,apellido,nombre,idequipo,dni,invitado,expulsado,email,facebook)
+		values ('','".utf8_decode($apellido)."','".utf8_decode($nombre)."',".$idequipo.",".$dni.",".$invitado.",".$expulsado.",'".utf8_decode($email)."','".utf8_decode($facebook)."')";
+		if ($this->existeJugador($dni,$idequipo) == 0) {
 			$res = $this->query($sql,1);
-		} else {
-			$res = "El jugador ya existe o no se puede cargar en la misma zona!";	
-		}
-	return $res;
+			return $res;
+		} 
+		
+		$res = "El jugador ya existe o no se puede cargar en la misma zona!";	
+		return $res;
+
 	} 
 
 	
@@ -253,7 +255,7 @@ return $res;
 } 
 
 function traerGoleadores() {
-	$sql = "select g.idgoleador,j.apyn, j.dni, e.nombre, ff.tipofecha, g.goles 
+	$sql = "select g.idgoleador,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.goles 
 			from tbgoleadores g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -265,7 +267,7 @@ function traerGoleadores() {
 
 
 function traerGoleadoresPorFecha($fecha) {
-	$sql = "select g.idgoleador,j.apyn, j.dni, e.nombre, ff.tipofecha, g.goles 
+	$sql = "select g.idgoleador,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.goles 
 			from tbgoleadores g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -277,7 +279,7 @@ function traerGoleadoresPorFecha($fecha) {
 }
 
 function traerEstadisticas() {
-	$sql = "select g.idgoleador,j.apyn, j.dni, e.nombre, ff.tipofecha, g.goles , (case when a.amarillas is null then 0 else a.amarillas end) as amarillas
+	$sql = "select g.idgoleador,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.goles , (case when a.amarillas is null then 0 else a.amarillas end) as amarillas
 			from tbgoleadores g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador
@@ -289,7 +291,7 @@ function traerEstadisticas() {
 }
 
 function traerGoleadoresPorId($id) {
-	$sql = "select g.idgoleador, j.idjugador,j.apyn, j.dni,e.idequipo, e.nombre,f.idfixture, ff.tipofecha, g.goles 
+	$sql = "select g.idgoleador, j.idjugador,concat(j.apellido, ', ',j.nombre) as apyn, j.dni,e.idequipo, e.nombre,f.idfixture, ff.tipofecha, g.goles 
 			from tbgoleadores g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -308,7 +310,7 @@ function traerAcumuladosAmarillasPorTorneoZonaJugador($idfecha,$idjugador) {
 				from
 				(
 				select
-					a.refequipo, e.nombre, j.apyn, j.dni, count(a.amarillas) as cantidad,max(fi.reffecha) as ultimafecha, max(ff.tipofecha) as fecha
+					a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre) as apyn, j.dni, count(a.amarillas) as cantidad,max(fi.reffecha) as ultimafecha, max(ff.tipofecha) as fecha
 					from		tbamonestados a
 					inner
 					join		dbequipos e
@@ -324,7 +326,7 @@ function traerAcumuladosAmarillasPorTorneoZonaJugador($idfecha,$idjugador) {
 					on			ff.idfecha = fi.reffecha
 					where		j.idjugador = ".$idjugador."
 					and a.amarillas <> 2
-					group by a.refequipo, e.nombre, j.apyn, j.dni
+					group by a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre) as apyn, j.dni
 					
 				) t
 					where (cantidad <> 3 and ultimafecha < ".$idfecha.") or (cantidad = 3 and ultimafecha = ".$idfecha.") or (cantidad < 3 and ultimafecha = ".$idfecha.")
@@ -440,7 +442,7 @@ return $res;
 } 
 
 function traerAmonestados() {
-	$sql = "select g.idamonestado,j.apyn, j.dni, e.nombre, ff.tipofecha, g.amarillas 
+	$sql = "select g.idamonestado,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.amarillas 
 			from tbamonestados g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -451,7 +453,7 @@ function traerAmonestados() {
 }
 
 function traerAmonestadosPorFecha($fecha) {
-	$sql = "select g.idamonestado,j.apyn, j.dni, e.nombre, ff.tipofecha, g.amarillas 
+	$sql = "select g.idamonestado,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.amarillas 
 			from tbamonestados g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -463,7 +465,7 @@ function traerAmonestadosPorFecha($fecha) {
 }
 
 function traerAmonestadosPorId($id) {
-	$sql = "select g.idamonestado, j.idjugador,j.apyn, j.dni,e.idequipo, e.nombre,f.idfixture, ff.tipofecha, g.amarillas 
+	$sql = "select g.idamonestado, j.idjugador,concat(j.apellido, ', ',j.nombre) as apyn, j.dni,e.idequipo, e.nombre,f.idfixture, ff.tipofecha, g.amarillas 
 			from tbamonestados g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
@@ -523,7 +525,7 @@ return $res;
 } 
 
 function traerSuspendidos() {
-	$sql = "select idsuspendido,e.nombre,j.apyn,motivos,cantidadfechas,fechacreacion,c.reffixture from tbsuspendidos c
+	$sql = "select idsuspendido,e.nombre,concat(j.apellido, ', ',j.nombre) as apyn,motivos,cantidadfechas,fechacreacion,c.reffixture from tbsuspendidos c
 			inner join dbjugadores j on j.idjugador = c.refjugador 
 			inner join dbequipos e on e.idequipo = c.refequipo
 			order by e.nombre";
@@ -532,13 +534,50 @@ function traerSuspendidos() {
 }
 
 function traerSuspendidosPorId($id) {
-	$sql = "select idsuspendido,e.nombre,j.apyn,motivos,cantidadfechas,fechacreacion,c.refequipo,j.idjugador,c.reffixture from tbsuspendidos c
+	$sql = "select idsuspendido,e.nombre,concat(j.apellido, ', ',j.nombre) as apyn,motivos,cantidadfechas,fechacreacion,c.refequipo,j.idjugador,c.reffixture from tbsuspendidos c
 			inner join dbjugadores j on j.idjugador = c.refjugador
 			inner join dbequipos e on e.idequipo = c.refequipo
 			where c.idsuspendido =".$id;
 	$res = $this->query($sql,0);
 	return $res;
 }
+
+
+function traerJugadoresPorFixtureA($idfixture) {
+	$sql = "select
+				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre
+			from		(select
+						distinct tge.refequipo
+						from		dbfixture fix
+						inner
+						join		dbtorneoge tge
+						on			tge.idtorneoge = fix.reftorneoge_a
+						where 		fix.idfixture = ".$idfixture.") e
+				inner join		dbjugadores j on  j.idequipo = e.refequipo 
+				inner join		dbequipos ee on ee.idequipo = j.idequipo
+				order by concat(j.apellido, ', ', j.nombre)";	
+	$res = $this->query($sql,0);
+	return $res;
+}
+
+
+function traerJugadoresPorFixtureB($idfixture) {
+	$sql = "select
+				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre
+			from		(select
+						distinct tge.refequipo
+						from		dbfixture fix
+						inner
+						join		dbtorneoge tge
+						on			tge.idtorneoge = fix.reftorneoge_b
+						where 		fix.idfixture = ".$idfixture.") e
+				inner join		dbjugadores j on  j.idequipo = e.refequipo 
+				inner join		dbequipos ee on ee.idequipo = j.idequipo
+				order by concat(j.apellido, ', ', j.nombre)";	
+	$res = $this->query($sql,0);
+	return $res;
+}
+
 
 	
 	function query($sql,$accion) {
