@@ -118,7 +118,7 @@ for ($i=1; $i<=$filas;$i++) {
 
 $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),8);
 
-header('Location: generarfixture.php');
+header('Location: generarfixture.php?idtorneo='.$_POST['idtorneo'].'&idzona='.$_POST['idzona']);
 ?>
 
 <!DOCTYPE HTML>

@@ -58,8 +58,8 @@ function traerEquipos($idtorneo, $idZona) {
 								join		tbtipotorneo tp
 								on			tp.idtipotorneo = t.reftipotorneo
 					
-					where	t.idtorneo = ".$idtorneo." and tge.refgrupo = ".$idZona."
-					limit 12
+					where	t.idtorneo = ".$idtorneo." and tge.refgrupo = ".$idZona." and t.activo = 1
+					
 			
 				";
 
