@@ -91,8 +91,12 @@ $fech = substr($fech,0,strlen($fech)-1);
 $resJugadoresA = $serviciosJugadores->traerJugadoresPorFixtureA($idFixture);
 $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 
-$equipoA	= mysql_result($resJugadoresA,0,'nombre');
-$equipoB	= mysql_result($resJugadoresB,0,'nombre');
+if (mysql_num_rows($resJugadoresA)>0) {
+	$equipoA	= mysql_result($resJugadoresA,0,'nombre');
+}
+if (mysql_num_rows($resJugadoresB)>0) {
+	$equipoB	= mysql_result($resJugadoresB,0,'nombre');
+}
 
 if ($_SESSION['refroll_predio'] != 1) {
 
@@ -101,6 +105,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 	
 }
 
+$resJugadoresA = $serviciosJugadores->traerJugadoresPorFixtureA($idFixture);
+$resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 
 ?>
 
@@ -206,6 +212,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                     	<?php 
 							
 							while ($row = mysql_fetch_array($resJugadoresA)) {
+								if ($row[0] != '') {
 						?>
                         <tr>
                         	<th>
@@ -266,7 +273,9 @@ if ($_SESSION['refroll_predio'] != 1) {
                             </th>
                         </tr>
                         <?php
-							
+								} else {
+									echo "<tr><th colspan='12'><h4>El Equipo no posee jugadores cargados</h4></th></tr>";	
+								}
 							}
 						?>
                     </tbody>
@@ -297,6 +306,7 @@ if ($_SESSION['refroll_predio'] != 1) {
                     	<?php 
 							
 							while ($rowB = mysql_fetch_array($resJugadoresB)) {
+								if ($rowB[0] != '') {
 						?>
                         <tr>
                         	<th>
@@ -357,7 +367,9 @@ if ($_SESSION['refroll_predio'] != 1) {
                             </th>
                         </tr>
                         <?php
-							
+								} else {
+									echo "<tr><th colspan='12'><h4>El Equipo no posee jugadores cargados</h4></th></tr>";
+								}
 							}
 						?>
                     </tbody>

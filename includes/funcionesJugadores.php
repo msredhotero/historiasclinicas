@@ -482,11 +482,25 @@ $sql = "insert into tbsuspendidos(idsuspendido,refequipo,refjugador,motivos,cant
 values ('',".$refequipo.",".$refjugador.",'".utf8_decode($motivos)."','".utf8_decode($cantidadfechas)."','".$fechacreacion."',".$reffixture.")";
 $res = $this->query($sql,1);
 
-if ($motivos == 'Roja Directa') {
+
+if (strpos($motivos,'Roja Directa') !== false) {
+	
+	$sqlFixFecha = "select fix.reffecha, tge.reftorneo 
+				from dbfixture fix 
+				inner join dbtorneoge tge
+				on  tge.idtorneoge = fix.reftorneoge_a or tge.idtorneoge = fix.reftorneoge_b
+				where fix.idfixture = ".$reffixture."
+				group by fix.reffecha, tge.reftorneo";
+	$resFixFecha = $this->query($sqlFixFecha,0);
+		
+	$fechaJuego = mysql_result($resFixFecha,0,0);
+	$refTorneo = mysql_result($resFixFecha,0,1);
+
+
 	$sql3 = "update tbconducta
 			set
 			puntos = puntos + 3
-			where refequipo =".$refequipo;
+			where refequipo =".$refequipo." and reffecha =".$fechaJuego." and reftorneo =".$refTorneo;
 	$res3 = $this->query($sql3,0);
 	
 		
@@ -553,8 +567,8 @@ function traerJugadoresPorFixtureA($idfixture) {
 						join		dbtorneoge tge
 						on			tge.idtorneoge = fix.reftorneoge_a
 						where 		fix.idfixture = ".$idfixture.") e
-				inner join		dbjugadores j on  j.idequipo = e.refequipo 
-				inner join		dbequipos ee on ee.idequipo = j.idequipo
+				left join		dbjugadores j on  j.idequipo = e.refequipo 
+				inner join		dbequipos ee on ee.idequipo = e.refequipo
 				order by concat(j.apellido, ', ', j.nombre)";	
 	$res = $this->query($sql,0);
 	return $res;
@@ -571,8 +585,8 @@ function traerJugadoresPorFixtureB($idfixture) {
 						join		dbtorneoge tge
 						on			tge.idtorneoge = fix.reftorneoge_b
 						where 		fix.idfixture = ".$idfixture.") e
-				inner join		dbjugadores j on  j.idequipo = e.refequipo 
-				inner join		dbequipos ee on ee.idequipo = j.idequipo
+				left join		dbjugadores j on  j.idequipo = e.refequipo 
+				inner join		dbequipos ee on ee.idequipo = e.refequipo
 				order by concat(j.apellido, ', ', j.nombre)";	
 	$res = $this->query($sql,0);
 	return $res;

@@ -15,6 +15,7 @@ include ('../../includes/funcionesJugadores.php');
 include ('../../includes/funcionesEquipos.php');
 include ('../../includes/funcionesGrupos.php');
 include ('../../includes/funcionesZonasEquipos.php');
+include ('../../includes/funcionesDATOS.php');
 
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
@@ -23,6 +24,7 @@ $serviciosJugadores = new ServiciosJ();
 $serviciosEquipos	= new ServiciosE();
 $serviciosGrupos	= new ServiciosG();
 $serviciosZonasEquipos	= new ServiciosZonasEquipos();
+$serviciosDatos		= new ServiciosDatos();
 
 $fecha = date('Y-m-d');
 
@@ -100,7 +102,7 @@ $formulario 	= $serviciosFunciones->camposTabla("insertarFixture",$tabla,$lblCam
 
 $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerTodoFixture(),98);
 
-
+$resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_predio']);
 
 
 ?>
@@ -187,9 +189,6 @@ $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasE
                         <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
                     </li>
                     <li>
-                        <button type="button" class="btn btn-primary" id="generar" style="margin-left:0px;">Generar Fixture</button>
-                    </li>
-                    <li>
                         <button type="button" class="btn btn-success" id="chequearF" style="margin-left:0px;">Chequear Fixture</button>
                     </li>
                     <li>
@@ -197,6 +196,23 @@ $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasE
                     </li>
                 </ul>
                 </div>
+            </div>
+            
+            <div class="row" align="center">
+            	<ul class="list-inline">
+                	<li>
+                    	Seleccione una zona para cargar datos de los jugadores y los equipos
+                    </li>
+                </ul>
+            </div>
+            <div class="row" align="center">
+                <ul class="list-inline">
+                	<?php while ($row = mysql_fetch_array($resZonasTorneos)) { ?>
+                	<li>
+                    	<a href="generarfixture.php?idtorneo=<?php echo $row[2]; ?>&idzona=<?php echo $row[0]; ?>"><button type="button" class="btn btn-primary" style="margin-left:0px;"><?php echo $row[1]; ?> Generar Fixture</button></a>
+                    </li>
+					<?php } ?>
+                </ul>
             </div>
             </form>
     	</div>
