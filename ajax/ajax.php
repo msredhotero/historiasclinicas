@@ -176,6 +176,10 @@ break;
 	case 'eliminarSuspendidos':
 		eliminarSuspendidos($serviciosJugadores);
 		break; 
+	
+	case 'insertarEstadisticaPorJugador':
+		insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones);
+		break;
 	/* fin jugadores */
 	
 	
@@ -1338,6 +1342,57 @@ function eliminarConducta($serviciosFunciones) {
 
 
 /* para los jugadores */
+
+function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones) {
+	
+	if (isset($_POST['jugo'])) {
+		$jugo = 1;
+	} else {
+		$jugo = 0;
+	}
+	if (isset($_POST['goles'])) {
+		$goles = $_POST['goles'];
+	} else {
+		$goles = 'null';
+	}	
+	if (isset($_POST['cancha'])) {
+		$cancha = $_POST['cancha'];
+	} else {
+		$cancha = 'null';
+	}	
+	if (isset($_POST['arquero'])) {
+		$arquero = $_POST['arquero'];
+	} else {
+		$arquero = 'null';
+	}	
+	if (isset($_POST['amarillas'])) {
+		$amarillas = $_POST['amarillas'];
+	} else {
+		$amarillas = 'null';
+	}
+	if (isset($_POST['azules'])) {
+		$azules = $_POST['azules'];
+	} else {
+		$azules = 'null';
+	}
+	if (isset($_POST['rojas'])) {
+		$rojas = $_POST['rojas'];
+	} else {
+		$rojas = 'null';
+	}	
+	if (isset($_POST['puntos'])) {
+		$puntos = $_POST['puntos'];
+	} else {
+		$puntos = 'null';
+	}
+	if (isset($_POST['mejor'])) {
+		$mejor = 1;
+	} else {
+		$mejor = 0;
+	}		
+	
+}
+
 
 function buscarJugadores($serviciosJugadores) {
 	$tipobusqueda	= $_POST['tipobusqueda'];

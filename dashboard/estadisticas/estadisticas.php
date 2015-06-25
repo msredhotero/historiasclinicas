@@ -541,8 +541,16 @@ $(document).ready(function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$.ajax({
-				data:  {refequipo: $('#refequipo').val(),
-						accion: 'insertarEstadisticaPorJugador'},
+				data:  {jugo: 		$('#jugo'+usersid).is(':checked') ? 1 : 0,
+						goles: 		$('#goles'+usersid).val(),
+						cancha: 	$('#cancha'+usersid).val(),
+						arquero: 	$('#arquero'+usersid).val(),
+						amarillas: 	$('#amarillas'+usersid).val(),
+						azules: 	$('#azules'+usersid).val(),
+						rojas: 		$('#rojas'+usersid).val(),
+						puntos: 	$('#puntos'+usersid).val(),
+						mejor: 		$('#mejor'+usersid).is(':checked') ? 1 : 0,
+						accion: 	'insertarEstadisticaPorJugador'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
 				beforeSend: function () {
