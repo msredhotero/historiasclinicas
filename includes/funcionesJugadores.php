@@ -600,7 +600,7 @@ function traerSuspendidosPorId($id) {
 
 function traerJugadoresPorFixtureA($idfixture) {
 	$sql = "select
-				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre
+				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre, ee.idequipo
 			from		(select
 						distinct tge.refequipo
 						from		dbfixture fix
@@ -618,7 +618,7 @@ function traerJugadoresPorFixtureA($idfixture) {
 
 function traerJugadoresPorFixtureB($idfixture) {
 	$sql = "select
-				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre
+				j.idjugador, concat(j.apellido, ', ', j.nombre) as apyn, j.dni, ee.nombre, ee.idequipo
 			from		(select
 						distinct tge.refequipo
 						from		dbfixture fix
