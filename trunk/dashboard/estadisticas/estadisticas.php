@@ -93,9 +93,11 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 
 if (mysql_num_rows($resJugadoresA)>0) {
 	$equipoA	= mysql_result($resJugadoresA,0,'nombre');
+	$IdequipoA	= mysql_result($resJugadoresA,0,'idequipo');
 }
 if (mysql_num_rows($resJugadoresB)>0) {
 	$equipoB	= mysql_result($resJugadoresB,0,'nombre');
+	$IdequipoB	= mysql_result($resJugadoresB,0,'idequipo');
 }
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -268,7 +270,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
-                                	<button type="button" class="btn btn-primary guardarjugador" id="<?php echo $row[0]; ?>" style="margin-left:0px;">Guardar</button>
+                                	<button type="button" class="btn btn-primary guardarjugadorA" id="<?php echo $row[0]; ?>" style="margin-left:0px;">Guardar</button>
                                 </div>
                             </th>
                         </tr>
@@ -362,7 +364,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
-                                	<button type="button" class="btn btn-primary guardarjugador" id="<?php echo $rowB[0]; ?>" style="margin-left:0px;">Guardar</button>
+                                	<button type="button" class="btn btn-primary guardarjugadorB" id="<?php echo $rowB[0]; ?>" style="margin-left:0px;">Guardar</button>
                                 </div>
                             </th>
                         </tr>
@@ -537,7 +539,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$('.guardarjugador').click(function(event){
+	$('.guardarjugadorA').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$.ajax({
@@ -550,6 +552,9 @@ $(document).ready(function(){
 						rojas: 		$('#rojas'+usersid).val(),
 						puntos: 	$('#puntos'+usersid).val(),
 						mejor: 		$('#mejor'+usersid).is(':checked') ? 1 : 0,
+						idfixture:	<?php echo $idFixture; ?>,
+						idjugador:	usersid,
+						refequipo:	<?php echo $IdequipoA; ?>,
 						accion: 	'insertarEstadisticaPorJugador'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
@@ -567,7 +572,43 @@ $(document).ready(function(){
 		  } else {
 			alert("Error, vuelva a realizar la acción.");	
 		  }
-	});//fin del boton eliminar
+	});//fin del boton guardarJugadorA
+	
+	
+	$('.guardarjugadorB').click(function(event){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			$.ajax({
+				data:  {jugo: 		$('#jugo'+usersid).is(':checked') ? 1 : 0,
+						goles: 		$('#goles'+usersid).val(),
+						cancha: 	$('#cancha'+usersid).val(),
+						arquero: 	$('#arquero'+usersid).val(),
+						amarillas: 	$('#amarillas'+usersid).val(),
+						azules: 	$('#azules'+usersid).val(),
+						rojas: 		$('#rojas'+usersid).val(),
+						puntos: 	$('#puntos'+usersid).val(),
+						mejor: 		$('#mejor'+usersid).is(':checked') ? 1 : 0,
+						idfixture:	<?php echo $idFixture; ?>,
+						idjugador:	usersid,
+						refequipo:	<?php echo $IdequipoB; ?>,
+						accion: 	'insertarEstadisticaPorJugador'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+					$('#reffixture').html('')	
+				},
+				success:  function (response) {
+					$('#reffixture').html(response);
+						
+				}
+			});
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error, vuelva a realizar la acción.");	
+		  }
+	});//fin del boton guardarJugadorB
 	
 	$('.varmodificar').click(function(event){
 		  usersid =  $(this).attr("id");
