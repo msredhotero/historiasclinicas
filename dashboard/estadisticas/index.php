@@ -219,17 +219,75 @@ if ($_SESSION['refroll_predio'] != 1) {
                 </div>
                 
                 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-2">
                	 <label class="control-label" style="text-align:left" for="reftorneo">Goles</label>
                     <div class="input-group col-md-12">
                     	<input type="text" id="goles" name="goles" class="form-control" required/>
                     </div>
                 </div>
                 
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-2">
                	 <label class="control-label" style="text-align:left" for="reftorneo">Amarillas</label>
                     <div class="input-group col-md-12">
                     	<input type="text" id="amarillas" name="amarillas" class="form-control" required/>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Azules</label>
+                    <div class="input-group col-md-12">
+                    	<input type="text" id="azules" name="azules" class="form-control" required/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Rojas</label>
+                    <div class="input-group col-md-12">
+                    	<input type="text" id="rojas" name="rojas" class="form-control" required/>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Jugo</label>
+                    <div class="input-group col-md-12">
+                    	<select class="form-control" name="jugo" id="jugo">
+                        	<option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Cancha</label>
+                    <div class="input-group col-md-12">
+                    	<input type="text" id="cancha" name="cancha" class="form-control" required/>
+                    </div>
+                </div>
+                
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Puntos</label>
+                    <div class="input-group col-md-12">
+                    	<input type="text" id="puntos" name="puntos" class="form-control" required/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Atajo</label>
+                    <div class="input-group col-md-12">
+                    	<input type="text" id="arquero" name="arquero" class="form-control" required/>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-2">
+               	 <label class="control-label" style="text-align:left" for="reftorneo">Figura</label>
+                    <div class="input-group col-md-12">
+                        <select class="form-control" name="mejor" id="mejor">
+                        	<option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
                     </div>
                 </div>
             

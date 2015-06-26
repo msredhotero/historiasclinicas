@@ -736,10 +736,10 @@ class ServiciosZonasEquipos {
 				left
 				join		dbtorneoge tge
 				on			tge.refequipo = e.idequipo
-				inner
+				left
 				join		dbtorneos t
-				on			t.idtorneo = tge.reftorneo
-				where		tge.idtorneoge is null and t.activo = 1
+				on			t.idtorneo = tge.reftorneo and t.activo = 1
+				where		tge.idtorneoge is null
 				order by e.nombre";
 		return $this->query($sql,0);
 		
