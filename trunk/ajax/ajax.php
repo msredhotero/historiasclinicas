@@ -1391,6 +1391,12 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 		$mejor = 0;
 	}		
 	
+	$res = $serviciosAmonestados->insertarAmonestados($refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor);
+	if ((integer)$res > 0) {
+		echo '';
+	} else {
+		echo 'Huvo un error al insertar datos';
+	} 
 }
 
 
