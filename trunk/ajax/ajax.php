@@ -1425,6 +1425,11 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 	$puntos = $_POST['puntos'];
 	$mejor = $_POST['mejor'];
 
+	if ($mejor == '1') {
+		$mejor = true;
+	} else {
+		$mejor = false;
+	}
 	$id = $serviciosJugadores->existeAmonestado($reffixture);
 	
 	if ($id == 0) {
@@ -1449,7 +1454,7 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 			}
 		} else {
 			$res = $serviciosJugadores->eliminarAmonestados($id);
-			echo '<img src="../../imagenes/warning.gif"> La estadistica ha sido eliminada, ya que el jugador no jugó';	
+			echo 'La estadistica ha sido eliminada, ya que el jugador no jugó';	
 		}
 	}
 }

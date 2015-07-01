@@ -98,9 +98,9 @@ $cabeceras 		= "	<th>Equipo 1</th>
 
 
 
-$fixtureGenerardo = $Generar->Generar(38,19);
+$fixtureGenerardo = $Generar->Generar($_POST['idtorneo'],$_POST['idzona']);
 
-$array = $Generar->devolverCantFilas(38,19);
+$array = $Generar->devolverCantFilas($_POST['idtorneo'],$_POST['idzona']);
 
 $filas = $array["filas"] * $array["columnas"];
 
@@ -111,7 +111,7 @@ for ($i=1; $i<=$filas;$i++) {
 	$nuevaFecha = $date[2]."-".$date[1]."-".$date[0];
 	$serviciosZonasEquipos->insertarFixture($_POST["equipoa".$i],"",$_POST["equipob".$i],"",$nuevaFecha,22+$fecha,$_POST["horario".$i],$_POST["cancha".$i]);
 	//echo "aaaaaaaaaaaaaaaaaaaaaaa".$nuevaFecha;
-	if (($i % 5) == 0) {
+	if (($i % (integer)$array["filas"]) == 0) {
 		$fecha += 1;
 	}
 }
