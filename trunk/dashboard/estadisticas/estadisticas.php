@@ -13,13 +13,14 @@ include ('../../includes/funciones.php');
 include ('../../includes/funcionesHTML.php');
 include ('../../includes/funcionesJugadores.php');
 include ('../../includes/funcionesEquipos.php');
+include ('../../includes/funcionesZonasEquipos.php');
 
-
-$serviciosUsuarios  = new ServiciosUsuarios();
-$serviciosFunciones = new Servicios();
-$serviciosHTML		= new ServiciosHTML();
-$serviciosJugadores = new ServiciosJ();
-$serviciosEquipos	= new ServiciosE();
+$serviciosUsuarios  	= new ServiciosUsuarios();
+$serviciosFunciones 	= new Servicios();
+$serviciosHTML			= new ServiciosHTML();
+$serviciosJugadores 	= new ServiciosJ();
+$serviciosEquipos		= new ServiciosE();
+$serviciosZonasEquipos 	= new ServiciosZonasEquipos();
 
 
 $fecha = date('Y-m-d');
@@ -28,6 +29,10 @@ $fecha = date('Y-m-d');
 $resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Estadisticas",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
 $idFixture = $_GET['id'];
+
+$resFix = $serviciosZonasEquipos->TraerFixturePorId($idFixture);
+
+$refFecha = mysql_result($resFix,0,6);
 
 $resEquipos = $serviciosEquipos->TraerEquipos();
 
@@ -94,10 +99,36 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 if (mysql_num_rows($resJugadoresA)>0) {
 	$equipoA	= mysql_result($resJugadoresA,0,'nombre');
 	$IdequipoA	= mysql_result($resJugadoresA,0,'idequipo');
+	$refTorneoA = mysql_result($resJugadoresA,0,'reftorneo');
+	$refPuntosEquiposA = $serviciosEquipos->traerPuntosEquiposPorFixtureEquipoFechaTorneo($idFixture,$IdequipoA,$refFecha,$refTorneoA);
+	if (mysql_num_rows($refPuntosEquiposA)>0) {
+		$ePuntosA 		= mysql_result($refPuntosEquiposA,0,'puntos');
+		$eAmarillasA 	= mysql_result($refPuntosEquiposA,0,'amarillas');
+		$eRojasA 		= mysql_result($refPuntosEquiposA,0,'rojas');
+		$eAzulesA 		= mysql_result($refPuntosEquiposA,0,'azules');	
+	} else {
+		$ePuntosA 		= '';
+		$eAmarillasA 	= '';
+		$eRojasA 		= '';
+		$eAzulesA 		= '';	
+	}
 }
 if (mysql_num_rows($resJugadoresB)>0) {
 	$equipoB	= mysql_result($resJugadoresB,0,'nombre');
 	$IdequipoB	= mysql_result($resJugadoresB,0,'idequipo');
+	$refTorneoB = mysql_result($resJugadoresB,0,'reftorneo');
+	$refPuntosEquiposB = $serviciosEquipos->traerPuntosEquiposPorFixtureEquipoFechaTorneo($idFixture,$IdequipoB,$refFecha,$refTorneoB);
+	if (mysql_num_rows($refPuntosEquiposB)>0) {
+		$ePuntosB 		= mysql_result($refPuntosEquiposB,0,'puntos');
+		$eAmarillasB 	= mysql_result($refPuntosEquiposB,0,'amarillas');
+		$eRojasB 		= mysql_result($refPuntosEquiposB,0,'rojas');
+		$eAzulesB 		= mysql_result($refPuntosEquiposB,0,'azules');	
+	} else {
+		$ePuntosB 		= '';
+		$eAmarillasB 	= '';
+		$eRojasB 		= '';
+		$eAzulesB 		= '';	
+	}
 }
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -219,7 +250,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         <tr>
                         	<th>
                             	<div align="center">
-                                	<input type="checkbox" class="form-control input-sm" id="jugo<?php echo $row[0]; ?>" name="jugo<?php echo $row[0]; ?>" style="width:30px;"/>
+                                	<input type="checkbox" class="form-control input-sm" id="jugo<?php echo $row[0]; ?>" name="jugo<?php echo $row[0]; ?>" style="width:30px;" <?php if ($row["jugo"] == '1') { echo "checked"; } ?> />
                                 </div>
                             </th>
                         	<th>
@@ -230,50 +261,52 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="goles<?php echo $row[0]; ?>" id="goles<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="goles<?php echo $row[0]; ?>" id="goles<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["goles"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $row[0]; ?>" id="cancha<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $row[0]; ?>" id="cancha<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["cancha"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="arquero<?php echo $row[0]; ?>" id="arquero<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="arquero<?php echo $row[0]; ?>" id="arquero<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["arquero"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">	
-                                	<input type="number" class="form-control input-sm" name="amarillas<?php echo $row[0]; ?>" id="amarillas<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="amarillas<?php echo $row[0]; ?>" id="amarillas<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["amarillas"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="azules<?php echo $row[0]; ?>" id="azules<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="azules<?php echo $row[0]; ?>" id="azules<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["azules"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="rojas<?php echo $row[0]; ?>" id="rojas<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="rojas<?php echo $row[0]; ?>" id="rojas<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["rojas"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $row[0]; ?>" id="puntos<?php echo $row[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $row[0]; ?>" id="puntos<?php echo $row[0]; ?>" style="width:45px;" value="<?php if ($row["puntos"] == '') { echo 6; } else { echo $row["puntos"]; }?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="checkbox" class="form-control input-sm" id="mejor<?php echo $row[0]; ?>" name="mejor<?php echo $row[0]; ?>s" style="width:30px;"/>
+                                	<input type="checkbox" class="form-control input-sm" id="mejor<?php echo $row[0]; ?>" name="mejor<?php echo $row[0]; ?>s" style="width:30px;" <?php if ($row["mejor"] == 1) { echo "checked"; } ?>/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
+                                	
                                 	<button type="button" class="btn btn-primary guardarjugadorA" id="<?php echo $row[0]; ?>" style="margin-left:0px;">Guardar</button>
                                 </div>
                             </th>
                         </tr>
+                        <tr style="display:none;" id="resultado<?php echo $row[0]; ?>"><th colspan='12'></th></tr>
                         <?php
 								} else {
 									echo "<tr><th colspan='12'><h4>El Equipo no posee jugadores cargados</h4></th></tr>";	
@@ -283,7 +316,45 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     </tbody>
                 </table>
                 
+                <div class='row' style="margin-left:15px; margin-right:15px;">
+                    <h4>Puntos Bonus - Sanciones del Equipo</h4>
+                    <div class="form-group col-md-2">
+                     <label class="control-label" style="text-align:left" for="reftorneo">Punto Bonus</label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="puntobonusa" name="puntobonusa" class="form-control" value="<?php echo $ePuntosA; ?>" required/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoAmarilla.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equipoamarillasa" name="equipoamarillasa" value="<?php echo $eAmarillasA; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/azul.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equipoazulesa" name="equipoazulesa" value="<?php echo $eAzulesA; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equiporojasa" name="equiporojasa" value="<?php echo $eRojasA; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-group col-md-12" align="left">
+                    	<button type="button" class="btn btn-primary guardarpuntosA" id="<?php echo $IdequipoA; ?>" style="margin-left:0px;">Guardar Puntos</button>
+                        <h4 id="msgResultadoA"></h4>
+                    </div>
+                    
+                </div>
                 
+                <hr>
                 
                 
                 <table class="table table-striped" style="margin:10px;">
@@ -354,7 +425,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $rowB[0]; ?>" id="puntos<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $rowB[0]; ?>" value="6" id="puntos<?php echo $rowB[0]; ?>" style="width:45px;"/>
                                 </div>
                             </th>
                             <th>
@@ -364,10 +435,12 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
+                                	
                                 	<button type="button" class="btn btn-primary guardarjugadorB" id="<?php echo $rowB[0]; ?>" style="margin-left:0px;">Guardar</button>
                                 </div>
                             </th>
                         </tr>
+                        <tr style="display:none;" id="resultado<?php echo $row[0]; ?>"><th colspan='12'></th></tr>
                         <?php
 								} else {
 									echo "<tr><th colspan='12'><h4>El Equipo no posee jugadores cargados</h4></th></tr>";
@@ -376,11 +449,50 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 						?>
                     </tbody>
                 </table>
+
                 
-                
+                <div class='row' style="margin-left:15px; margin-right:15px;">
+                    <h4>Puntos Bonus - Sanciones del Equipo</h4>
+                    <div class="form-group col-md-2">
+                     <label class="control-label" style="text-align:left" for="reftorneo">Punto Bonus</label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="puntobonusb" name="puntobonusb" value="<?php echo $ePuntosB; ?>" class="form-control" required/>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoAmarilla.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equipoamarillasb" name="equipoamarillasb" value="<?php echo $eAmarillasB; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/azul.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equipoazulesb" name="equipoazulesb" value="<?php echo $eAzulesB; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-2" align="center">
+                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
+                        <div class="input-group col-md-8">
+                            <input type="text" id="equiporojasb" name="equiporojasb" value="<?php echo $eRojasB; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-group col-md-12" align="left">
+                    	<button type="button" class="btn btn-primary guardarpuntosB" id="<?php echo $IdequipoB; ?>" style="margin-left:0px;">Guardar Puntos</button>
+                        <h4 id="msgResultadoB"></h4>
+                    </div>
+                    
+                </div>
               
             
             </div>
+            
+            
             
             
             
@@ -400,9 +512,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
             <div class="row">
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
-                    <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar Todo</button>
-                    </li>
+
 					<li>
                         <button type="button" class="btn btn-success" id="cargarjugador">Agregar Jugador</button>
                     </li>
@@ -539,6 +649,88 @@ $(document).ready(function(){
 		});
 	});
 
+
+	$('.guardarpuntosA').click(function(event){
+		usersid =  $(this).attr("id");
+		if (!isNaN(usersid)) {
+			 $.ajax({
+				data:  {rojas: 		$('#equiporojasa').val(),
+						azules: 	$('#equipoazulesa').val(),
+						amarillas: 	$('#equipoamarillasa').val(),
+						puntos: 	$('#puntobonusa').val(),
+						reffixture:	<?php echo $idFixture; ?>,
+						reffecha:	<?php echo $refFecha; ?>,
+						refequipo:	<?php echo $IdequipoA; ?>,
+						reftorneo:  <?php echo $refTorneoA; ?>,
+						accion: 	'insertarPuntosEquipos'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+					$('#reffixture').html('')	
+				},
+				success:  function (response) {
+					if (response == '') {
+				
+						$('#msgResultadoA').html("<img src='../../imagenes/check.gif'> Se cargo correctamente!!");
+						$('#msgResultadoA').show(300);
+						$('#msgResultadoA').toggle(120);
+						$('#msgResultadoA').show(150);
+					} else {
+						$('#msgResultadoA').show(300);
+						$('#msgResultadoA').toggle(120);
+						$('#msgResultadoA').show(150);
+						$('#msgResultadoA').html("<img src='../../imagenes/errorico.png'> " + response);
+						
+					}
+				}
+			}); 
+		} else {
+			alert("Error, vuelva a realizar la acción.");	
+		}
+	});//fin del boton guardarPuntosA
+	
+	
+	
+	$('.guardarpuntosB').click(function(event){
+		usersid =  $(this).attr("id");
+		if (!isNaN(usersid)) {
+			 $.ajax({
+				data:  {rojas: 		$('#equiporojasb').val(),
+						azules: 	$('#equipoazulesb').val(),
+						amarillas: 	$('#equipoamarillasb').val(),
+						puntos: 	$('#puntobonusb').val(),
+						reffixture:	<?php echo $idFixture; ?>,
+						reffecha:	<?php echo $refFecha; ?>,
+						refequipo:	<?php echo $IdequipoB; ?>,
+						reftorneo:  <?php echo $refTorneoB; ?>,
+						accion: 	'insertarPuntosEquipos'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+					$('#reffixture').html('')	
+				},
+				success:  function (response) {
+					if (response == '') {
+				
+						$('#msgResultadoB').html("<img src='../../imagenes/check.gif'> Se cargo correctamente!!");
+						$('#msgResultadoB').show(300);
+						$('#msgResultadoB').toggle(120);
+						$('#msgResultadoB').show(150);
+					} else {
+						$('#msgResultadoB').show(300);
+						$('#msgResultadoB').toggle(120);
+						$('#msgResultadoB').show(150);
+						$('#msgResultadoB').html("<img src='../../imagenes/errorico.png'> " + response);
+						
+					}
+				}
+			}); 
+		} else {
+			alert("Error, vuelva a realizar la acción.");	
+		}
+	});//fin del boton guardarPuntosB
+	
+	
 	$('.guardarjugadorA').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
@@ -552,8 +744,8 @@ $(document).ready(function(){
 						rojas: 		$('#rojas'+usersid).val(),
 						puntos: 	$('#puntos'+usersid).val(),
 						mejor: 		$('#mejor'+usersid).is(':checked') ? 1 : 0,
-						idfixture:	<?php echo $idFixture; ?>,
-						idjugador:	usersid,
+						reffixture:	<?php echo $idFixture; ?>,
+						refjugador:	usersid,
 						refequipo:	<?php echo $IdequipoA; ?>,
 						accion: 	'insertarEstadisticaPorJugador'},
 				url:   '../../ajax/ajax.php',
@@ -562,8 +754,19 @@ $(document).ready(function(){
 					$('#reffixture').html('')	
 				},
 				success:  function (response) {
-					$('#reffixture').html(response);
+					if (response == '') {
+				
+						$('#resultado'+usersid).html("<th colspan='12'><img src='../../imagenes/check.gif'> Se cargo correctamente!!</th>");
+						$('#resultado'+usersid).show(300);
+						$('#resultado'+usersid).toggle(120);
+						$('#resultado'+usersid).show(150);
+					} else {
+						$('#resultado'+usersid).show(300);
+						$('#resultado'+usersid).toggle(120);
+						$('#resultado'+usersid).show(150);
+						$('#resultado'+usersid).html("<th colspan='12'><img src='../../imagenes/errorico.png'> " + response + "</th>");
 						
+					}
 				}
 			});
 			
@@ -588,8 +791,8 @@ $(document).ready(function(){
 						rojas: 		$('#rojas'+usersid).val(),
 						puntos: 	$('#puntos'+usersid).val(),
 						mejor: 		$('#mejor'+usersid).is(':checked') ? 1 : 0,
-						idfixture:	<?php echo $idFixture; ?>,
-						idjugador:	usersid,
+						reffixture:	<?php echo $idFixture; ?>,
+						refjugador:	usersid,
 						refequipo:	<?php echo $IdequipoB; ?>,
 						accion: 	'insertarEstadisticaPorJugador'},
 				url:   '../../ajax/ajax.php',
@@ -598,7 +801,20 @@ $(document).ready(function(){
 					$('#reffixture').html('')	
 				},
 				success:  function (response) {
-					$('#reffixture').html(response);
+					if (response == '') {
+						$('#resultado'+usersid).show(300);
+						$('#resultado'+usersid).toggle(120);
+						$('#resultado'+usersid).show(150);
+						$('#resultado'+usersid).html("<th colspan='12'><img src='../../imagenes/check.gif'> Se cargo correctamente!!</th>");
+						
+						
+					} else {
+						$('#resultado'+usersid).show(300);
+						$('#resultado'+usersid).toggle(120);
+						$('#resultado'+usersid).show(150);
+						$('#resultado'+usersid).html("<th colspan='12'><img src='../../imagenes/errorico.png'> " + response + "</th>");
+						
+					}
 						
 				}
 			});

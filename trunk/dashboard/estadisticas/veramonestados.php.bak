@@ -48,7 +48,7 @@ $cabeceras2 		= "<th>Nombre</th>
 				<th>Amarillas</th>";
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
-$lstCargados2 	= $serviciosFunciones->camposTablaView($cabeceras2,$serviciosJugadores->traerAmonestados($_SESSION['idtorneo_predio']),5);
+$lstCargados2 	= $serviciosFunciones->camposTablaView($cabeceras2,$serviciosJugadores->traerAmonestados(),5);
 
 
 

@@ -1157,32 +1157,32 @@ function traerSuspendidosPorFechas($refjugador,$refequipo,$idSuspendido) {
 						inner
 						join		tbfechas ff
 						on			ff.idfecha = f.reffecha
-						where tp.idtipotorneo in (".$idtorneo.") and t.activo = 1
+						where tp.idtipotorneo in (".$idtorneo.")
 						union all
 						
 						
 						select 
-							e.nombre,
-							e.nombrecapitan,
-							e.telefonocapitan,
-							e.emailcapitan,
-							e.facebookcapitan,
-							e.nombresubcapitan,
-							e.telefonosubcapitan,
-							e.emailsubcapitan,
-							e.facebooksubcapitan,
-							g.nombre as zona,
-							t.idtorneo,
-							tp.idtipotorneo,
-							g.idgrupo,
-							t.nombre as torneo,
-							tp.descripciontorneo,
-							e.idequipo,
-							f.idfixture,
-							ff.tipofecha,
-							f.cancha,
-							DATE_FORMAT(f.Hora, '%k:%i') AS hora,
-							ff.idfecha
+					e.Nombre,
+					e.nombrecapitan,
+					e.telefonocapitan,
+					e.emailcapitan,
+					e.facebookcapitan,
+					e.nombresubcapitan,
+					e.telefonosubcapitan,
+					e.emailsubcapitan,
+					e.facebooksubcapitan,
+					g.nombre as zona,
+					g.idgrupo,
+					t.nombre as torneo,
+					t.idtorneo,
+					tp.idtipotorneo,
+					tp.descripciontorneo,
+					e.idequipo,
+					f.idfixture,
+					ff.tipofecha,
+					f.cancha,
+					DATE_FORMAT(f.Hora,'%k:%i') AS hora,
+					ff.idfecha
 					
 					from		dbtorneoge tge
 					inner
@@ -1204,7 +1204,7 @@ function traerSuspendidosPorFechas($refjugador,$refequipo,$idSuspendido) {
 					inner
 					join		tbfechas ff
 					on			ff.idfecha = f.reffecha
-					where		tp.idtipotorneo in (".$idtorneo.") and t.activo = 1
+					where		tp.idtipotorneo in (".$idtorneo.")
 					) t
 					where t.idfecha = ".$reffecha."
 					order by t.idfixture";	
