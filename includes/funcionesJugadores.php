@@ -317,11 +317,16 @@ function traerGoleadoresPorId($id) {
 
 function traerAcumuladosAmarillasPorTorneoZonaJugador($idfecha,$idjugador,$idtipoTorneo) {
 		$sql = "select
-				t.refequipo, t.nombre, t.apyn, t.dni, (case when t.cantidad > 3 then mod(t.cantidad,3) else t.cantidad end) as cantidad,ultimafecha,fecha,t.reemplzado, t.volvio
+				t.refequipo, t.nombre, t.apyn, t.dni, (t.cantidadAmarillas + (t.cantidadAzules*2)) as cantidad,ultimafecha,fecha,t.reemplzado, t.volvio
 				from
 				(
 				select
-					a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre) as apyn, j.dni, count(a.amarillas) as cantidad,max(fi.reffecha) as ultimafecha, max(ff.tipofecha) as fecha
+					a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre) as apyn, j.dni, 
+					count(a.amarillas) as cantidadAmarillas,
+					sum(a.azul)*2 as cantidadAzules,
+					count(a.rojas) as cantidadRojas,
+					max(fi.reffecha) as ultimafecha, 
+					max(ff.tipofecha) as fecha
 					, (case when rr.idreemplazo is null then false else true end) as reemplzado
 					, (case when rrr.idreemplazo is null then 0 else 1 end) as volvio
 					from		tbamonestados a
@@ -353,11 +358,11 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$i
 					where	j.idjugador = ".$idjugador."
 					and a.amarillas <> 2
 					and fi.reffecha <= ".$idfecha."
-					group by a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre) as apyn, j.dni
+					group by a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre), j.dni
 				) t
-					where (cantidad <> 3 and ultimafecha < ".$idfecha.") or (cantidad = 3 and ultimafecha = ".$idfecha.") or (cantidad < 3 and ultimafecha = ".$idfecha.") or (cantidad > 3 and ultimafecha = ".$idfecha.")
 					
-					order by (case when t.cantidad > 3 then mod(t.cantidad,3) else t.cantidad end) desc,t.nombre, t.apyn";
+					
+					order by (t.cantidadAmarillas + t.cantidadAzules) desc,t.nombre, t.apyn";
 		
 	
 		$res = $this-> query($sql,0);

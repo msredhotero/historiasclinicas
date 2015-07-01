@@ -733,13 +733,13 @@ class ServiciosZonasEquipos {
 		$sql  = "select
 					e.idequipo, e.nombre
 				from		dbequipos e
-				left
+				/*left
 				join		dbtorneoge tge
 				on			tge.refequipo = e.idequipo
 				left
 				join		dbtorneos t
 				on			t.idtorneo = tge.reftorneo and t.activo = 1
-				where		tge.idtorneoge is null
+				where		tge.idtorneoge is null*/
 				order by e.nombre";
 		return $this->query($sql,0);
 		

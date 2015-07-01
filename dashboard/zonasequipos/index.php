@@ -259,7 +259,7 @@ if ($_SESSION['refroll_predio'] != 1) {
             </form>
             <br>
             <hr>
-            <div class="row" style="padding:0 15px;">
+            <div class="row" style="padding:0 15px; display:none;">
             <h4>Reemplazar Equipos</h4>
             <div class="help-block">Recuerde que el equipo reemplazado se inhabilitar&aacute;, y el equipo que lo reemplaza tomar&aacute; los puntos, puntos de fairplay y goles en contra del ultimo en la tabla de posiciones</div>
             <form class="form-inline formulario2" role="form">
