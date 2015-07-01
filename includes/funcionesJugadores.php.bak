@@ -521,11 +521,12 @@ $res = $this->query($sql,0);
 return $res;
 } 
 
-function traerAmonestados($idtipoTorneo) {
+function traerAmonestados() {
 	$sql = "select g.idamonestado,concat(j.apellido, ', ',j.nombre) as apyn, j.dni, e.nombre, ff.tipofecha, g.amarillas 
 			from tbamonestados g 
 			inner join dbequipos e on g.refequipo = e.idequipo 
 			inner join dbjugadores j on g.refjugador = j.idjugador 
+			inner join dbfixture f on f.idfixture = g.reffixture
 			inner 
 			join 		(select idfixture,reffecha from dbfixture fix
 							inner join dbtorneoge tge ON fix.reftorneoge_a = tge.idtorneoge

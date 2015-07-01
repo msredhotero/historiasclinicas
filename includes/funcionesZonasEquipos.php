@@ -956,8 +956,8 @@ function traerPuntosConductaPorFechaEquipo($refequipo,$reffecha) {
 					reftorneoge_b,
 					resultado_b,
 					fechajuego,
-					refFecha,
-					Hora,
+					reffecha,
+					hora,
 					cancha
 				FROM dbfixture 
 				where idfixture = ".$id;

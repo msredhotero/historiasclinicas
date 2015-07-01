@@ -121,6 +121,16 @@ break;
 	case 'eliminarConducta':
 		eliminarConducta($serviciosFunciones);
 		break; 
+		
+	case 'insertarPuntosEquipos':
+	insertarPuntosEquipos($serviciosEquipos);
+	break;
+	case 'modificarPuntosEquipos':
+	modificarPuntosEquipos($serviciosEquipos);
+	break;
+	case 'eliminarPuntosEquipos':
+	eliminarPuntosEquipos($serviciosEquipos);
+	break; 	
 	/* fin equipos */
 	
 	
@@ -1338,6 +1348,62 @@ function eliminarConducta($serviciosFunciones) {
 	$res = $serviciosFunciones->eliminarConducta($id);
 	echo $res;
 } 
+
+
+
+function insertarPuntosEquipos($serviciosPuntosEquipos) {
+$refequipo = $_POST['refequipo'];
+$puntos = $_POST['puntos'];
+$amarillas = $_POST['amarillas'];
+$azules = $_POST['azules'];
+$rojas = $_POST['rojas'];
+$reffixture = $_POST['reffixture'];
+$reffecha = $_POST['reffecha'];
+$reftorneo = $_POST['reftorneo'];
+
+$resExiste = $serviciosPuntosEquipos->traerPuntosEquiposPorFixtureEquipoFechaTorneo($reffixture,$refequipo,$reffecha,$reftorneo);
+
+	if (mysql_num_rows($resExiste)<1) {
+		$res = $serviciosPuntosEquipos->insertarPuntosEquipos($refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+		if ((integer)$res > 0) {
+			echo '';
+		} else {
+			echo 'Huvo un error al insertar datos ';
+		}
+	} else {
+		$res = $serviciosPuntosEquipos->modificarPuntosEquipos(mysql_result($resExiste,0,0) ,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+		if ($res == true) {
+			echo '';
+		} else {
+			echo 'Huvo un error al modificar datos';
+		}
+	}
+}
+function modificarPuntosEquipos($serviciosPuntosEquipos) {
+$id = $_POST['id'];
+$refequipo = $_POST['refequipo'];
+$puntos = $_POST['puntos'];
+$amarillas = $_POST['amarillas'];
+$azules = $_POST['azules'];
+$rojas = $_POST['rojas'];
+$reffixture = $_POST['reffixture'];
+$reffecha = $_POST['reffecha'];
+$reftorneo = $_POST['reftorneo'];
+$res = $serviciosPuntosEquipos->modificarPuntosEquipos($id,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarPuntosEquipos($serviciosPuntosEquipos) {
+$id = $_POST['id'];
+$res = $serviciosPuntosEquipos->eliminarPuntosEquipos($id);
+echo $res;
+} 
+
+
+
 /* fin equipos */
 
 
@@ -1345,58 +1411,47 @@ function eliminarConducta($serviciosFunciones) {
 
 function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones) {
 	
-	if (isset($_POST['jugo'])) {
-		$jugo = 1;
-	} else {
-		$jugo = 0;
-	}
-	if (isset($_POST['goles'])) {
-		$goles = $_POST['goles'];
-	} else {
-		$goles = 'null';
-	}	
-	if (isset($_POST['cancha'])) {
-		$cancha = $_POST['cancha'];
-	} else {
-		$cancha = 'null';
-	}	
-	if (isset($_POST['arquero'])) {
-		$arquero = $_POST['arquero'];
-	} else {
-		$arquero = 'null';
-	}	
-	if (isset($_POST['amarillas'])) {
-		$amarillas = $_POST['amarillas'];
-	} else {
-		$amarillas = 'null';
-	}
-	if (isset($_POST['azules'])) {
-		$azules = $_POST['azules'];
-	} else {
-		$azules = 'null';
-	}
-	if (isset($_POST['rojas'])) {
-		$rojas = $_POST['rojas'];
-	} else {
-		$rojas = 'null';
-	}	
-	if (isset($_POST['puntos'])) {
-		$puntos = $_POST['puntos'];
-	} else {
-		$puntos = 'null';
-	}
-	if (isset($_POST['mejor'])) {
-		$mejor = 1;
-	} else {
-		$mejor = 0;
-	}		
+	$refjugador		= $_POST['refjugador'];
+	$refequipo		= $_POST['refequipo'];
+	$reffixture		= $_POST['reffixture'];
+
+	$jugo = $_POST['jugo'];
+	$goles = $_POST['goles'];
+	$cancha = $_POST['cancha'];
+	$arquero = $_POST['arquero'];
+	$amarillas = $_POST['amarillas'];
+	$azul = $_POST['azules'];
+	$rojas = $_POST['rojas'];
+	$puntos = $_POST['puntos'];
+	$mejor = $_POST['mejor'];
+
+	$id = $serviciosJugadores->existeAmonestado($reffixture);
 	
-	$res = $serviciosAmonestados->insertarAmonestados($refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor);
-	if ((integer)$res > 0) {
-		echo '';
+	if ($id == 0) {
+		
+		if ($jugo == 1) {
+			$res = $serviciosJugadores->insertarAmonestados($refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor,$goles);
+			if ((integer)$res > 0) {
+				echo '';
+			} else {
+				echo 'Huvo un error al insertar datos'.$res;
+			} 
+		} else {
+			echo 'La estadistica no ha sido cargada, ya que el jugador no jugó';	
+		}
 	} else {
-		echo 'Huvo un error al insertar datos';
-	} 
+		if ($jugo == 1) {
+			$res = $serviciosJugadores->modificarAmonestados($id,$refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor,$goles);
+			if ($res == true) {
+				echo '';
+			} else {
+				echo 'Huvo un error al MODIFICAR datos'.$res;
+			}
+		} else {
+			$res = $serviciosJugadores->eliminarAmonestados($id);
+			echo '<img src="../../imagenes/warning.gif"> La estadistica ha sido eliminada, ya que el jugador no jugó';	
+		}
+	}
 }
 
 
