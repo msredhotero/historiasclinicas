@@ -1286,11 +1286,11 @@ function modificarTorneo($serviciosFunciones) {
 	} else {
 		$activo = 0;
 	}
-
+	$actual = 0;
 	$reftipotorneo	=	$_POST['reftipotorneo'];
 	$refsede		=	$_POST['refsede'];
 	
-	$res = $serviciosFunciones->modificarTorneo($id,$nombre,$fechacreacion,$activo,$actual,$reftipotorneo,$refsede);
+	$res = $serviciosFunciones->modificarTorneo($id,$nombre,$fechacreacion,$activo,$reftipotorneo,$refsede);
 	
 
 	if ($res == true) {

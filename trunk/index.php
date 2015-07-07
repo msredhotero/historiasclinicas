@@ -188,7 +188,7 @@ $resTipoTorneos = $servicios->traerTipoTorneo();
 
                                         } else {
 											url = "dashboard/";
-											$(location).attr('href',url);
+											//$(location).attr('href',url);
 										}
                                         
                                 }
