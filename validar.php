@@ -244,7 +244,7 @@ if ($resLogin == '') {
              
               <div class="form-group">
                 <div class="col-lg-offset-2 col-lg-10">
-                  <button type="button" class="btn btn-default" id="login">Login</button>
+                  <button type="submit" class="btn btn-default" id="login">Login</button>
                 </div>
               </div>
 				

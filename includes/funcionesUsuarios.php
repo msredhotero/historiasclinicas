@@ -68,7 +68,7 @@ if (mysql_num_rows($respusu) > 0) {
 }
 	
 	
-	return $sqlpass;
+	return $error;
 	
 }
 
