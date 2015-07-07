@@ -9,6 +9,7 @@ include ('../includes/funcionesGrupos.php');
 include ('../includes/funcionesZonasEquipos.php');
 include ('../includes/funcionesNoticias.php');
 include ('../includes/funcionesDATOS.php');
+include ('../includes/funcionesPlayoff.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosFunciones = new Servicios();
@@ -19,6 +20,7 @@ $serviciosGrupos	= new ServiciosG();
 $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosNoticias = new ServiciosNoticias();
 $serviciosDatos = new ServiciosDatos();
+$serviciosPlayOff = new ServiciosPlayOff();
 
 $accion = $_POST['accion'];
 
@@ -44,6 +46,19 @@ switch ($accion) {
 	case 'modificarCliente':
 		modificarCliente($serviciosUsuarios);
 		break;
+
+/* PARA PlayOff */
+case 'insertarPlayOff':
+insertarPlayOff($serviciosPlayOff);
+break;
+case 'modificarPlayOff':
+modificarPlayOff($serviciosPlayOff);
+break;
+case 'eliminarPlayOff':
+eliminarPlayOff($serviciosPlayOff);
+break;
+
+/* Fin */
 	
 	/* PARA Sedes */
 case 'insertarSedes':
@@ -98,6 +113,9 @@ break;
 	case 'cambiarTorneo':
 		cambiarTorneo($serviciosFunciones);
 		break;
+	case 'traerZonaPorTorneos':
+		traerZonaPorTorneos($serviciosFunciones);
+		break;
 		
 	/* fin torneos */
 	
@@ -130,7 +148,11 @@ break;
 	break;
 	case 'eliminarPuntosEquipos':
 	eliminarPuntosEquipos($serviciosEquipos);
-	break; 	
+	break; 
+	
+	case 'traerEquipoPorZonaTorneos':
+		traerEquipoPorZonaTorneos($serviciosEquipos);
+		break;
 	/* fin equipos */
 	
 	
@@ -330,11 +352,46 @@ break;
 function toArray($query)
 {
     $res = array();
-    while ($row = @mysql_fetch_assoc($query)) {
+    while ($row = @mysql_fetch_array($query)) {
         $res[] = $row;
     }
     return $res;
 }
+
+
+/* PARA PlayOff */
+function insertarPlayOff($serviciosPlayOff) {
+$refequipo = $_POST['refequipo'];
+$reftorneo = $_POST['reftorneo'];
+$refzona = $_POST['refzona'];
+$fechacreacion = $_POST['fechacreacion'];
+$res = $serviciosPlayOff->insertarPlayOff($refequipo,$reftorneo,$refzona,$fechacreacion);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarPlayOff($serviciosPlayOff) {
+$id = $_POST['id'];
+$refequipo = $_POST['refequipo'];
+$reftorneo = $_POST['reftorneo'];
+$refzona = $_POST['refzona'];
+$fechacreacion = $_POST['fechacreacion'];
+$res = $serviciosPlayOff->modificarPlayOff($id,$refequipo,$reftorneo,$refzona,$fechacreacion);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarPlayOff($serviciosPlayOff) {
+$id = $_POST['id'];
+$res = $serviciosPlayOff->eliminarPlayOff($id);
+echo $res;
+}
+
+/* Fin */ 
 
 /* PARA Canchas */
 function insertarCanchas($serviciosCanchas) {
@@ -1188,6 +1245,15 @@ echo $res;
 
 /* para los torneos */
 
+function traerZonaPorTorneos($serviciosFunciones) {
+	$idTorneo	= 	$_POST["reftorneo"];
+	
+	$res	= $serviciosFunciones->traerZonaPorTorneos($idTorneo);
+	
+	echo json_encode(toArray($res));	
+	
+}
+
 function insertarTorneo($serviciosFunciones) {
 	$nombre			=	$_POST['nombre'];
 	$fechacreacion	=	$_POST['fechacreacion'];
@@ -1271,6 +1337,16 @@ function cambiarTorneo($serviciosFunciones) {
 /* fin torneos */
 	
 /* para los equipos */
+
+function traerEquipoPorZonaTorneos($serviciosEquipos) {
+	$refTorneo		= $_POST['reftorneo'];
+	$refZona		= $_POST['refzona'];
+	
+	$res	= $serviciosEquipos->traerEquipoPorZonaTorneos($refTorneo,$refZona);
+	
+	echo json_encode(toArray($res));
+}
+
 
 function insertarEquipos($serviciosEquipos) {
 	$Nombre 			= $_POST['nombre'];
