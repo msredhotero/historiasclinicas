@@ -8,6 +8,14 @@ date_default_timezone_set('America/Buenos_Aires');
 
 class ServiciosE {
 	
+	function traerEquipoPorZonaTorneos($idTorneo, $idZona) {
+		$sql = "select e.idequipo, e.nombre 
+				from dbequipos e
+				inner join dbtorneoge tge 
+				on	tge.refequipo = e.idequipo 
+				where	tge.reftorneo = ".$idTorneo." and tge.refgrupo =".$idZona;
+		return $this-> query($sql,0);	
+	}
 	function TraerEquipos() {
 		$sql = "select IdEquipo,
 				Nombre,
