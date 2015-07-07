@@ -23,7 +23,7 @@ function GUID()
 function login($usuario,$pass,$torneo) {
 	
 	$sqlusu = "select * from se_usuarios where email = '".$usuario."'";
-
+$error = 'Error';
 
 
 if (trim($usuario) != '' and trim($pass) != '') {
@@ -34,12 +34,12 @@ if (mysql_num_rows($respusu) > 0) {
 	$error = '';
 	
 	$idUsua = mysql_result($respusu,0,0);
-	$sqlpass = "select nombrecompleto,email,usuario,refroll from se_usuarios where password = '".$pass."' and IdUsuario = ".$idUsua;
+	$sqlpass = "select nombrecompleto,email,usuario,refroll from se_usuarios where password = '".$pass."' and idusuario = ".$idUsua;
 
 	$resppass = $this->query($sqlpass,0);
 	
-	if (mysql_num_rows($resppass) > 0) {
-		$error = '';
+		if (mysql_num_rows($resppass) > 0) {
+			$error = '';
 		} else {
 			$error = 'Usuario o Password incorrecto';
 		}
@@ -68,7 +68,7 @@ if (mysql_num_rows($respusu) > 0) {
 }
 	
 	
-	return $error;
+	return $sqlpass;
 	
 }
 

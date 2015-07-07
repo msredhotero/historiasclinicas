@@ -974,6 +974,8 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	return $this-> query($sql,0);
 }
 
+
+
 	function TraerTorneosActivo($tipotorneo) {
 		$sql = "select t.idtorneo,t.nombre,t.fechacreacion,t.activo,tt.descripciontorneo from dbtorneos t
 				inner join
@@ -1017,10 +1019,12 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	function insertarTorneo($nombre,$fechacrea,$activo,$reftipotorneo,$refsede) {
 		$nombre = str_replace("'","",$nombre);
 		$nombre = utf8_decode($nombre);
-		
-		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo,refsede) values ('','".$nombre."', '".$fechacrea."', ".$activo.",".$reftipotorneo.",".$refsede.")";
+
+		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo,refsede) values ('','".$nombre."', '".$fechacrea."', '".$activo."',".$reftipotorneo.",".$refsede.")";
 		//return $sql;
 		$res = $this-> query($sql,1);
+		
+		$this->deshactivarTorneos($res,$reftipotorneo);
 		
 		return $res;
 	}
@@ -1033,7 +1037,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		$sql = "update dbtorneos 
 					set 
 						nombre = '".$nombre."', 
-						activo =".$activo.",
+						activo ='".$activo."',
 						refsede=".$refsede.",
 						";
 		if ($fechacrea != '') {				
@@ -1044,9 +1048,12 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		$res = $this-> query($sql,0);
 		
 		if ($res == false) {
-			return 'Error al insertar datos';
+			return 'Error al modificar datos';
 		} else {
-			return '';
+			if ($activo == '1') {
+				$this->deshactivarTorneos($idtorneo,$reftipotorneo);
+			}
+			return $res;
 		}	
 
 		

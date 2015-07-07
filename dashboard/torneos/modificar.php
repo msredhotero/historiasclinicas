@@ -38,8 +38,8 @@ $accionEliminar		= "eliminarTorneo";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbtorneos";
 
-$lblCambio	 	= array("reftipotorneo","FechaCreacion");
-$lblreemplazo	= array("Tipo Torneo","Fecha Creación");
+$lblCambio	 	= array("reftipotorneo","FechaCreacion","refsede");
+$lblreemplazo	= array("Tipo Torneo","Fecha Creación","Sede");
 
 $resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
 
@@ -62,8 +62,6 @@ while ($rowS = mysql_fetch_array($resSede)) {
 	} else {
 		$cadRef2 = $cadRef2.'<option value="'.$rowS[0].'">'.$rowS[1].'</option>';
 	}
-	
-	
 }
 
 $refdescripcion = array(0 => $cadRef,1 => $cadRef2);
