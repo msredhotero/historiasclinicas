@@ -299,6 +299,7 @@ $(document).ready(function(){
 				//datos del formulario
 				data: formData,
 				//necesario para subir archivos via ajax
+				async:true,
 				cache: false,
 				contentType: false,
 				processData: false,
@@ -306,20 +307,18 @@ $(document).ready(function(){
 				beforeSend: function(){
 					$("#load").html('<img src="../../imagenes/load13.gif" width="50" height="50" />');       
 				},
+
+				global: true,
+        		ifModified: false,
 				//una vez finalizado correctamente
 				success: function(data){
-
+					
 					if (data == '') {
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
                                             $(".alert").html('<strong>Ok!</strong> Se Modifico exitosamente el <strong><?php echo $lblTitulosingular; ?></strong>. ');
-											$(".alert").delay(3000).queue(function(){
-												/*aca lo que quiero hacer 
-												  después de los 2 segundos de retraso*/
-												$(this).dequeue(); //continúo con el siguiente ítem en la cola
-												
-											});
+											
 											$("#load").html('');
 											
                                             
