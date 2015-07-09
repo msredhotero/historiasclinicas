@@ -947,7 +947,12 @@ return $res;
 	}
 	
 	function TraerTorneos() {
-		$sql = "select t.idtorneo,t.nombre,t.fechacreacion,t.activo,tt.descripciontorneo,ss.nombre from dbtorneos t
+		$sql = "select t.idtorneo,t.nombre,t.fechacreacion, 
+		(CASE WHEN t.activo =1
+		THEN  '1'
+		ELSE  '0'
+		END
+		) AS activo ,tt.descripciontorneo,ss.nombre from dbtorneos t
 				inner join
 				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
 				inner join
@@ -957,7 +962,12 @@ return $res;
 	}
 	
 	function TraerIdTorneos($id) {
-		$sql = "SELECT idtorneo,nombre,date_format(fechacreacion, '%d/%m/%Y') as fechacreacion,activo,reftipotorneo,refsede FROM dbtorneos where idtorneo = ".$id;
+		$sql = "SELECT idtorneo,nombre,date_format(fechacreacion, '%d/%m/%Y') as fechacreacion, 
+				(CASE WHEN activo =1
+				THEN  '1'
+				ELSE  '0'
+				END
+				) AS activo,reftipotorneo,refsede FROM dbtorneos where idtorneo = ".$id;
 		return $this-> query($sql,0);
 	}
 	
@@ -994,7 +1004,12 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	}
 	
 	function TraerTorneoPorTipoTorneo($idtipotorneo) {
-		$sql = "select t.idtorneo,t.nombre,t.fechacreacion,t.activo,tt.descripciontorneo from dbtorneos t
+		$sql = "select t.idtorneo,t.nombre,t.fechacreacion, 
+		(CASE WHEN t.activo =1
+			THEN  '1'
+			ELSE  '0'
+			END
+			) AS activo,tt.descripciontorneo from dbtorneos t
 				right join
 				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
 				where tt.idtipotorneo = ".$idtipotorneo;
@@ -1030,14 +1045,15 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	}
 	
 	function modificarTorneo($idtorneo,$nombre,$fechacrea,$activo,$reftipotorneo,$refsede) {
+		
 		$nombre = str_replace("'","",$nombre);
 		$nombre = utf8_decode($nombre);
 
 		
 		$sql = "update dbtorneos 
 					set 
-						nombre = '".$nombre."', 
-						activo ='".$activo."',
+						nombre = '".$nombre.$activo."1', 
+						activo =".$activo.",
 						refsede=".$refsede.",
 						";
 		if ($fechacrea != '') {				
@@ -1045,6 +1061,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		}
 		$sql = $sql."   reftipotorneo = ".$reftipotorneo."  
 						where idtorneo =".$idtorneo;
+
 		$res = $this-> query($sql,0);
 		
 		if ($res == false) {
