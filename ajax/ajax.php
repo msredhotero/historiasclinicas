@@ -1278,26 +1278,28 @@ function insertarTorneo($serviciosFunciones) {
 }
 
 function modificarTorneo($serviciosFunciones) {
-	$id				=	$_POST['id'];
+	/*$id				=	$_POST['id'];
 	$nombre			=	$_POST['nombre'];
 	$fechacreacion	=	$_POST['fechacreacion'];
-	if (isset($_POST['activo'])) {
+	/*if (isset($_POST['activo'])) {
 		$activo	= 1;
 	} else {
 		$activo = 0;
-	}
-	$actual = 0;
+	}*/
+	/*$activo = 0;
+
 	$reftipotorneo	=	$_POST['reftipotorneo'];
 	$refsede		=	$_POST['refsede'];
 	
 	$res = $serviciosFunciones->modificarTorneo($id,$nombre,$fechacreacion,$activo,$reftipotorneo,$refsede);
-	
-
+	*/
+	echo 'asdasd';
+/*
 	if ($res == true) {
-		echo '';
+		echo 'dfg'.$res;
 	} else {
-		echo 'Huvo un error al modificar datos';
-	}
+		echo 'Huvo un error al modificar datos'.$res;
+	}*/
 }
 
 function eliminarTorneo($serviciosFunciones) {
