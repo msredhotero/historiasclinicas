@@ -160,6 +160,9 @@ if ($_SESSION['refroll_predio'] != 1) {
                         <li>
                        	 <button id="cargar" class="btn btn-primary" style="margin-left:0px;" type="button">Cargar Tabla de conducta</button>
                         </li>
+						<li>
+                       	 <button id="calcular" class="btn btn-warning" style="margin-left:0px;" type="button">Calcular Tabla de conducta</button>
+                        </li>
                     </ul>
                     </div>
                 </div>
@@ -212,6 +215,29 @@ $('#cargar').click(function() {
 			});
 		}
 	});
+
+$('#calcular').click(function() {
+		if ($('#reffecha').val() == 0) {
+			alert("Error, debe seleccionar una fecha.");	
+		} else {
+			$.ajax({
+					data:  {reffecha: $('#reffecha').val(), 
+							accion: 'calcularTablaConducta'},
+					url:   '../../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							url = "conductafixture.php";
+							$(location).attr('href',url);
+							
+					}
+			});
+		}
+	});
+	
+	
 	
 
 
