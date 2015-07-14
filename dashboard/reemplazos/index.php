@@ -22,7 +22,7 @@ $serviciosHTML 		= new ServiciosHTML();
 $serviciosFunciones = new Servicios();
 $serviciosJugadores = new ServiciosJ();
 $serviciosEquipos	= new ServiciosE();
-$serviciosGrupos	= new ServiciosG();
+$serviciosZonas 	= new ServiciosG();
 $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosDatos	= new ServiciosDatos();
 
@@ -33,16 +33,13 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_predio']),"ZonasEq
 
 
 
-$resHorarios = $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
-
-
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbtorneoge";
+$tabla 			= "dbreemplazo";
 
-$lblCambio	 	= array("refgrupo","refequipo","reftorneo");
-$lblreemplazo	= array("Zonas","Equipos","Torneo");
+$lblCambio	 	= array("refequipo","refequiporeemplazado","reffecha","reftorneo","golesencontra");
+$lblreemplazo	= array("Equipo - Entra","Equipo - Sale","Fecha","Tipo Torneo","Goles en contra");
 
-$resTipoTorneo 	= $serviciosFunciones->TraerTorneosActivo($_SESSION['torneo_predio']);
+$resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
 
 $cadRef = '';
 $idtorneo = 0;
@@ -53,16 +50,16 @@ while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
 }
 
 
-$resZonas 	= $serviciosGrupos->TraerGrupos();
+$resFecha 	= $serviciosFunciones->TraerFecha();
 
 $cadRef2 = '';
-while ($rowZ = mysql_fetch_array($resZonas)) {
+while ($rowZ = mysql_fetch_array($resFecha)) {
 	$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.utf8_encode($rowZ[1]).'</option>';
 	
 }
 
 
-$resEquipos 	= $serviciosZonasEquipos->TraerEquiposSinZona();
+$resEquipos 	= $serviciosEquipos->TraerEquipos();
 
 $cadRef3 = '';
 while ($rowE = mysql_fetch_array($resEquipos)) {
@@ -70,28 +67,14 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 	
 }
 
-$refdescripcion = array(0 => $cadRef2,1=>$cadRef3,2=>$cadRef);
-$refCampo	 	= array("refgrupo","refequipo","reftorneo"); 
+
+
+$refdescripcion = array(0 => $cadRef3,1=>$cadRef3,2=>$cadRef2,3=>$cadRef);
+$refCampo	 	= array("refequipo","refequiporeemplazado","reffecha","reftorneo"); 
 
 
 
 
-$resEquiposRR 	= $serviciosEquipos->TraerEquipos();
-
-$cadEquiposR = '';
-while ($rowER = mysql_fetch_array($resEquiposRR)) {
-	$cadEquiposR = $cadEquiposR.'<option value="'.$rowER[0].'">'.utf8_encode($rowER[1]).'</option>';
-	
-}
-
-
-$refultimaFecha = $serviciosFunciones->TraerUltimaFechaActivo();
-
-if (mysql_num_rows($refultimaFecha)>0) {
-	$ultimaFecha = mysql_result($refultimaFecha,0,0);
-} else {
-	$ultimaFecha = 0;
-}
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -99,21 +82,27 @@ if (mysql_num_rows($refultimaFecha)>0) {
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Zonas</th>
-				<th>Equipos</th>
-				<th>Torneo</th>
-				<th>Prioridad</th>";
+$cabeceras 		= "	<th>Equipo(Entra)</th>
+				<th>Equipo(Sale)</th>
+				<th>Puntos</th>
+				<th>Goles En Contra</th>
+				<th>Fecha</th>
+				<th>Tipo Torneo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
-$formulario 	= $serviciosFunciones->camposTabla("insertarZonasEquipos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTabla("insertarReemplazos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerEquiposZonas(),4);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->traerReemplazos(),6);
 
-
+$cadZonas = '';
+$resZonas = $serviciosZonas->TraerGrupos();
+while ($rowZonas = mysql_fetch_array($resZonas)) {
+	$cadZonas = $cadZonas.'<option value="'.$rowZonas[0].'">'.$rowZonas[1].'</option>';	
+}
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -137,7 +126,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 
 
-<title>Gestión: Tres Sesenta Fútbol</title>
+<title>Gestión: Predio 98</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
@@ -182,11 +171,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Zonas-Equipos</h3>
+<h3>Reemplazos</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Zonas-Equipos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Reemplazos</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -195,116 +184,45 @@ if ($_SESSION['refroll_predio'] != 1) {
     		<?php echo $formulario; ?>
             </div>
             <br>
-            <hr>
-            <h4>Prioridades de Turnos</h4>
-            <div class="help-block">
-            	* Recuerde que cero 0, significa que no puede jugar en ese horario
-            </div>
-            <div class="row">
-            
-            	<?php
-					$i = 0;
-					while ($rowH = mysql_fetch_array($resHorarios)) {
-					$i = $i + 1;
-
-				?>
-            	<div class="form-group col-md-3">
-                    <label class="control-label" style="text-align:left" for="refgrupo"><?php echo $rowH[1]; ?></label>
-                    <div class="input-group col-md-12">
-                        <select id="horario<?php echo $i; ?>" class="form-control" name="horario<?php echo $i; ?>">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="0">0</option>
+            <div class="form-group col-md-6">
+             <label class="control-label" style="text-align:left" for="torneo">Zona</label>
+                <div class="input-group col-md-8">
+                    <select id="refzona" class="form-control" name="refzona">
+                        <option value="0">--Seleccione--</option>
+                        <?php echo $cadZonas; ?>
                             
-                        </select>
-                        <input type="hidden" id="idhorario<?php echo $i; ?>" name="idhorario<?php echo $i; ?>" value="<?php echo $rowH[0]; ?>"/>
-                    </div>
+                    </select>
                 </div>
-                
-                <?php
-				
-					}
-				
-				?>
-                
-               
-            
+                <div class="input-group col-md-4">
+                	<button id="buscar" class="btn btn-primary" style="margin-left:0px;" type="button">Buscar</button>
+                </div>
             </div>
             
-            
-            <div class="row">
-                <div class="col-md-12" align="center">
-                <ul class="list-inline" style="margin-top:15px;">
-                    <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
-                    </li>
-                </ul>
+            <div class="form-group col-md-6">
+             <label class="control-label" style="text-align:left" for="torneo">Puntos Fair Play</label>
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control" id="fairplay" name="fairplay" value="0" />
                 </div>
+
             </div>
             </form>
-            <br>
-            <hr>
-            <div class="row" style="padding:0 15px;">
-            <h4>Reemplazar Equipos</h4>
-            <div class="help-block">Recuerde que el equipo reemplazado se inhabilitará, y el equipo que lo reemplaza tomará los puntos, puntos de fairplay y goles en contra del ultimo en la tabla de posiciones</div>
-            <form class="form-inline formulario2" role="form">
-            	<div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="control-label" style="text-align:left" for="refgrupo">Equipo A Reemplazar</label>
-                        <div class="input-group col-md-12">
-                            <select id="refequipor" class="form-control" name="refequipor">
-                                <option value="0">--Seleccione--</option>
-                            	<?php echo $cadEquiposR; ?>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="form-group col-md-6">
-                        <label class="control-label" style="text-align:left" for="refgrupo">Equipo Reemplazante</label>
-                        <div class="input-group col-md-12">
-                            <select id="refequiporr" class="form-control" name="refequiporr">
-                                <option value="0">--Seleccione--</option>
-                            	<?php echo $cadEquiposR; ?>
-                            </select>
-                        </div>
-                    </div>
-            	</div>
-                
-                <div class="row">
-                    <div class="col-md-12" align="center">
-                    <ul class="list-inline" style="margin-top:15px;">
-                        <li>
-                            <button type="button" class="btn btn-warning" id="cambiar" style="margin-left:0px;">Cambiar</button>
-                        </li>
-                    </ul>
-                    </div>
-                </div>
-                <div class="row alert-info" id="datosequipoultimo" style="padding:0 15px; display:none;">
-                	<h4>Datos del ultimo equipo de la zona del equipo a reeplazar</h4>
-                    <p><b>Equipo: </b> <span id="ultimoequipo"></span></p>
-                    <input type="hidden" id="idequiporeemp" name="idequiporeemp" value=""/>
-                    <input type="hidden" id="accion" name="accion" value="reemplazarEquipos"/>
-                    <input type="hidden" id="reffechar" name="reffechar" value="<?php echo $ultimaFecha; ?>"/>
-                    <p><b>Puntos: </b><input type="text" required name="puntos" id="puntos" class="form-control"></p>
-                    <p><b>Puntos FairPlay: </b><input type="text" required name="puntosfp" id="puntosfp" class="form-control"></p>
-                    <p><b>Goles en Contra: </b><input type="text" required name="golesec" id="golesec" class="form-control"></p>
-                </div>
-            </form>
-            </div>
+            
     	</div>
     </div>
-
+	<div class="boxInfoLargo" style="margin-top:-30px;">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Posiciones</p>
+        	
+        </div>
+    	<div class="cuerpoBox" id="posiciones">
+        
+        </div>
+        
+    </div>
+    
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Zonas-Equipos Cargados</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Reemplazos Cargados</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -324,7 +242,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipo de la Zona">
     	<p class="alert alert-danger">
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el Equipo de la Zona?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Reemplazos?.<span id="proveedorEli"></span>
         </p>
 
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -338,38 +256,30 @@ $(document).ready(function(){
 	
 	?>
 	
-	$('#refequipor').change(function() {
+	function traerPosiciones(reftorneo,refzona,reffecha, zona) {
 		$.ajax({
-				data:  {refequipo: $('#refequipor').val(),
-						reftorneo: <?php echo $_SESSION['idtorneo_predio']; ?>, 
-						reffecha: <?php echo $ultimaFecha; ?>,  
-						accion: 'TraerZonaPorTorneoEquipo'},
+				data:  {reftorneo: reftorneo,
+						refzona: refzona,
+						zona: zona,
+						reffecha: reffecha,
+						accion: 'TraerFixturePorZonaTorneo'},
 				url:   '../../ajax/ajax.php',
 				type:  'post',
 				beforeSend: function () {
 						
 				},
 				success:  function (response) {
-						
-						if(response){
-							resultObj = eval (response);
-							$('#idequiporeemp').val(resultObj[1]);
-							$('#ultimoequipo').html(resultObj[0]);
-							$('#puntos').val(resultObj[2]);
-							$('#puntosfp').val(resultObj[3]);
-							$('#golesec').val(resultObj[4]);
-							$('#datosequipoultimo').show(200);
-						}else{
-							$('#datosequipoultimo').hide(200);
-						}
-						
-						url = "index.php";
-						//$(location).attr('href',url);
+						$('#posiciones').html(response);
 						
 				}
 		});
-		
+	}
+	
+	$('#buscar').click(function(e) {
+		traerPosiciones($('#reftorneo').val(),$('#refzona').val(),$('#reffecha').val(),$('#refzona option:selected').text());
 	});
+	
+	traerPosiciones($('#reftorneo').val(),$('#refzona').val(),$('#reffecha').val(),$('#refzona option:selected').text());
 	
 	
 	 $('.varborrar').click(function(event){
