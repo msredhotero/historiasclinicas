@@ -384,7 +384,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         <tr>
                         	<th>
                             	<div align="center">
-                                	<input type="checkbox" class="form-control input-sm" id="jugo<?php echo $rowB[0]; ?>" name="jugo<?php echo $rowB[0]; ?>" style="width:30px;"/>
+                                	<input type="checkbox" class="form-control input-sm" id="jugo<?php echo $rowB[0]; ?>" name="jugo<?php echo $rowB[0]; ?>" style="width:30px;" <?php if ($rowB["jugo"] == '1') { echo "checked"; } ?>/>
                                 </div>
                             </th>
                         	<th>
@@ -395,42 +395,42 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="goles<?php echo $rowB[0]; ?>" id="goles<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="goles<?php echo $rowB[0]; ?>" id="goles<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["goles"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $rowB[0]; ?>" id="cancha<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $rowB[0]; ?>" id="cancha<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["cancha"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="arquero<?php echo $rowB[0]; ?>" id="arquero<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="arquero<?php echo $rowB[0]; ?>" id="arquero<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["arquero"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">	
-                                	<input type="number" class="form-control input-sm" name="amarillas<?php echo $rowB[0]; ?>" id="amarillas<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="amarillas<?php echo $rowB[0]; ?>" id="amarillas<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["amarillas"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="azules<?php echo $rowB[0]; ?>" id="azules<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="azules<?php echo $rowB[0]; ?>" id="azules<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["azules"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="rojas<?php echo $rowB[0]; ?>" id="rojas<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="rojas<?php echo $rowB[0]; ?>" id="rojas<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["rojas"]; ?>"/>
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $rowB[0]; ?>" value="6" id="puntos<?php echo $rowB[0]; ?>" style="width:45px;"/>
+                                	<input type="number" class="form-control input-sm" name="puntos<?php echo $rowB[0]; ?>" id="puntos<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php if ($rowB["puntos"] == '') { echo 6; } else { echo $rowB["puntos"]; }?>" />
                                 </div>
                             </th>
                             <th>
                             	<div align="center">
-                                	<input type="checkbox" class="form-control input-sm" id="mejor<?php echo $rowB[0]; ?>" name="mejor<?php echo $rowB[0]; ?>s" style="width:30px;"/>
+                                	<input type="checkbox" class="form-control input-sm" id="mejor<?php echo $rowB[0]; ?>" name="mejor<?php echo $rowB[0]; ?>s" style="width:30px;" <?php if ($rowB["mejor"] == 1) { echo "checked"; } ?>/>
                                 </div>
                             </th>
                             <th>
@@ -440,7 +440,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                                 </div>
                             </th>
                         </tr>
-                        <tr style="display:none;" id="resultado<?php echo $row[0]; ?>"><th colspan='12'></th></tr>
+                        <tr style="display:none;" id="resultado<?php echo $rowB[0]; ?>"><th colspan='12'></th></tr>
                         <?php
 								} else {
 									echo "<tr><th colspan='12'><h4>El Equipo no posee jugadores cargados</h4></th></tr>";

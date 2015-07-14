@@ -872,6 +872,111 @@ class ServiciosZonasEquipos {
 		return $res;
 		}
 
+
+function traerCalculoPorFechaTorneoEquipo($refequipo,$reffecha,$idtorneo) {
+	$sql = "select 
+				*
+			from
+				(select 
+					t.tipofecha,
+						t.nombre,
+						sum(t.puntosAmarillas + t.puntosAzules) as puntos,
+						t.idequipo,
+						t.idfecha
+				from
+					(select 
+					f.tipofecha,
+						e.nombre,
+						count(a.amarillas) as puntosAmarillas,
+						COALESCE(sum(a.azul*2),0) as puntosAzules,
+						f.idfecha,
+						e.idequipo
+				from
+					tbamonestados a
+				inner join dbequipos e ON e.idequipo = a.refequipo
+				inner join dbfixture fix ON fix.idfixture = a.reffixture
+				inner join tbfechas f ON f.idfecha = fix.reffecha
+				inner join dbtorneoge tge ON tge.refequipo = e.idequipo
+					and fix.reftorneoge_a = tge.idtorneoge
+				where
+					(a.amarillas = 1 or a.azul = 1) and tge.reftorneo = ".$idtorneo."
+						and fix.reffecha = ".$reffecha."
+				group by f.tipofecha , e.nombre , f.idfecha , e.idequipo union all select 
+					f.tipofecha,
+						e.nombre,
+						count(a.amarillas) as puntosAmarillas,
+						COALESCE(sum(a.azul*2),0) as puntosAzules,
+						f.idfecha,
+						e.idequipo
+				from
+					tbamonestados a
+				inner join dbequipos e ON e.idequipo = a.refequipo
+				inner join dbfixture fix ON fix.idfixture = a.reffixture
+				inner join tbfechas f ON f.idfecha = fix.reffecha
+				inner join dbtorneoge tge ON tge.refequipo = e.idequipo
+					and fix.reftorneoge_b = tge.idtorneoge
+				where
+					(a.amarillas = 1 or a.azul = 1) and tge.reftorneo = ".$idtorneo."
+						and fix.reffecha = ".$reffecha."
+				group by f.tipofecha , e.nombre , f.idfecha , e.idequipo union all select 
+					f.tipofecha,
+						e.nombre,
+						sum(3) as puntosAmarillas,
+						0 as puntosAzules,
+						f.idfecha,
+						e.idequipo
+				from
+					tbsuspendidos a
+				inner join dbequipos e ON e.idequipo = a.refequipo
+				inner join (select 
+					refsuspendido, min(reffecha) as idfecha
+				from
+					dbsuspendidosfechas
+				group by refsuspendido) sp ON sp.refsuspendido = a.idsuspendido
+				inner join tbfechas f ON f.idfecha = sp.idfecha - 1
+				inner join dbfixture fix ON fix.idfixture = a.reffixture
+				inner join dbtorneoge tge ON tge.refequipo = e.idequipo
+					and fix.reftorneoge_a = tge.idtorneoge
+				where
+					tge.reftorneo = ".$idtorneo." and fix.reffecha = ".$reffecha." and (a.motivos like '%Roja Directa%' or a.motivos like '%Doble Amarilla%') 
+				group by f.tipofecha , e.nombre , f.idfecha , e.idequipo union all select 
+					f.tipofecha,
+						e.nombre,
+						sum(3) as puntosAmarillas,
+						0 as puntosAzules,
+						f.idfecha,
+						e.idequipo
+				from
+					tbsuspendidos a
+				inner join dbequipos e ON e.idequipo = a.refequipo
+				inner join (select 
+					refsuspendido, min(reffecha) as idfecha
+				from
+					dbsuspendidosfechas
+				group by refsuspendido) sp ON sp.refsuspendido = a.idsuspendido
+				inner join tbfechas f ON f.idfecha = sp.idfecha - 1
+				inner join dbfixture fix ON fix.idfixture = a.reffixture
+				inner join dbtorneoge tge ON tge.refequipo = e.idequipo
+					and fix.reftorneoge_b = tge.idtorneoge
+				where
+					tge.reftorneo = ".$idtorneo." and fix.reffecha = ".$reffecha." and (a.motivos like '%Roja Directa%' or a.motivos like '%Doble Amarilla%') 
+				group by f.tipofecha , e.nombre , f.idfecha , e.idequipo) as t
+				group by t.tipofecha , t.nombre , t.idequipo , t.idfecha) as tt
+					inner join
+				dbtorneoge tge ON tge.refequipo = tt.idequipo
+					and tge.reftorneo = ".$idtorneo."
+					inner join
+				dbfixture fix ON (fix.reftorneoge_a = tge.idtorneoge
+					or fix.reftorneoge_b = tge.idtorneoge)
+					and fix.reffecha = tt.idfecha
+			where
+				tt.idfecha = ".$reffecha." and tt.idequipo = ".$refequipo." 
+			order by 2";	
+			
+		$res = $this->query($sql,0);
+		return $res;
+}
+
 function traerPuntosConductaPorFechaEquipo($refequipo,$reffecha,$idtorneo) {
 	$sql = "select c.puntos,e.idequipo from tbconducta c
 			inner join dbequipos e on e.idequipo = c.refequipo 
@@ -881,7 +986,52 @@ function traerPuntosConductaPorFechaEquipo($refequipo,$reffecha,$idtorneo) {
 	return $res;
 }
 
-	function cargarTablaConducta($reffecha) {
+function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
+		$sql  = "select 
+					e.idequipo, e.nombre,ff.tipofecha, t.idtorneo
+				from
+					dbtorneoge tge
+						inner join
+					dbgrupos g ON tge.refgrupo = g.idgrupo
+						inner join
+					dbtorneos t ON tge.reftorneo = t.idtorneo
+						and t.activo = 1
+						inner join
+					tbtipotorneo tp ON t.reftipotorneo = tp.idtipotorneo
+						inner join
+					dbequipos e ON e.idequipo = tge.refequipo
+						inner join
+					dbfixture fix ON fix.reftorneoge_a = tge.idtorneoge or fix.reftorneoge_b = tge.idtorneoge
+						left join
+					tbconducta cc ON cc.reffecha = fix.reffecha and cc.refequipo = e.idequipo and cc.reftorneo = t.idtorneo
+						inner join
+					tbfechas ff ON ff.idfecha = fix.reffecha
+				where fix.reffecha = ".$reffecha." and cc.idconducta is null and tge.refgrupo = ".$refzona." and t.reftipotorneo = ".$reftorneo."
+				group by	e.idequipo, e.nombre,ff.tipofecha";
+		
+		//return $sql;
+		$res = $this->query($sql,0);
+		
+		if (mysql_num_rows($res)>0) {
+			while ($row6 = mysql_fetch_array($res)) {
+				if (($reffecha - 1) == 22) {
+					$puntos = 0;
+				} else {
+					$resPuntos = $this->traerPuntosConductaPorFechaEquipo($row6[0],$reffecha-1,$row6[3]);
+					if (mysql_num_rows($resPuntos)>0) {
+						$puntos = mysql_result($resPuntos,0,0);	
+					}
+				}
+				$this->insertarConducta($row6[0],$puntos,$reffecha,$row6[3]);				
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	
+	function calcularTablaConducta($reffecha) {
 		$sql  = "select 
 					e.idequipo, e.nombre,ff.tipofecha, t.idtorneo
 				from
@@ -910,12 +1060,27 @@ function traerPuntosConductaPorFechaEquipo($refequipo,$reffecha,$idtorneo) {
 		if (mysql_num_rows($res)>0) {
 			while ($row6 = mysql_fetch_array($res)) {
 				if (($reffecha - 1) == 22) {
-					$puntos = 0;
-				} else {
-					$resPuntos = $this->traerPuntosConductaPorFechaEquipo($row6[0],$reffecha-1,$row6[3]);
-					if (mysql_num_rows($resPuntos)>0) {
-						$puntos = mysql_result($resPuntos,0,0);	
+					$resPuntosB = $this->traerCalculoPorFechaTorneoEquipo($row6[0],$reffecha,$row6[3]);
+					if (mysql_num_rows($resPuntosB)>0) {
+						$puntosB = mysql_result($resPuntosB,0,2);	
+					} else {
+						$puntosB = 0;	
 					}
+					$puntos = 0 + (integer)$puntosB;
+				} else {
+					$resPuntosA = $this->traerPuntosConductaPorFechaEquipo($row6[0],$reffecha-1,$row6[3]);
+					
+					if (mysql_num_rows($resPuntosA)>0) {
+						$puntosA = mysql_result($resPuntosA,0,0);	
+					} else {
+						$puntosA = 0;	
+					}
+					if (mysql_num_rows($resPuntosB)>0) {
+						$puntosB = mysql_result($resPuntosB,0,2);	
+					} else {
+						$puntosB = 0;	
+					}
+					$puntos = (integer)$puntosA + (integer)$puntosB;
 				}
 				$this->insertarConducta($row6[0],$puntos,$reffecha,$row6[3]);				
 			}

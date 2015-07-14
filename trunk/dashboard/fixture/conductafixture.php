@@ -51,6 +51,23 @@ while ($rowF = mysql_fetch_array($resFechas)) {
 
 $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosZonasEquipos->TraerFixtureSinTablaConducta(),2);
 
+$resTipoTorneo 	= $serviciosFunciones->TraerTorneosActivo($_SESSION['torneo_predio']);
+
+$cadT = '';
+$idtorneo = 0;
+while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
+	$idtorneo = $rowTT[0];
+	$cadT = $cadT.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';
+	
+}
+
+$resZonas 	= $serviciosGrupos->TraerGrupos();
+
+$cadRef2 = '';
+while ($rowZ = mysql_fetch_array($resZonas)) {
+	$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.$rowZ[1].'</option>';
+	
+}
 
 if ($_SESSION['refroll_predio'] != 1) {
 
@@ -133,16 +150,38 @@ if ($_SESSION['refroll_predio'] != 1) {
                 </div>
                 <div class="row">
                 	
-                	<div class="form-group col-md-6">
+                	<div class="form-group col-md-12">
 
                     
                     
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-4">
                      <label class="control-label" style="text-align:left" for="torneo">Fecha</label>
                         <div class="input-group col-md-12">
                             <select id="reffecha" class="form-control" name="reffecha">
                                 <option value="0">--Seleccione--</option>
                                 <?php echo $cadF; ?>
+                                    
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                     <label class="control-label" style="text-align:left" for="torneo">Torneo</label>
+                        <div class="input-group col-md-12">
+                            <select id="reftorneo" class="form-control" name="reftorneo">
+                                <option value="0">--Seleccione--</option>
+                                <?php echo $cadT; ?>
+                                    
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group col-md-4">
+                     <label class="control-label" style="text-align:left" for="Zona">Zona</label>
+                        <div class="input-group col-md-12">
+                            <select id="refzona" class="form-control" name="refzona">
+                                <option value="0">--Seleccione--</option>
+                                <?php echo $cadRef2; ?>
                                     
                             </select>
                         </div>
@@ -157,9 +196,9 @@ if ($_SESSION['refroll_predio'] != 1) {
                 <div class="row">
                     <div class="col-md-12">
                     <ul class="list-inline" style="margin-top:15px;">
-                        <li>
+                        <!--<li>
                        	 <button id="cargar" class="btn btn-primary" style="margin-left:0px;" type="button">Cargar Tabla de conducta</button>
-                        </li>
+                        </li>-->
 						<li>
                        	 <button id="calcular" class="btn btn-warning" style="margin-left:0px;" type="button">Calcular Tabla de conducta</button>
                         </li>
@@ -197,7 +236,7 @@ $(document).ready(function(){
 
 $('#cargar').click(function() {
 		if ($('#reffecha').val() == 0) {
-			alert("Error, debe seleccionar una fecha.");	
+			alert("Error, debe seleccionar una Fecha/Torneo/Zona.");	
 		} else {
 			$.ajax({
 					data:  {reffecha: $('#reffecha').val(), 
@@ -217,11 +256,13 @@ $('#cargar').click(function() {
 	});
 
 $('#calcular').click(function() {
-		if ($('#reffecha').val() == 0) {
-			alert("Error, debe seleccionar una fecha.");	
+		if  (($('#reffecha').val() == 0) || ($('#reftorneo').val() == 0) || ($('#refzona').val() == 0)) {
+			alert("Error, debe seleccionar una Fecha - Torneo - Zona.");	
 		} else {
 			$.ajax({
 					data:  {reffecha: $('#reffecha').val(), 
+							reftorneo: $('#reftorneo').val(), 
+							refzona: $('#refzona').val(), 
 							accion: 'calcularTablaConducta'},
 					url:   '../../ajax/ajax.php',
 					type:  'post',
