@@ -59,8 +59,8 @@ eliminarPlayOff($serviciosPlayOff);
 break;
 
 /* Fin */
-	
-	/* PARA Sedes */
+
+/* PARA Sedes */
 case 'insertarSedes':
 insertarSedes($serviciosFunciones);
 break;
@@ -251,6 +251,9 @@ break;
 	case 'cargarTablaConducta':
 		cargarTablaConducta($serviciosZonasEquipos);
 		break;
+	case 'calcularTablaConducta':
+		calcularTablaConducta($serviciosZonasEquipos);
+		break;
 	/* PARA Reemplazos */
 	case 'insertarReemplazos':
 		insertarReemplazos($serviciosReemplazos);
@@ -262,6 +265,7 @@ break;
 		eliminarReemplazos($serviciosReemplazos);
 		break;
 	/* Fin */
+
 	/* fin torneo-zonas-equipos */
 	
 	
@@ -492,6 +496,7 @@ echo $res;
 }
 
 /* Fin */ 
+
 
 /* Reportes */
 function traerResultadosPorTorneoZonaFecha($serviciosDatos) {
@@ -2069,6 +2074,18 @@ function cargarTablaConducta($serviciosZonasEquipos) {
 	}
 }
 
+function calcularTablaConducta($serviciosZonasEquipos) {
+	$reffecha		=	$_POST['reffecha'];	
+	
+	$res = $serviciosZonasEquipos->calcularTablaConducta($reffecha);
+	//echo $res;
+	
+	if ((integer)$res > 0) {
+		echo '';
+	} else {
+		echo 'Huvo un error al chequear los datos';
+	}
+}
 
 /* fin torneo-zonas-equipos */
 
