@@ -1525,12 +1525,15 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 	} else {
 		$mejor = false;
 	}
-	$id = $serviciosJugadores->existeAmonestado($reffixture);
+	$id = $serviciosJugadores->existeAmonestado($reffixture,$refjugador);
 	
 	if ($id == 0) {
 		
 		if ($jugo == 1) {
 			$res = $serviciosJugadores->insertarAmonestados($refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor,$goles);
+			if ($goles > 0) {
+				$serviciosJugadores->insertarGoleadores($refequipo,$reffixture,$goles,$refjugador);	
+			}
 			if ((integer)$res > 0) {
 				echo '';
 			} else {
@@ -1542,6 +1545,7 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 	} else {
 		if ($jugo == 1) {
 			$res = $serviciosJugadores->modificarAmonestados($id,$refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor,$goles);
+			$serviciosJugadores->modificarGoleadoresPorFixture($refequipo,$reffixture,$goles,$refjugador);
 			if ($res == true) {
 				echo '';
 			} else {
@@ -1549,6 +1553,7 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 			}
 		} else {
 			$res = $serviciosJugadores->eliminarAmonestados($id);
+			$serviciosJugadores->eliminarGoleadoresPorFixture($reffixture);
 			echo 'La estadistica ha sido eliminada, ya que el jugador no jugó';	
 		}
 	}
@@ -2076,8 +2081,10 @@ function cargarTablaConducta($serviciosZonasEquipos) {
 
 function calcularTablaConducta($serviciosZonasEquipos) {
 	$reffecha		=	$_POST['reffecha'];	
+	$reftorneo		=	$_POST['reftorneo'];	
+	$refzona		=	$_POST['refzona'];	
 	
-	$res = $serviciosZonasEquipos->calcularTablaConducta($reffecha);
+	$res = $serviciosZonasEquipos->calcularTablaConducta($reffecha,$reftorneo,$refzona);
 	//echo $res;
 	
 	if ((integer)$res > 0) {

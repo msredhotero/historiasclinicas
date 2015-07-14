@@ -259,8 +259,24 @@ return $res;
 }
 
 
+function modificarGoleadoresPorFixture($refequipo,$reffixture,$goles,$refjugador) {
+$sql = "update tbgoleadores
+set
+refequipo = ".$refequipo.",reffixture = ".$reffixture.",goles = ".$goles.",refjugador = ".$refjugador."
+where reffixture =".$reffixture." and refjugador = ".$refjugador;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
 function eliminarGoleadores($id) {
 $sql = "delete from tbgoleadores where idgoleador =".$id;
+$res = $this->query($sql,0);
+return $res;
+} 
+
+function eliminarGoleadoresPorFixture($fixture) {
+$sql = "delete from tbgoleadores where reffixture =".$fixture;
 $res = $this->query($sql,0);
 return $res;
 } 
@@ -373,8 +389,8 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$i
 	}
 
 
-function existeAmonestado($idfixture) {
-	$sql = "select idamonestado from tbamonestados where reffixture =".$idfixture;	
+function existeAmonestado($idfixture,$idjugador) {
+	$sql = "select idamonestado from tbamonestados where reffixture =".$idfixture." and refjugador=".$idjugador;	
 	$res = $this-> query($sql,0);
 	if (mysql_num_rows($res)>0) {
 		return mysql_result($res,0,0);
