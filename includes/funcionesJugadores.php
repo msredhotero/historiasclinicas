@@ -622,6 +622,27 @@ function eliminarSuspendidos($id) {
 
 
 $resS = $this->traerSuspendidosPorId($id);
+    //////////////////////// TRAIGO los datos para descontar el FairPlay ///////////////////////
+	$sqlFixFecha = "select fix.reffecha, tge.reftorneo, t.reftipotorneo
+					from dbfixture fix 
+					inner join dbtorneoge tge
+					on  tge.idtorneoge = fix.reftorneoge_a or tge.idtorneoge = fix.reftorneoge_b
+					inner join dbtorneos t 
+					on  t.idtorneo = tge.reftorneo
+					where fix.idfixture = ".mysql_result($resS,0,'reffixture')."
+					group by fix.reffecha, tge.reftorneo, t.reftipotorneo";
+	$resFixFecha = $this->query($sqlFixFecha,0);
+		
+	$fechaJuego = mysql_result($resFixFecha,0,0);
+	$refTorneo = mysql_result($resFixFecha,0,1);
+	$refTipoTorneo = mysql_result($resFixFecha,0,2);
+
+	$sqlFP = "update tbconducta
+					set
+					puntos = puntos - 3
+					where refequipo =".$refequipo." and reffecha =".$fechaJuego." and reftorneo =".$refTorneo;
+	$this->query($sqlFP,0);
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 $sql2 = "delete from dbsuspendidosfechas where refjugador =".mysql_result($resS,0,'idjugador')." and refequipo = ".mysql_result($resS,0,'refequipo')." and refsuspendido =".$id;
 $res2 = $this->query($sql2,0);
