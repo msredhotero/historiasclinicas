@@ -72,7 +72,7 @@ class Servicios {
 			
 			for ($i=1;$i<=$cantidad;$i++) {
 				
-				$cadsubRows = $cadsubRows.'<td>'.$row[$i].'</td>';	
+				$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
 			}
 			
 			

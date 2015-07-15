@@ -15,6 +15,8 @@ include ('../../includes/funcionesJugadores.php');
 include ('../../includes/funcionesEquipos.php');
 include ('../../includes/funcionesGrupos.php');
 include ('../../includes/funcionesZonasEquipos.php');
+include ('../../includes/funcionesDATOS.php');
+include ('../../includes/funcionesPagos.php');
 
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
@@ -23,38 +25,35 @@ $serviciosJugadores = new ServiciosJ();
 $serviciosEquipos	= new ServiciosE();
 $serviciosGrupos	= new ServiciosG();
 $serviciosZonasEquipos	= new ServiciosZonasEquipos();
+$serviciosDatos		= new ServiciosDatos();
+$serviciosPagos		= new ServiciosPagos();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"ZonasEquipos",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Pagos",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
 
 $id = $_GET['id'];
 
-$resResultado = $serviciosZonasEquipos->TraerEquiposZonasPorId($id);
+$resResultado = $serviciosPagos->traerPagosPorId($id);
 
+$tabla 			= "dbpagos";
 
-$resHorarios = $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
-$resResHor	 = $serviciosFunciones->TraerHorariosId($id);
+$lblCambio	 	= array("refequipo","reftorneo","refzona","reffecha","observacion","fechacreacion");
+$lblreemplazo	= array("Equipos","Torneo","Zonas","Fecha","Observación","Fecha Creación");
 
-/////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbtorneoge";
-
-$lblCambio	 	= array("refgrupo","refequipo","reftorneo");
-$lblreemplazo	= array("Zonas","Equipos","Torneo");
-
-$resTipoTorneo 	= $serviciosFunciones->TraerTorneosActivo($_SESSION['torneo_predio']);
+$resTipoTorneo 	= $serviciosFunciones->TraerTorneos();
 
 $cadRef = '';
 $idtorneo = 0;
 while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
-	$idtorneo = $rowTT[0];
 	if (mysql_result($resResultado,0,'reftorneo') == $rowTT[0]) {
 		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.$rowTT[1].'</option>';
 	} else {
 		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';
 	}
+	
 }
 
 
@@ -62,7 +61,7 @@ $resZonas 	= $serviciosGrupos->TraerGrupos();
 
 $cadRef2 = '';
 while ($rowZ = mysql_fetch_array($resZonas)) {
-	if (mysql_result($resResultado,0,'refgrupo') == $rowZ[0]) {
+	if (mysql_result($resResultado,0,'refzona') == $rowZ[0]) {
 		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'" selected>'.$rowZ[1].'</option>';
 	} else {
 		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.$rowZ[1].'</option>';
@@ -79,28 +78,29 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 	} else {
 		$cadRef3 = $cadRef3.'<option value="'.$rowE[0].'">'.$rowE[1].'</option>';
 	}
-	
 }
 
-$refdescripcion = array(0 => $cadRef2,1=>$cadRef3,2=>$cadRef);
-$refCampo	 	= array("refgrupo","refequipo","reftorneo"); 
+$resFechas 	= $serviciosFunciones->TraerFecha();
+
+$cadRefFF = '';
+while ($rowFF = mysql_fetch_array($resFechas)) {
+	if (mysql_result($resResultado,0,'reffecha') == $rowFF[0]) {
+		$cadRefFF = $cadRefFF.'<option value="'.$rowFF[0].'" selected>'.$rowFF[1].'</option>';
+	} else {
+		$cadRefFF = $cadRefFF.'<option value="'.$rowFF[0].'">'.$rowFF[1].'</option>';
+	}
+}
+
+
+$refdescripcion = array(0 => $cadRef3,1=>$cadRef,2=>$cadRef2,3=>$cadRefFF);
+$refCampo	 	= array("refequipo","reftorneo","refzona","reffecha"); 
+
+
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
-
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Zonas</th>
-				<th>Equipos</th>
-				<th>Torneo</th>
-				<th>Prioridad</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-
-
-
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, "IdTorneoGE","modificarZonasEquipos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idpago","modificarPagos",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_predio'] != 1) {
@@ -142,7 +142,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
-
+	<script type="text/javascript" src="../../js/jquery.number.min.js"></script>
+	<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
 	<style type="text/css">
 		
   
@@ -182,48 +183,7 @@ if ($_SESSION['refroll_predio'] != 1) {
     		<?php echo $formulario; ?>
             </div>
             <br>
-            <hr>
-            <div class="hidden">
-            <h4>Prioridades de Turnos</h4>
-            <div class="help-block">
-            	* Recuerde que cero 0, significa que no puede jugar en ese horario
-            </div>
-            <div class="row">
             
-            	<?php
-					$i = 0;
-					while ($rowH = mysql_fetch_array($resHorarios)) {
-					$i = $i + 1;
-
-				?>
-            	<div class="form-group col-md-3">
-                    <label class="control-label" style="text-align:left" for="refgrupo"><?php echo $rowH[1]; ?></label>
-                    <div class="input-group col-md-12">
-                        <select id="horario<?php echo $i; ?>" class="form-control" name="horario<?php echo $i; ?>">
-                            <?php for ($f=0;$f<10;$f++) { ?>
-                            	<?php
-								 		if (mysql_result($resResHor,$i-1,'valor')== $f) {
-								?>
-                                	<option value="<?php echo $f; ?>" selected><?php echo $f; ?></option>
-                                <?php } else { ?>
-                                	<option value="<?php echo $f; ?>"><?php echo $f; ?></option>
-                                <?php }  ?>
-                            <?php } ?>
-                        </select>
-                        <input type="hidden" id="idhorario<?php echo $i; ?>" name="idhorario<?php echo $i; ?>" value="<?php echo $rowH[0]; ?>"/>
-                        <input type="hidden" id="idtp<?php echo $i; ?>" name="idtp<?php echo $i; ?>" value="<?php echo mysql_result($resResHor,$i-1,2); ?>"/>
-                    </div>
-                </div>
-                
-                <?php
-				
-					}
-				
-				?>
-                
-            </div>   
-            
-            </div>
             
            <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -272,6 +232,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../js/bootstrap-datetimepicker.es.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -312,7 +274,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarZonasEquipos'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarPagos'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
@@ -399,6 +361,19 @@ $(document).ready(function(){
 		}
     });
 
+});
+</script>
+<script type="text/javascript">
+$('.form_date').datetimepicker({
+	language:  'es',
+	weekStart: 1,
+	todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	minView: 2,
+	forceParse: 0,
+	format: 'dd/mm/yyyy'
 });
 </script>
 <?php } ?>
