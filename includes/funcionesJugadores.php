@@ -400,6 +400,20 @@ function existeAmonestado($idfixture,$idjugador) {
 	
 function insertarAmonestados($refjugador,$refequipo,$reffixture,$amarillas,$azul,$rojas,$jugo,$cancha,$arquero,$puntos,$mejor,$goles) {
 
+	$puntosRecargados = (integer)($goles == '' ? 0: $goles) + 
+						(integer)($mejor == 1 ? 1 : 0) - 
+						(integer)($amarillas == '' ? 0: $amarillas) -
+						(integer)($azul == '' ? 0: $azul*2) - 
+						(integer)($rojas == '' ? 0: $rojas*3);
+	
+	if (($puntos == 6) || ($puntos == '')) {					
+		$puntos = 6 + $puntosRecargados;
+	}
+	
+	if ($puntos > 10) {
+		$puntos = 10;
+	}
+
 	$sql = "insert into tbamonestados(idamonestado,refjugador,refequipo,reffixture,amarillas,azul,rojas,jugo,cancha,arquero,puntos,mejor,goles)
 values ('',".$refjugador.",".$refequipo.",".$reffixture.",".($amarillas == '' ? 'null': $amarillas).",".($azul == '' ? 'null': $azul).",".($rojas == '' ? 'null': $rojas).",'".$jugo."',".($cancha == '' ? 'null': $cancha).",".($arquero == '' ? 'null': $arquero).",".($puntos == '' ? 6: $puntos).",'".$mejor."',".($goles == '' ? 'null': $goles).")"; 
 	//return $sql;
