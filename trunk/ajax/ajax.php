@@ -10,6 +10,7 @@ include ('../includes/funcionesZonasEquipos.php');
 include ('../includes/funcionesNoticias.php');
 include ('../includes/funcionesDATOS.php');
 include ('../includes/funcionesPlayoff.php');
+include ('../includes/funcionesPagos.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosFunciones = new Servicios();
@@ -21,6 +22,7 @@ $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosNoticias = new ServiciosNoticias();
 $serviciosDatos = new ServiciosDatos();
 $serviciosPlayOff = new ServiciosPlayOff();
+$serviciosPagos = new ServiciosPagos();
 
 $accion = $_POST['accion'];
 
@@ -360,6 +362,19 @@ break;
 		FairPlay($serviciosDatos);
 		break;
 	/* Fin reportes */
+	
+	/* PARA Pagos */
+	case 'insertarPagos':
+		insertarPagos($serviciosPagos);
+		break;
+	case 'modificarPagos':
+		modificarPagos($serviciosPagos);
+		break;
+	case 'eliminarPagos':
+		eliminarPagos($serviciosPagos);
+		break;
+	
+	/* Fin */
 }
 
 //////////////////////////Traer datos */
@@ -2166,7 +2181,53 @@ function traerFixturePorEquipo($serviciosZonasEquipos) {
 		
 }
 /* fin fixture */
+
+
+/* PARA Pagos */
+function insertarPagos($serviciosPagos) {
+	$refequipo = $_POST['refequipo'];
+	$reftorneo = $_POST['reftorneo'];
+	$refzona = $_POST['refzona'];
+	$reffecha = $_POST['reffecha'];
+	$importe = $_POST['importe'];
+	$observacion = $_POST['observacion'];
+	$fechacreacion = $_POST['fechacreacion'];
 	
+	$res = $serviciosPagos->insertarPagos($refequipo,$reftorneo,$refzona,$reffecha,$importe,$observacion,$fechacreacion);
+	
+	if ((integer)$res > 0) {
+		echo '';
+	} else {
+		echo 'Huvo un error al insertar datos';
+	}
+}
+
+function modificarPagos($serviciosPagos) {
+	$id = $_POST['id'];
+	$refequipo = $_POST['refequipo'];
+	$reftorneo = $_POST['reftorneo'];
+	$refzona = $_POST['refzona'];
+	$reffecha = $_POST['reffecha'];
+	$importe = $_POST['importe'];
+	$observacion = $_POST['observacion'];
+	$fechacreacion = $_POST['fechacreacion'];
+	
+	$res = $serviciosPagos->modificarPagos($id,$refequipo,$reftorneo,$refzona,$reffecha,$importe,$observacion,$fechacreacion);
+	
+	if ($res == true) {
+		echo '';
+	} else {
+		echo 'Huvo un error al modificar datos';
+	}
+}
+
+function eliminarPagos($serviciosPagos) {
+	$id = $_POST['id'];
+	$res = $serviciosPagos->eliminarPagos($id);
+	echo $res;
+}
+
+/* Fin */ 	
 	
 	
 function modificarCliente($serviciosUsuarios) {
