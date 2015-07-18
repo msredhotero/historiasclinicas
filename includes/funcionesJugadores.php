@@ -634,6 +634,10 @@ return $res;
 
 
 function modificarSuspendidos($id,$refequipo,$refjugador,$motivos,$cantidadfechas,$fechacreacion,$reffixture) {
+
+$sqlSF = "update dbsuspendidosfechas set refjugador = ".$refjugador." where refsuspendido =".$id;
+$this->query($sqlSF,0);
+
 $sql = "update tbsuspendidos
 set
 refequipo = ".$refequipo.",
