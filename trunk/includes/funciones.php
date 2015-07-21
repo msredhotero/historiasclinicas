@@ -1238,7 +1238,7 @@ function traerConducta() {
 }
 
 function traerConductaPorId($id) {
-	$sql = "select c.idconducta,e.nombre,c.puntos,e.idequipo from tbconducta c
+	$sql = "select c.idconducta,e.nombre,c.puntos,e.idequipo,c.reffecha,c.reftorneo from tbconducta c
 			inner join dbequipos e on e.idequipo = c.refequipo 
 			where c.idconducta =".$id;
 	$res = $this->query($sql,0);
