@@ -113,7 +113,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -127,7 +127,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -140,7 +140,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -156,7 +156,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -168,7 +168,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -185,7 +185,7 @@ class ServiciosZonasEquipos {
 					        on tge.idtorneoge = fi.reftorneoge_b
 					        inner 
 					        join dbtorneos t
-					        on tge.reftorneo = t.idtorneo and t.activo = true
+					        on tge.reftorneo = t.idtorneo and t.activo = 1
 					        inner 
 					        join dbgrupos g
 					        on g.idgrupo = tge.refgrupo
@@ -209,7 +209,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -225,7 +225,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -241,7 +241,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -264,7 +264,7 @@ class ServiciosZonasEquipos {
 					        on ge.idgrupoequipo = tge.refgrupoequipo
 					        inner 
 					        join dbtorneos t
-					        on tge.reftorneo = t.idtorneo and t.activo = true
+					        on tge.reftorneo = t.idtorneo and t.activo = 1
 					        inner 
 					        join dbgrupos g
 					        on g.idgrupo = ge.refgrupo
@@ -282,7 +282,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -297,7 +297,7 @@ class ServiciosZonasEquipos {
 																										from dbtorneoge tge
 																										inner 
 																										join dbtorneos t
-																										on tge.reftorneo = t.idtorneo and t.activo = true
+																										on tge.reftorneo = t.idtorneo and t.activo = 1
 																										inner 
 																										join dbequipos e
 																										on e.idequipo = tge.refequipo
@@ -313,7 +313,7 @@ class ServiciosZonasEquipos {
 						from dbtorneoge tge
 						inner 
 						join dbtorneos t
-						on tge.reftorneo = t.idtorneo and t.activo = true
+						on tge.reftorneo = t.idtorneo and t.activo = 1
 						inner 
 						join dbequipos e
 						on e.idequipo = tge.refequipo
@@ -326,7 +326,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -339,7 +339,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -360,7 +360,7 @@ class ServiciosZonasEquipos {
 					        on tge.idtorneoge = fi.reftorneoge_b
 					        inner 
 					        join dbtorneos t
-					        on tge.reftorneo = t.idtorneo and t.activo = true
+					        on tge.reftorneo = t.idtorneo and t.activo = 1
 							inner
 							join		tbtipotorneo tp
 							on			tp.idtipotorneo = t.reftipotorneo
@@ -382,7 +382,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -397,7 +397,7 @@ class ServiciosZonasEquipos {
 																										from dbtorneoge tge
 																										inner 
 																										join dbtorneos t
-																										on tge.reftorneo = t.idtorneo and t.activo = true
+																										on tge.reftorneo = t.idtorneo and t.activo = 1
 																										inner 
 																										join dbequipos e
 																										on e.idequipo = tge.refequipo
@@ -413,7 +413,7 @@ class ServiciosZonasEquipos {
 						from dbtorneoge tge
 						inner 
 						join dbtorneos t
-						on tge.reftorneo = t.idtorneo and t.activo = true
+						on tge.reftorneo = t.idtorneo and t.activo = 1
 						inner 
 						join dbequipos e
 						on e.idequipo = tge.refequipo
@@ -426,7 +426,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -439,7 +439,7 @@ class ServiciosZonasEquipos {
 			        from dbtorneoge tge
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = tge.refequipo
@@ -460,7 +460,7 @@ class ServiciosZonasEquipos {
 					        on tge.idtorneoge = fi.reftorneoge_b
 					        inner 
 					        join dbtorneos t
-					        on tge.reftorneo = t.idtorneo and t.activo = true
+					        on tge.reftorneo = t.idtorneo and t.activo = 1
 							inner
 							join		tbtipotorneo tp
 							on			tp.idtipotorneo = t.reftipotorneo
@@ -625,7 +625,7 @@ class ServiciosZonasEquipos {
 		
 		$sql = "update dbfixture
 		set
-		reftorneoge_a = ".$reftorneoge_a.",resultado_a = ".$resultado_a.",reftorneoge_b = ".$reftorneoge_b.",resultado_b = ".$resultado_b.",fechajuego = '".$fechajuego."',refFecha = ".$refFecha.",cancha = '".utf8_decode($cancha)."',hora = '".$horario."', chequeado = '".$chequeado."' 
+		reftorneoge_a = ".$reftorneoge_a.",resultado_a = ".$resultado_a.",reftorneoge_b = ".$reftorneoge_b.",resultado_b = ".$resultado_b.",fechajuego = '".$fechajuego."',refFecha = ".$refFecha.",cancha = '".utf8_decode($cancha)."',hora = '".$horario."', chequeado = ".$chequeado." 
 		where Idfixture =".$id;
 		
 		$res = $this->query($sql,0);
@@ -665,7 +665,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -681,7 +681,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -697,7 +697,7 @@ class ServiciosZonasEquipos {
 			        on ge.idgrupoequipo = tge.refgrupoequipo
 			        inner 
 			        join dbtorneos t
-			        on tge.reftorneo = t.idtorneo and t.activo = true
+			        on tge.reftorneo = t.idtorneo and t.activo = 1
 			        inner 
 			        join dbequipos e
 			        on e.idequipo = ge.refequipo
@@ -720,7 +720,7 @@ class ServiciosZonasEquipos {
 					        on ge.idgrupoequipo = tge.refgrupoequipo
 					        inner 
 					        join dbtorneos t
-					        on tge.reftorneo = t.idtorneo and t.activo = true
+					        on tge.reftorneo = t.idtorneo and t.activo = 1
 					        inner 
 					        join dbgrupos g
 					        on g.idgrupo = ge.refgrupo
@@ -1123,7 +1123,12 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 					fechajuego,
 					reffecha,
 					hora,
-					cancha
+					cancha,
+					(CASE WHEN chequeado =1
+					THEN  '1'
+					ELSE  '0'
+					END
+					) AS chequeado
 				FROM dbfixture 
 				where idfixture = ".$id;
 		return $this->query($sql,0);	
