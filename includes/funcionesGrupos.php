@@ -37,7 +37,14 @@ class ServiciosG {
 		return $res;
 	}
 	
-	
+	function modificarGrupos($id,$nombre) {
+			$sql = "update dbgrupos
+			set
+			nombre = '".utf8_decode($nombre)."'
+			where IdGrupo =".$id;
+		$res = $this->query($sql,0);
+		return $res;
+	} 
 	
 	function query($sql,$accion) {
 		
