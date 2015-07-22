@@ -458,6 +458,31 @@ values ('',".$refjugador.",".$refequipo.",".$reffixture.",".($amarillas == '' ? 
 			}
 		}
 		
+		
+		if ($azul == 1) {
+			
+			//// verificar que este en la tabla de conducta  ///
+			//// si esta modificar los puntos /////
+			
+			$cantidad = $this->traerAcumuladosAmarillasPorTorneoZonaJugador($fechaJuego,$refjugador,$refTipoTorneo);
+			
+			$sql = "update tbconducta
+					set
+					puntos = puntos + 2
+					where refequipo =".$refequipo." and reffecha =".$fechaJuego." and reftorneo =".$refTorneo;
+			$res2 = $this->query($sql,0);	
+			
+			if ($cantidad == 3) {
+				$sqlSuspendido = "insert into tbsuspendidos(idsuspendido,refequipo,refjugador,motivos,cantidadfechas,fechacreacion,reffixture)
+				values ('',".$refequipo.",".$refjugador.",'".utf8_decode('Acumulación de 3 Amarillas')."','1','".date('Y-m-d H:i:s')."',".$reffixture.")";
+				$res4 = $this->query($sqlSuspendido,1);
+				
+				$sql5 = "insert into dbsuspendidosfechas(idsuspendidofecha,refjugador,refequipo,reffecha,refsuspendido)
+				values ('',".$refjugador.",".$refequipo.",".($fechaJuego + 1).",".$res4.")";
+				$res5 = $this->query($sql5,1);
+			}
+		}
+		
 		if ($amarillas == 2) {
 
 			$sql = "update tbconducta
@@ -473,6 +498,35 @@ values ('',".$refjugador.",".$refequipo.",".$reffixture.",".($amarillas == '' ? 
 			$sql5 = "insert into dbsuspendidosfechas(idsuspendidofecha,refjugador,refequipo,reffecha,refsuspendido)
 			values ('',".$refjugador.",".$refequipo.",".($fechaJuego + 1).",".$res4.")";
 			$res5 = $this->query($sql5,1);
+			
+			$sql6 = "insert into dbsuspendidosfechas(idsuspendidofecha,refjugador,refequipo,reffecha,refsuspendido)
+			values ('',".$refjugador.",".$refequipo.",".($fechaJuego + 2).",".$res4.")";
+			$res6 = $this->query($sql6,1);
+		}
+		
+		
+		if ($rojas == 1) {
+
+			$sql = "update tbconducta
+					set
+					puntos = puntos + 3
+					where refequipo =".$refequipo." and reffecha =".$fechaJuego." and reftorneo =".$refTorneo;
+			$res3 = $this->query($sql,0);
+			
+			$sqlSuspendido = "insert into tbsuspendidos(idsuspendido,refequipo,refjugador,motivos,cantidadfechas,fechacreacion,reffixture)
+			values ('',".$refequipo.",".$refjugador.",'Roja Directa','1','".date('Y-m-d H:i:s')."',".$reffixture.")";
+			$res4 = $this->query($sqlSuspendido,1);
+			
+			
+			//////////////////////  LO SANCIONO 2 FECHAS //////////////////////////////////////////////////////////
+			$sql5 = "insert into dbsuspendidosfechas(idsuspendidofecha,refjugador,refequipo,reffecha,refsuspendido)
+			values ('',".$refjugador.",".$refequipo.",".($fechaJuego + 1).",".$res4.")";
+			$res5 = $this->query($sql5,1);
+			
+			$sql6 = "insert into dbsuspendidosfechas(idsuspendidofecha,refjugador,refequipo,reffecha,refsuspendido)
+			values ('',".$refjugador.",".$refequipo.",".($fechaJuego + 2).",".$res4.")";
+			$res6 = $this->query($sql6,1);
+			///////////////////////////////////////////////////////////////////////////////////////////////////////
 		}
 	}
 	return $res;
