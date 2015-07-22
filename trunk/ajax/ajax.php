@@ -1910,9 +1910,9 @@ echo 'Huvo un error al insertar datos';
 }
 function modificarGrupos($serviciosGrupos) {
 	$id = $_POST['id'];
-	$Nombre = $_POST['nombre'];
+	$nombre = $_POST['nombre'];
 	
-	$res = $serviciosGrupos->modificarGrupos($id,$Nombre);
+	$res = $serviciosGrupos->modificarGrupos($id,$nombre);
 	if ($res == true) {
 		echo '';
 	} else {

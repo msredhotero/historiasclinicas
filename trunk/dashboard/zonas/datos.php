@@ -197,7 +197,19 @@ if ($_SESSION['refroll_predio'] != 1) {
                         </tbody>
                     </table>
                 	
+                    
+                <div class="row">
+                    <div class="col-md-12">
+                    <ul class="list-inline" style="margin-top:15px; margin-left:15px;">
+
+                        <li>
+                            <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
              	</form>
+                
             </div>
            
     	</div>
@@ -287,7 +299,11 @@ $(document).ready(function(){
 			alert("Error, vuelva a realizar la acción.");	
 		  }
 	});//fin del boton eliminar
-	
+		$('.volver').click(function(event){
+		 
+		url = "index.php";
+		$(location).attr('href',url);
+	});//fin del boton modificar
 	
 	/*modificarJugadores
 	$id 		= $_POST['id'];
