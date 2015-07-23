@@ -33,8 +33,8 @@ function query($sql,$accion) {
 }
 
 
-$tabla = "dbgrupos";
-$nombre = "Grupos";
+$tabla = "tbplayoff";
+$nombre = "ArmarPlayOff";
 
 $sql	=	"show columns from ".$tabla;
 $res 	=	query($sql,0);
