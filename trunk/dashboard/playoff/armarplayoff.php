@@ -97,7 +97,7 @@ $cabeceras 		= "	<th>Equipo 1</th>
 
 
 
-$formulario 	= $serviciosFunciones->camposTabla("insertarPlayOff",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+$formulario 	= $serviciosFunciones->camposTabla("insertarArmarPlayOff",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 $lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPlayOff->traerArmarPlayOff($idTorneo,$idZona),9);
 

@@ -163,6 +163,7 @@ $sql = "select
 				where
 					pl.idplayoff = p.refplayoffequipo_a) as refplayoffequipo_a,
 			refplayoffresultado_a,
+			refplayoffresultado_b,
 			(select 
 					eq.nombre
 				from
@@ -171,7 +172,7 @@ $sql = "select
 					dbplayoff pl ON eq.idequipo = pl.refequipo
 				where
 					pl.idplayoff = p.refplayoffequipo_b) as refplayoffequipo_b,
-			refplayoffresultado_b,
+			
 			t.nombre,
 			g.nombre,
 			fechajuego,
