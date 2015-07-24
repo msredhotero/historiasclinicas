@@ -109,7 +109,7 @@ for ($i=1; $i<=$filas;$i++) {
 	
 	$date = explode("/",$_POST["datepicker".$fecha]);
 	$nuevaFecha = $date[2]."-".$date[1]."-".$date[0];
-	$serviciosZonasEquipos->insertarFixture($_POST["equipoa".$i],"",$_POST["equipob".$i],"",$nuevaFecha,22+$fecha,$_POST["horario".$i],$_POST["cancha".$i]);
+	$serviciosZonasEquipos->insertarFixture($_POST["equipoa".$i],"",$_POST["equipob".$i],"",$nuevaFecha,22+$fecha,$_POST["cancha".$i],$_POST["horario".$i]);
 	//echo "aaaaaaaaaaaaaaaaaaaaaaa".$nuevaFecha;
 	if (($i % (integer)$array["filas"]) == 0) {
 		$fecha += 1;

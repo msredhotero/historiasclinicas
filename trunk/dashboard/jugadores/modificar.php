@@ -59,8 +59,8 @@ $accionEliminar		= "eliminarJugadores";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbjugadores";
 
-$lblCambio		= array("idequipo","apyn");
-$lblreemplazo	= array("Equipo","Apellido y Nombre");
+$lblCambio		= array("idequipo");
+$lblreemplazo	= array("Equipo");
 
 $resEquipos 	= $serviciosEquipos->TraerEquipos();
 

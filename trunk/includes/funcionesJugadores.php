@@ -91,7 +91,7 @@ class ServiciosJ {
 	}
 	
 	function TraerJugadoresEquipos() {
-		$sql = "select j.idjugador,concat(j.apellido,' ',j.nombre) as apyn,j.dni,e.nombre,(case when j.invitado = 1 then 'Si' else 'No' end) as invitado from dbjugadores j
+		$sql = "select j.idjugador,concat(j.apellido,' ',j.nombre) as apyn,j.dni,e.nombre,(case when j.invitado = 1 then 'Si' else 'No' end) as invitado,j.email, j.facebook from dbjugadores j
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				order by e.nombre,concat(j.apellido, ', ',j.nombre)";
@@ -99,7 +99,7 @@ class ServiciosJ {
 	}
 	
 	function TraerJugadoresPorId($id) {
-		$sql = "select j.idjugador,concat(j.apellido,' ',j.nombre) as apyn,j.dni,e.nombre,e.idequipo,j.invitado,j.expulsado from dbjugadores j
+		$sql = "select j.idjugador,j.apellido,j.nombre,j.dni,e.nombre,e.idequipo,j.invitado,j.expulsado,j.email, j.facebook from dbjugadores j
 		        inner join dbequipos e
 		        on j.idequipo = e.idequipo
 				where idjugador = ".$id;
