@@ -583,20 +583,28 @@ function traerResultadosPorTorneoZonaFecha($serviciosDatos) {
 	$res = $serviciosDatos->traerResultadosPorTorneoZonaFecha($idtorneo,$idzona,$idfecha);
 	
 	$cad = '<div class="row">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:750px; margin-left:20px; font-weight:bold;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="5" align="center" style="font-size:1.9em;">RESULTADOS '.$zona.'</td>
-                        </tr>';
+                	<table class="table table-responsive table-striped" style="margin:2px 20px;">
+                    	<thead>
+							<tr>
+								<th>Resultado A</th>
+								<th>Equipo A</th>
+								<th>Horario</th>
+								<th>Equipo B</th>
+								<th>Resultado B</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>';
                         while ($row = mysql_fetch_array($res)) {
-                        	$cad = $cad.'<tr style="font-size:1.5em;">
-                        	<td align="center" bgcolor="#bfbfbf" width="40px" style="padding:1px 6px;">'.$row['resultadoa'].'</td>
-                            <td align="center" style="padding:1px 6px;">'.(substr(utf8_encode($row['equipo1']),0,17)).'</td>
-                            <td align="center" style="padding:1px 6px;" bgcolor="#bfbfbf">Horario '.$row['hora'].'</td>
-                            <td align="center" style="padding:1px 6px;">'.(substr(utf8_encode($row['equipo2']),0,17)).'</td>
-                            <td align="center" style="padding:1px 6px;" bgcolor="#bfbfbf" width="40px">'.$row['resultadob'].'</td>
+                        	$cad = $cad.'<tr>
+                        	<td>'.$row['resultadoa'].'</td>
+                            <td>'.(substr($row['equipo1'],0,17)).'</td>
+                            <td>Horario '.$row['hora'].'</td>
+                            <td>'.(substr($row['equipo2'],0,17)).'</td>
+                            <td>'.$row['resultadob'].'</td>
                         </tr>';
                     	}
-                    $cad = $cad.'</table>
+                    $cad = $cad.'</tbody></table>
                 
                 </div>';
 	echo $cad;
@@ -1152,15 +1160,14 @@ function AmarillasAcumuladas($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:auto; margin-left:20px; font-weight:bold; margin-right:5px;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="11" align="center" style="font-size:1.9em;">AMARILLAS '.$zona.'</td>
-                        </tr>
-                        <tr style="font-size:1.5em;">
-                            <td align="center" style="padding:1px 6px;">EQUIPO</td>
-                            <td align="center" style="padding:1px 6px;">JUGADOR</td>
-							<td align="center" style="padding:1px 6px;">DNI</td>
-                            <td align="center" style="padding:1px 6px;">AMARILLAS</td>
+                	<table class="table table-responsive table-striped" style="padding:2px 20px;">
+                        <tr>
+                            <th align="center">EQUIPO</th>
+							<th align="center">JUGADOR</th>
+							<th align="center">DNI</th>
+              				<th align="center">AMARILLAS</th>
+							<th align="center">AZULES</th>
+							<th align="center">ROJAS</th>
                         </tr>';
 
 						$i =1;
@@ -1169,11 +1176,13 @@ function AmarillasAcumuladas($serviciosDatos) {
 						
 							
 						if (($row1['reemplzado'] == '0') || (($row1['reemplzado'] == '1') && ($row1['volvio'] == '1'))) {
-							$cad2 = $cad2.'<tr style="font-size:1.5em;">
-								<td align="left" style="padding:1px 6px;">'.utf8_encode($row1['nombre']).'</td>
-								<td align="right" style="padding:1px 6px;">'.strtoupper(utf8_encode($row1['apyn'])).'</td>
-								<td align="right" style="padding:1px 6px;">'.utf8_encode($row1['dni']).'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['cantidad'].'</td>
+							$cad2 = $cad2.'<tr>
+								<td align="left">'.$row1['nombre'].'</td>
+								<td align="left">'.strtoupper($row1['apyn']).'</td>
+								<td align="left">'.$row1['dni'].'</td>
+								<td align="center">'.$row1['cantidad'].'</td>
+								<td align="center">'.$row1['cantidadazules'].'</td>
+								<td align="center">'.$row1['cantidadrojas'].'</td>
 							</tr>';
 						}
 						}
@@ -1182,6 +1191,8 @@ function AmarillasAcumuladas($serviciosDatos) {
                 </div>';
 	echo $cad2;
 }
+
+
 
 
 
@@ -1196,13 +1207,10 @@ function FairPlay($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:auto; margin-left:20px; font-weight:bold; margin-right:5px;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="11" align="center" style="font-size:1.9em;">FairPlay '.$zona.'</td>
-                        </tr>
-                        <tr style="font-size:1.5em;">
-                            <td align="center" style="padding:1px 6px;">EQUIPO</td>
-                            <td align="center" style="padding:1px 6px;">PUNTOS</td>
+                	<table class="table table-responsive table-striped" style="padding:2px 20px;">
+                        <tr>
+                            <th align="center">EQUIPO</th>
+                            <th align="center">PUNTOS</th>
                         </tr>';
 
 						$i =1;
@@ -1211,9 +1219,9 @@ function FairPlay($serviciosDatos) {
 						
 							
 				
-							$cad2 = $cad2.'<tr style="font-size:1.5em;">
-								<td align="left" style="padding:1px 6px;">'.utf8_encode($row1['nombre']).'</td>
-								<td align="right" style="padding:1px 6px;">'.utf8_encode($row1['puntos']).'</td>
+							$cad2 = $cad2.'<tr>
+								<td align="left">'.$row1['nombre'].'</td>
+								<td align="center">'.$row1['puntos'].'</td>
 							</tr>';
 
 						}
