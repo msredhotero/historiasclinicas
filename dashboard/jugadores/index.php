@@ -134,7 +134,7 @@ if ($_SESSION['refroll_predio'] != 1) {
   
 		
 	</style>
-    
+    <link rel="stylesheet" href="../../css/chosen.css">
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
       <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
@@ -201,7 +201,8 @@ if ($_SESSION['refroll_predio'] != 1) {
                 <div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="idequipo">Equipo</label>
                     <div class="input-group col-md-12">
-                        <select id="idequipo" class="form-control" name="idequipo">
+                        <select data-placeholder="selecione el equipo..." id="idequipo" class="form-control chosen-select" name="idequipo">
+                        	<option value=""></option>
                         	<?php echo $cadRef; ?>
                         </select>
                     </div>
@@ -508,6 +509,19 @@ $(document).ready(function(){
 
 });
 </script>
+<script src="../../js/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+  </script>
 <?php } ?>
 </body>
 </html>
