@@ -386,6 +386,8 @@ $(document).ready(function(){
 				}
 		});
 		
+
+		
 		$.ajax({
 				data:  {reftorneo: $('#reftorneo').val(),
 						refzona: $('#refzona').val(),

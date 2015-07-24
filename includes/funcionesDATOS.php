@@ -1019,12 +1019,26 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= '.$r
 	
 	
 	function traerAcumuladosAmarillasPorTorneoZona($idtipoTorneo,$idzona,$idfecha) {
+		//(case when t.cantidad > 3 then mod(t.cantidad,3) else t.cantidad end) as cantidad,
+		// para el acumulado
 		$sql = "select
-				t.refequipo, t.nombre, t.apyn, t.dni, (case when t.cantidad > 3 then mod(t.cantidad,3) else t.cantidad end) as cantidad,ultimafecha,fecha,t.reemplzado, t.volvio
+				t.refequipo, t.nombre, t.apyn, t.dni, 
+				COALESCE(t.cantidad,0) as cantidad,
+				COALESCE(t.cantidadazules,0) as cantidadazules,
+				COALESCE(t.cantidadrojas,0) as cantidadrojas,
+				ultimafecha,
+				fecha,
+				t.reemplzado, 
+				t.volvio
 				from
 				(
 				select
-					a.refequipo, e.nombre, concat(j.apellido,', ',j.nombre) as apyn, j.dni, count(a.amarillas) as cantidad,max(fi.reffecha) as ultimafecha, max(ff.tipofecha) as fecha
+					a.refequipo, e.nombre, concat(j.apellido,', ',j.nombre) as apyn, j.dni, 
+					count(a.amarillas) as cantidad,
+					count(a.azul) as cantidadazules,
+					count(a.rojas) as cantidadrojas,
+					max(fi.reffecha) as ultimafecha, 
+					max(ff.tipofecha) as fecha
 					, (case when rr.idreemplazo is null then false else true end) as reemplzado
 					, (case when rrr.idreemplazo is null then 0 else 1 end) as volvio
 					from		tbamonestados a
@@ -1069,7 +1083,8 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$i
 											join		tbtipotorneo tp
 											on			tp.idtipotorneo = t.reftipotorneo
 											where		tp.idtipotorneo in (".$idtipoTorneo.") and tge.refgrupo = ".$idzona.")
-					and a.amarillas <> 2
+					/*and a.amarillas <> 2*/
+					and (a.amarillas is not null or a.azul is not null or a.rojas is not null)
 					and fi.reffecha <= ".$idfecha."
 					group by a.refequipo, e.nombre, concat(j.apellido,', ',j.nombre) , j.dni
 				) t
