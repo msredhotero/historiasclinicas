@@ -583,7 +583,7 @@ function traerResultadosPorTorneoZonaFecha($serviciosDatos) {
 	$res = $serviciosDatos->traerResultadosPorTorneoZonaFecha($idtorneo,$idzona,$idfecha);
 	
 	$cad = '<div class="row">
-                	<table class="table table-responsive table-striped" style="margin:2px 20px;">
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
                     	<thead>
 							<tr>
 								<th>Resultado A</th>
@@ -805,23 +805,22 @@ function TraerFixturePorZonaTorneo($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:auto; margin-left:20px; font-weight:bold; margin-right:5px;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="11" align="center" style="font-size:1.9em;">RESULTADOS '.$zona.'</td>
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
+						<thead>
+                        <tr>
+                        	<th>POSICION</th>
+                            <th>EQUIPO</th>
+                            <th>PTS</th>
+                            <th>PJ</th>
+                            <th>PG</th>
+                            <th>PE</th>
+                            <th>PP</th>
+                            <th>GF</th>
+                            <th>GC</th>
+                            <th>DIF</th>
+                            <th>F.P.</th>
                         </tr>
-                        <tr style="font-size:1.5em;">
-                        	<td align="center" style="padding:1px 6px;">POSICION</td>
-                            <td align="center" style="padding:1px 6px;">EQUIPO</td>
-                            <td align="center" style="padding:1px 6px;">PTS</td>
-                            <td align="center" style="padding:1px 6px;">PJ</td>
-                            <td align="center" style="padding:1px 6px;">PG</td>
-                            <td align="center" style="padding:1px 6px;">PE</td>
-                            <td align="center" style="padding:1px 6px;">PP</td>
-                            <td align="center" style="padding:1px 6px;">GF</td>
-                            <td align="center" style="padding:1px 6px;">GC</td>
-                            <td align="center" style="padding:1px 6px;">DIF</td>
-                            <td align="center" style="padding:1px 6px;">F.P.</td>
-                        </tr>';
+						</thead><tbody>';
 
 						$i =1;
 						$puntos = 0;
@@ -829,24 +828,24 @@ function TraerFixturePorZonaTorneo($serviciosDatos) {
 						
 							
 							if (($row1['reemplzado'] == '0') || (($row1['reemplzado'] == '1') && ($row1['volvio'] == '1'))) {	
-							$cad2 = $cad2.'<tr style="font-size:1.5em;">
-								<td align="right" style="padding:1px 6px;">'.$i.'</td>
-								<td align="left" style="padding:1px 6px;">'.utf8_encode($row1['nombre']).'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['pts'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['partidos'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['ganados'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['empatados'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['perdidos'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['golesafavor'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['golesencontra'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['diferencia'].'</td>
-								<td align="right" style="padding:1px 6px;">'.$row1['puntos'].'</td>
+							$cad2 = $cad2.'<tr>
+								<td>'.$i.'</td>
+								<td>'.$row1['nombre'].'</td>
+								<td>'.$row1['pts'].'</td>
+								<td>'.$row1['partidos'].'</td>
+								<td>'.$row1['ganados'].'</td>
+								<td>'.$row1['empatados'].'</td>
+								<td>'.$row1['perdidos'].'</td>
+								<td>'.$row1['golesafavor'].'</td>
+								<td>'.$row1['golesencontra'].'</td>
+								<td>'.$row1['diferencia'].'</td>
+								<td>'.$row1['puntos'].'</td>
 							</tr>';
 					
 							$i = $i + 1;
 							}
 						}
-                    $cad2 = $cad2.'</table>
+                    $cad2 = $cad2.'</tbody></table>
                 
                 </div>';
 	echo $cad2;
@@ -876,7 +875,7 @@ function TraerFixturePorZonaTorneoPagina($serviciosDatos) {
                                 	';
 	$cad2 = $cad2.'
 	<div class="row">
-                	<table class="table table-responsive table-striped" style="font-size:1em; padding:2px;">
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
 
                         <thead>
 							<tr>
@@ -951,7 +950,7 @@ function GoleadoresPagina($serviciosDatos) {
 				<div class="panel panel-predio">
                                 <div class="panel-heading">
                                 	<h3 class="panel-title">'.$zona.'</h3>
-                                	<img src="imagenes/logo2-chico.png" style="float:right;margin-top:-21px; width:26px; height:24px;">
+                                	
                                 </div>
                                 <div class="panel-body-predio" style="padding:5px 20px;">
                                 	';
@@ -1001,30 +1000,29 @@ function Goleadores($serviciosDatos) {
 	
 	$cad3 = '
 	<div class="row" style="margin-top:20px;">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:auto; margin-left:20px; font-weight:bold; margin-right:20px;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="3" align="center" style="font-size:1.9em;">GOLEADORES '.$zona.'</td>
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;max-width:480px;">
+                        <thead>
+						<tr>
+                        	<th>NOMBRE Y APELLIDO</th>
+                            <th>EQUIPO</th>
+                            <th>CANTIDAD</th>
                         </tr>
-                        <tr style="font-size:1.5em;">
-                        	<td align="center" style="padding:1px 6px;">NOMBRE Y APELLIDO</td>
-                            <td align="center" style="padding:1px 6px;">EQUIPO</td>
-                            <td align="center" style="padding:1px 6px;">CANTIDAD</td>
-                        </tr>';
+						</thead><tbody>';
                         
 						$i =1;
 						while ($row1 = mysql_fetch_array($res3)) {
 						if (($row1['reemplzado'] == '0') || (($row1['reemplzado'] == '1') && ($row1['volvio'] == '1'))) {
-                        $cad3 = $cad3.'<tr style="font-size:1.5em;">
-                            <td align="left" style="padding:1px 6px;">'.strtoupper(utf8_encode($row1['apyn'])).'</td>
-                            <td align="right" style="padding:1px 6px;">'.utf8_encode($row1['nombre']).'</td>
-                            <td align="right" style="padding:1px 6px;">'.$row1['cantidad'].'</td>
+                        $cad3 = $cad3.'<tr>
+                            <td>'.strtoupper($row1['apyn']).'</td>
+                            <td>'.$row1['nombre'].'</td>
+                            <td align="center">'.$row1['cantidad'].'</td>
  
                         </tr>';
          
 						$i = $i + 1;
 						}
 						}
-                    $cad3 = $cad3.'</table>
+                    $cad3 = $cad3.'</tbody></table>
                 
                 </div>';
 	echo $cad3;
@@ -1043,16 +1041,16 @@ function Suspendidos($serviciosDatos) {
 	
 	$cad4 = '
 	<div class="row" style="margin-top:20px;">
-                	<table cellpadding="0" cellspacing="0" border="2" bordercolor="#FF0000" style="width:auto; margin-left:20px; font-weight:bold; margin-right:20px;">
-                    	<tr bgcolor="#bfbfbf">
-                        	<td colspan="4" align="center" style="font-size:1.9em;">SUSPENDIDOS '.$zona.'</td>
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
+                    	<thead>
+                        <tr>
+                        	<th>NOMBRE Y APELLIDO</th>
+                            <th>EQUIPO</th>
+                            <th>MOTIVO</th>
+							<th>CANTIDAD</th>
                         </tr>
-                        <tr style="font-size:1.5em;">
-                        	<td align="center" style="padding:1px 6px;">NOMBRE Y APELLIDO</td>
-                            <td align="center" style="padding:1px 6px;">EQUIPO</td>
-                            <td align="center" style="padding:1px 6px;">MOTIVO</td>
-							<td align="center" style="padding:1px 6px;">CANTIDAD</td>
-                        </tr>';
+						</thead>
+						<tbody>';
                         
 						$i =1;
 						$restantes = 0;
@@ -1063,11 +1061,11 @@ function Suspendidos($serviciosDatos) {
 							//echo $restantes;
 							$restantes = (integer)$row1['cantidad'] - (integer)$restantes;
 							if ($restantes != 0) { 
-								$cad4 = $cad4.'<tr style="font-size:1.5em;">
-									<td align="left" style="padding:1px 6px;">'.strtoupper(utf8_encode($row1['apyn'])).'</td>
-									<td align="right" style="padding:1px 6px;">'.utf8_encode($row1['nombre']).'</td>
-									<td align="right" style="padding:1px 6px;">'.utf8_encode($row1['motivos']).'</td>
-									<td align="right" style="padding:1px 6px;">'.$row1['cantidad'].'(Resta '.$restantes.')'.'</td>
+								$cad4 = $cad4.'<tr>
+									<td>'.strtoupper($row1['apyn']).'</td>
+									<td>'.$row1['nombre'].'</td>
+									<td>'.$row1['motivos'].'</td>
+									<td>'.$row1['cantidad'].'(Resta '.$restantes.')'.'</td>
 								</tr>';
 								
 								$i = $i + 1;
@@ -1079,17 +1077,17 @@ function Suspendidos($serviciosDatos) {
 						while ($row2 = mysql_fetch_array($res5)) {
 
 
-								$cad4 = $cad4.'<tr style="font-size:1.5em;">
-									<td align="left" style="padding:1px 6px;">'.strtoupper(utf8_encode($row2['apyn'])).'</td>
-									<td align="right" style="padding:1px 6px;">'.utf8_encode($row2['nombre']).'</td>
-									<td align="right" style="padding:1px 6px;">'.utf8_encode($row2['motivos']).'</td>
-									<td align="right" style="padding:1px 6px;">Todas</td>
+								$cad4 = $cad4.'<tr>
+									<td>'.strtoupper($row2['apyn']).'</td>
+									<td>'.$row2['nombre'].'</td>
+									<td>'.$row2['motivos'].'</td>
+									<td>Todas</td>
 								</tr>';
 								
 								$i = $i + 1;
 
 						}
-                    $cad4 = $cad4.'</table>
+                    $cad4 = $cad4.'</tbody></table>
                 
                 </div>';
 	echo $cad4;
@@ -1160,15 +1158,18 @@ function AmarillasAcumuladas($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table class="table table-responsive table-striped" style="padding:2px 20px;">
-                        <tr>
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
+                        <thead>
+						<tr>
                             <th align="center">EQUIPO</th>
 							<th align="center">JUGADOR</th>
 							<th align="center">DNI</th>
               				<th align="center">AMARILLAS</th>
 							<th align="center">AZULES</th>
 							<th align="center">ROJAS</th>
-                        </tr>';
+                        </tr>
+						</thead>
+						<tbody>';
 
 						$i =1;
 						$puntos = 0;
@@ -1186,7 +1187,7 @@ function AmarillasAcumuladas($serviciosDatos) {
 							</tr>';
 						}
 						}
-                    $cad2 = $cad2.'</table>
+                    $cad2 = $cad2.'</tbody></table>
                 
                 </div>';
 	echo $cad2;
@@ -1207,11 +1208,14 @@ function FairPlay($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table class="table table-responsive table-striped" style="padding:2px 20px;">
-                        <tr>
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;max-width:400px;">
+                        <thead>
+						<tr>
                             <th align="center">EQUIPO</th>
                             <th align="center">PUNTOS</th>
-                        </tr>';
+                        </tr>
+						</thead>
+						<tbody>';
 
 						$i =1;
 						$puntos = 0;
@@ -1225,7 +1229,7 @@ function FairPlay($serviciosDatos) {
 							</tr>';
 
 						}
-                    $cad2 = $cad2.'</table>
+                    $cad2 = $cad2.'</tbody></table>
                 
                 </div>';
 	echo $cad2;

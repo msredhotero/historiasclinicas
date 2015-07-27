@@ -32,6 +32,14 @@ while ($rowFF = mysql_fetch_array($resFechas)) {
 	$cadFecha = $cadFecha.'<option value="'.$rowFF[0].'">'.$rowFF[1].'</option>';
 	
 }
+
+$refTorneos = $serviciosFunciones->traerTipoTorneo();
+
+$cadTorneo = '';
+while ($rowTT = mysql_fetch_array($refTorneos)) {
+	$cadTorneo = $cadTorneo.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';
+	
+}
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
@@ -114,11 +122,20 @@ if ($_SESSION['refroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
             
             <div class="row" style="margin-left:15px;" align="center">
-            	<div class="form-group col-md-4">
+            	<div class="form-group col-md-6">
                     <label class="control-label" style="text-align:left" for="idequipo">Fecha</label>
                     <div class="input-group col-md-12">
                         <select id="reffecha" class="form-control" name="reffecha">
                             <?php echo $cadFecha; ?>
+                        </select>
+                    </div>
+                </div>
+
+            	<div class="form-group col-md-6">
+                    <label class="control-label" style="text-align:left" for="idequipo">Torneos</label>
+                    <div class="input-group col-md-12">
+                        <select id="reftorneo" class="form-control" name="reftorneo">
+                            <?php echo $cadTorneo; ?>
                         </select>
                     </div>
                 </div>
@@ -127,10 +144,7 @@ if ($_SESSION['refroll_predio'] != 1) {
         	<div class="row" style="margin-left:15px;" align="center">
                 <ul class="list-inline">
                     <li>
-                        <button type="button" class="btn-lg btn-success" id="cargar" style="margin-left:0px;">Planillas F&uacute;tbol 11</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn-lg btn-info" id="guardar" style="margin-left:0px;">Planillas F&uacute;tbol 7</button>
+                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Generar Planilla</button>
                     </li>
                 </ul>
             </div>
@@ -164,19 +178,13 @@ $(document).ready(function(){
 	
 	$('#cargar').click(function(event){
 		
-		url = "../../reportes/planillasf11.php?reffecha="+$('#reffecha').val();
+		url = "../../reportes/planillas360.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val();
 		//$(location).attr('href',url);
 		window.open(url, '_blank');
       	return false;
 	});//fin del boton eliminar
 	
-	$('#guardar').click(function(event){
 
-		url = "../../reportes/planillasf7.php?reffecha="+$('#reffecha').val();
-		//$(location).attr('href',url);
-		window.open(url, '_blank');
-      	return false;
-	});//fin del boton eliminar
 
 });
 </script>
