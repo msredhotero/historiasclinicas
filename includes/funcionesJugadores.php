@@ -333,7 +333,7 @@ function traerGoleadoresPorId($id) {
 
 function traerAcumuladosAmarillasPorTorneoZonaJugador($idfecha,$idjugador,$idtipoTorneo) {
 		$sql = "select
-				t.refequipo, t.nombre, t.apyn, t.dni, (t.cantidadAmarillas + (t.cantidadAzules*2)) as cantidad,ultimafecha,fecha,t.reemplzado, t.volvio
+				t.refequipo, t.nombre, t.apyn, t.dni, (t.cantidadAmarillas + (t.cantidadAzules)) as cantidad,ultimafecha,fecha,t.reemplzado, t.volvio
 				from
 				(
 				select
@@ -372,7 +372,7 @@ left join dbreemplazo rr on rr.refequiporeemplazado = e.idequipo and rr.reffecha
 left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$idfecha." and rrr.reftorneo = ".$idtipoTorneo."
 					
 					where	j.idjugador = ".$idjugador."
-					and a.amarillas <> 2
+					and (a.amarillas is not null or a.azul is not null or a.rojas is not null)
 					and fi.reffecha <= ".$idfecha."
 					group by a.refequipo, e.nombre, concat(j.apellido, ', ',j.nombre), j.dni
 				) t

@@ -198,7 +198,14 @@ class ServiciosDatos {
 			fix.golesafavor,
 			(case when rr.idreemplazo is null then fix.golesencontra + COALESCE(rrr.golesencontra,0) else fix.golesencontra + rr.golesencontra end) as golesencontra,
 			fix.golesafavor - (case when rr.idreemplazo is null then fix.golesencontra + COALESCE(rrr.golesencontra,0) else fix.golesencontra + rr.golesencontra end) as diferencia,
-			(case when rr.idreemplazo is null then fix.pts + COALESCE(rrr.puntos,0) else fix.pts + rr.puntos end) as pts,
+			((case when rr.idreemplazo is null then fix.pts + COALESCE(rrr.puntos,0) else fix.pts + rr.puntos end) 
+			-
+			COALESCE((case 	when fix.puntos >= 15 and fix.puntos< 20 then 1
+					when fix.puntos >= 20 and fix.puntos < 25 then 2
+					when fix.puntos >= 25 then 3
+			end),0)
+			)
+			as pts,
 			fix.idequipo,
 			fix.puntos,
 			fix.equipoactivo,
