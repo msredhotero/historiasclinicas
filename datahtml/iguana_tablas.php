@@ -17,14 +17,21 @@ $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosDatos = new ServiciosDatos();
 
 if (isset($_GET["id"])) {
-	$id = $_GET["id"];
+	$idTipoTorneo = $_GET["id"];
+	$idzona = $_GET['zona'];
+	$idfecha = $_GET['fecha'];
 } else {
-	$id = 1;
+	$idTipoTorneo = 3;
+	$idzona = 19;
+	$idfecha = 23;
 }
 
-$resTorneos = $serviciosDatos->TraerFixturePorZonaTorneo(1,19,23);
-$resGoles = $serviciosDatos->Goleadores(1,19,23);
-$resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles(1,19,23);
+$resTorneos = $serviciosDatos->TraerFixturePorZonaTorneo($idTipoTorneo,$idzona,$idfecha);
+$resGoles = $serviciosDatos->Goleadores($idTipoTorneo,$idzona,$idfecha);
+$resFairPlay = $serviciosDatos->fairplay($idTipoTorneo,$idzona,$idfecha);
+$resSuspendido = $serviciosDatos->SuspendidosNuevo($idTipoTorneo,$idzona,$idfecha);
+$resAmarillas = $serviciosDatos->traerAcumuladosAmarillasPorTorneoZona($idTipoTorneo,$idzona,$idfecha);
+$resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles($idTipoTorneo,$idzona,$idfecha);
 
 
 ?>
@@ -80,8 +87,8 @@ $resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles(1,1
   <div style="display: none;" class="posiciones-wrapper section">
     	<div class="tabs-posiciones tabs-tablas">
       	<div class="tab-tabla selected" id="tab-tabla-2097">Futbol 5 Jueves / Torneo Apertura 2015</div>
-  	    	<div class="tab-tabla " id="tab-tabla-2139">Copa de Oro</div>
-  	    	<div class="tab-tabla " id="tab-tabla-2140">Copa de Plata</div>
+  	    	<!--<div class="tab-tabla " id="tab-tabla-2139">Copa de Oro</div>
+  	    	<div class="tab-tabla " id="tab-tabla-2140">Copa de Plata</div>-->
   	    <div class="bottom-line"></div>
 </div>
 <div class="tablas-posiciones">
@@ -142,7 +149,7 @@ contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P:
 puntos.</p>
         </div>
 	</div>
-		<div class="posiciones list" id="tabla-posiciones-2139">
+		<!--<div class="posiciones list" id="tabla-posiciones-2139">
     	<div class="titles">
     		<div class="col col1"></div>
     		<div class="col col2 col-number">PJ</div>
@@ -306,7 +313,7 @@ puntos.</p>
 empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
 contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
 puntos.</p>
-        </div>
+        </div>-->
 	</div>
 	</div>
   </div>
@@ -318,97 +325,28 @@ puntos.</p>
     		<div class="col col3">Goles</div>
     	</div>
     	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/29039" target="_top">Sabrina Bagdadi</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-    					    				</div>
-    				<div class="col col3">15</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/21798" target="_top">Karen Castaño</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-    					    				</div>
-    				<div class="col col3">13</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/30958" target="_top">Claudia Sosa</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-    					    				</div>
-    				<div class="col col3">12</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/29264" target="_top">Gabriela Mergen</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2610" target="_top">Arsenalgas</a>
-    					    				</div>
-    				<div class="col col3">12</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/30607" target="_top">Agostina Gigli</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-    					    				</div>
-    				<div class="col col3">12</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/30318" target="_top">Pilar Renau</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-    					    				</div>
-    				<div class="col col3">10</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/29147" target="_top">Sara Romero</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2610" target="_top">Arsenalgas</a>
-    					    				</div>
-    				<div class="col col3">7</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/29150" target="_top">Maria Papini</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-    					    				</div>
-    				<div class="col col3">7</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/30317" target="_top">Candela Gimeno</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-    					    				</div>
-    				<div class="col col3">6</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/jugador/24986" target="_top"> Vanesa Santana</a>
-    					    				</div>
-    				<div class="col col2">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-    					    				</div>
-    				<div class="col col3">6</div>
-    			</div>
-    			    		    	</div>
+        <?php
+			
+			$cant = 1;
+			
+			while ($rowG = mysql_fetch_array($resGoles)) {
+			?>
+			
+			<?php if (($cant % 2) != 0) { ?>
+			<div class="item pair-row">
+			<?php } else { ?>
+			<div class="item odd-row">
+			<?php } ?>
+            	<div class="col col1">
+            		<?php echo $rowG[0]; ?>
+            	</div>
+            	<div class="col col2">
+            		<?php echo $rowG[1]; ?>
+            	</div>
+            	<div class="col col3"><?php echo $rowG[2]; ?></div>
+            </div>
+			<?php $cant += 1; } ?>
+    	</div>
 	</div>
   </div>
   <div class="fairplay-wrapper section">
@@ -422,67 +360,30 @@ puntos.</p>
     	<div class="titles">
     		<div class="col col1">Equipo</div>
     		<div class="col col3"></div>
-    		<div class="col col4"></div>
-    		<div class="col col5"></div>
+
     	</div>
     	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-	    				    				</div>
-    				<div class="col col3">4</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-	    				    				</div>
-    				<div class="col col3">4</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-	    				    				</div>
-    				<div class="col col3">3</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-	    				    				</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-	    				    				</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2610" target="_top">Arsenalgas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-	    					    					<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    	</div>
+        	<?php
+	
+			$cant = 1;
+			
+			while ($rowFP = mysql_fetch_array($resFairPlay)) {
+			?>
+			
+			<?php if (($cant % 2) != 0) { ?>
+			<div class="item pair-row">
+			<?php } else { ?>
+			<div class="item odd-row">
+			<?php } ?>
+                <div class="col col1">
+                	<?php echo $rowFP[0]; ?>
+                </div>
+                <div class="col col3"><?php echo $rowFP[1]; ?></div>
+
+            </div>
+
+				<?php $cant += 1; } ?>
+    	</div>
 	</div>
 	<div class="fairplay list jugadores" id="tabla-fairplay-jugadores">
     	<div class="titles">
@@ -493,149 +394,64 @@ puntos.</p>
     		<div class="col col5"></div>
     	</div>
     	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30955" target="_top">Julieta Gomez</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-	    				    				</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30958" target="_top">Claudia Sosa</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-	    				    				</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30610" target="_top">Daiana Makle</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30606" target="_top">Florencia Cianchi</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30312" target="_top">Belen Nolazco</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30313" target="_top">Tania Vera</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/29147" target="_top">Sara Romero</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2610" target="_top">Arsenalgas</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col3">0</div>
-    				<div class="col col3">0</div>
-    			</div>
-    			    		    	</div>
+        	<?php
+	
+			$cant = 1;
+			
+			while ($rowA = mysql_fetch_array($resAmarillas)) {
+			?>
+			
+			<?php if (($cant % 2) != 0) { ?>
+			<div class="item pair-row">
+			<?php } else { ?>
+			<div class="item odd-row">
+			<?php } ?>
+                <div class="col col1">
+                	<?php echo $rowA['apyn']; ?>
+                </div>
+                <div class="col col2">
+                	<?php echo $rowA['nombre']; ?>
+                </div>
+                <div class="col col3"><?php echo $rowA['cantidad']; ?></div>
+                <div class="col col4"><?php echo $rowA['cantidadazules']; ?></div>
+                <div class="col col5"><?php echo $rowA['cantidadrojas']; ?></div>
+            </div>
+    		<?php $cant += 1; } ?>
+    		</div>
 	</div>
 	<div class="fairplay list suspendidos" id="tabla-fairplay-suspendidos">
     	<div class="titles">
     		<div class="col col1">Jugador</div>
     		<div class="col col2">Equipo</div>
-    		<div class="col col3">Partidos</div>
+            <div class="col col3">Motivos</div>
+    		<div class="col col4">Partidos</div>
     	</div>
     	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30958" target="_top">Claudia Sosa</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col4">
-    					<div class="view-more closed"></div>
-    				</div>
-    				<div class="more">
-    					<div class="row">
-    						<div class="title">Motivo:</div>
-    						<div class="text">Conducta antideportiva</div>
-    					</div>
-    					<div class="row">
-    						<div class="title">Desde:</div>
-    						<div class="text">
-    						              				    Fecha 4            				      						</div>
-    					</div>
-    					<div class="row">
-    						<div class="title">Hasta:</div>
-    						<div class="text">
-    						              				    Fecha 6            				      						</div>
-    					</div>
-    				</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/jugador/30955" target="_top">Julieta Gomez</a>
-	    				    				</div>
-    				<div class="col col2">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-	    				    				</div>
-    				<div class="col col3">1</div>
-    				<div class="col col4">
-    					<div class="view-more closed"></div>
-    				</div>
-    				<div class="more">
-    					<div class="row">
-    						<div class="title">Motivo:</div>
-    						<div class="text">Conducta antideportiva</div>
-    					</div>
-    					<div class="row">
-    						<div class="title">Desde:</div>
-    						<div class="text">
-    						              				    Fecha 4            				      						</div>
-    					</div>
-    					<div class="row">
-    						<div class="title">Hasta:</div>
-    						<div class="text">
-    						              				    Fecha 6            				      						</div>
-    					</div>
-    				</div>
-    			</div>
-    			    		    	</div>
+        	<?php
+	
+			$cant = 1;
+			
+			while ($rowS = mysql_fetch_array($resSuspendido)) {
+			?>
+			
+			<?php if (($cant % 2) != 0) { ?>
+			<div class="item pair-row">
+			<?php } else { ?>
+			<div class="item odd-row">
+			<?php } ?>
+
+                <div class="col col1">
+                	<?php echo $rowS['apyn']; ?>
+                </div>
+                <div class="col col2">
+                	<?php echo $rowS['nombre']; ?>
+                </div>
+                <div class="col col3"><?php echo $rowS['motivos']; ?></div>
+                <div class="col col4"><?php echo $rowS['cantidad']; ?></div>
+            
+            </div>
+    		<?php $cant += 1; } ?>
+    	</div>
 	</div>
   </div>
   <div style="display: block;" class="vallamenosvencida-wrapper section">
@@ -645,55 +461,26 @@ puntos.</p>
     		<div class="col col2">Goles en contra</div>
     	</div>
     	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top">Yendo</a>
-	    				    				</div>
-    				<div class="col col2">3</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2610" target="_top">Arsenalgas</a>
-	    				    				</div>
-    				<div class="col col2">17</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-	    				    				</div>
-    				<div class="col col2">18</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/1372" target="_top">Pura Pinta</a>
-	    				    				</div>
-    				<div class="col col2">20</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-	    				    				</div>
-    				<div class="col col2">21</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2785" target="_top">4 de Copas</a>
-	    				    				</div>
-    				<div class="col col2">23</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-	    				    				</div>
-    				<div class="col col2">40</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    						    					<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-	    				    				</div>
-    				<div class="col col2">64</div>
-    			</div>
-    			    		    	</div>
+        	<?php
+	
+			$cant = 1;
+			
+			while ($rowV = mysql_fetch_array($resVallaMenosVencida)) {
+			?>
+			
+			<?php if (($cant % 2) != 0) { ?>
+			<div class="item pair-row">
+			<?php } else { ?>
+			<div class="item odd-row">
+			<?php } ?>
+
+                    <div class="col col1">
+                        <?php echo $rowV['nombre']; ?>
+                    </div>
+                    <div class="col col2"><?php echo $rowV['golesencontra']; ?></div>
+                </div>
+            <?php $cant += 1; } ?>
+    		</div>
 	</div>
   </div>
   <div class="fixture-wrapper section">
