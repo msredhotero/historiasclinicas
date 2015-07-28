@@ -122,9 +122,12 @@ function MM_preloadImages() { //v3.0
       <div class="TabbedPanelsContentGroup">
         <div class="TabbedPanelsContent">
           <!-- IFRAME CON TODAS LAS TABLAS JUNTAS. -->
-          <iframe src="http://www.datafutbol.net/comunidad/campeonato/tablas/666" name="Campeonato-396" width="780" height="500" scrolling="No" frameborder="0" id="Campeonato-396">
+          <!--<iframe src="http://www.datafutbol.net/comunidad/campeonato/tablas/666" name="Campeonato-396" width="780" height="500" scrolling="No" frameborder="0" id="Campeonato-396">
             <p>Tu browser no permite mostrar estas tablas.</p>
-            </iframe>
+            </iframe>-->
+            <iframe src="datahtml/iguana_tablas.php?id=2&zona=19&fecha=23" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
+            <p>Tu browser no permite mostrar estas tablas.</p>
+            </iframe>-->
           <br />
           </div>
         </div>
