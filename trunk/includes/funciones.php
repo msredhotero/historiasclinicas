@@ -504,16 +504,48 @@ class Servicios {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	//  (ATENCION ESTA FUNCION SE REPITE EN FUNCIONESZONASEQUIPOS)
+	function TraerFixturePorId($id) {
+		$sql = "SELECT idfixture,
+					reftorneoge_a,
+					resultado_a,
+					reftorneoge_b,
+					resultado_b,
+					fechajuego,
+					reffecha,
+					hora,
+					cancha,
+					(CASE WHEN chequeado =1
+					THEN  '1'
+					ELSE  '0'
+					END
+					) AS chequeado
+				FROM dbfixture 
+				where idfixture = ".$id;
+		return $this->query($sql,0);	
+	}
 
 	function camposTablaModificar($id,$lblid,$accion,$tabla,$lblcambio,$lblreemplazo,$refdescripcion,$refCampo) {
 		
-		if ($tabla == 'dbtorneos') {
+		
+		switch ($tabla) {
+			case 'dbtorneos':
+				$resMod = $this->TraerIdTorneos($id);
+				break;
+			case 'dbfixture':
+				$resMod = $this->TraerFixturePorId($id);
+				break;	
+			default:
+				$sqlMod = "select * from ".$tabla." where ".$lblid." = ".$id;
+				$resMod = $this->query($sqlMod,0);
+		}
+		/*if ($tabla == 'dbtorneos') {
 			$resMod = $this->TraerIdTorneos($id);
 		} else {
+			
 			$sqlMod = "select * from ".$tabla." where ".$lblid." = ".$id;
 			$resMod = $this->query($sqlMod,0);
-		}
+		}*/
 		$sql	=	"show columns from ".$tabla;
 		$res 	=	$this->query($sql,0);
 		
@@ -994,6 +1026,14 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		return $this-> query($sql,0);
 	}
 	
+	function TraerTorneosActivoPorTipo($tipotorneo) {
+		$sql = "select t.idtorneo,t.nombre,t.fechacreacion,t.activo,tt.descripciontorneo from dbtorneos t
+				inner join
+				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
+				where tt.idtipotorneo = '".$tipotorneo."' and t.activo = 1";
+		return $this-> query($sql,0);
+	}
+	
 	function traerZonaPorTorneos($refTorneo) {
 		$sql = "select z.idgrupo,z.nombre 
 				from dbgrupos z 
@@ -1052,7 +1092,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		
 		$sql = "update dbtorneos 
 					set 
-						nombre = '".$nombre.$activo."1', 
+						nombre = '".$nombre."', 
 						activo =".$activo.",
 						refsede=".$refsede.",
 						";
@@ -1432,6 +1472,27 @@ function traerSuspendidosPorFechas($refjugador,$refequipo,$idSuspendido) {
 				where fi.chequeado = 1
 				group by ff.idfecha,ff.tipofecha
 				order by ff.idfecha desc 
+				limit 1";	
+		return $this-> query($sql,0);
+	}
+	
+	function UltimaFechaPorTorneoZona($idtorneo,$idzona) {
+		$sql = "select 
+					ff.idfecha, ff.tipofecha
+				from
+					dbfixture fi
+						inner join
+					tbfechas ff ON ff.idfecha = fi.reffecha
+						inner join
+					dbtorneoge tge ON (tge.idtorneoge = fi.reftorneoge_a
+						or tge.idtorneoge = fi.reftorneoge_b)
+						inner join
+					dbtorneos t ON t.idtorneo = tge.reftorneo
+				where
+					fi.chequeado = 1 and t.reftipotorneo =".$idtorneo."
+						and tge.refgrupo = ".$idzona."
+				group by ff.idfecha , ff.tipofecha
+				order by ff.idfecha desc
 				limit 1";	
 		return $this-> query($sql,0);
 	}
