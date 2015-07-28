@@ -157,12 +157,12 @@ function MM_preloadImages() { //v3.0
   <tr>
     <td><div id="TabbedPanels1" class="TabbedPanels">
       <ul class="TabbedPanelsTabGroup">
-        <li class="TabbedPanelsTab" tabindex="0">Estadisticas</li>
+        <li class="TabbedPanelsTab" tabindex="0">Estadisticas 5</li>
 </ul>
       <div class="TabbedPanelsContentGroup">
         <div class="TabbedPanelsContent">
           <!-- IFRAME CON TODAS LAS TABLAS JUNTAS.-->
-          <iframe src="datahtml/iguana_tablas.php?id=1" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
+          <iframe src="datahtml/iguana_tablas.php?id=3&zona=19&fecha=23" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
           <!--
         <div class="row">
         
