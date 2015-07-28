@@ -18,12 +18,34 @@ $serviciosDatos = new ServiciosDatos();
 
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
-	$idzona = $_GET['zona'];
-	$idfecha = $_GET['fecha'];
 } else {
 	$idTipoTorneo = 3;
+}
+
+if (isset($_GET["zona"])) {
+	$idzona = $_GET['zona'];
+} else {
 	$idzona = 19;
+}
+
+if (isset($_GET["fecha"])) {
+
+	$idfecha = $_GET['fecha'];
+} else {
+
 	$idfecha = 23;
+}
+
+$torneo = $serviciosFunciones->TraerTorneosActivoPorTipo($idTipoTorneo);
+
+$nombreTorneo = mysql_result($torneo,0,'descripciontorneo')." / ".mysql_result($torneo,0,'nombre');
+
+$idfecha = $serviciosFunciones->UltimaFechaPorTorneoZona($idTipoTorneo,$idzona);
+
+if (mysql_num_rows($idfecha)>0) {
+	$idfecha = mysql_result($idfecha,0,0);	
+} else {
+	$idfecha = 23;	
 }
 
 $resTorneos = $serviciosDatos->TraerFixturePorZonaTorneo($idTipoTorneo,$idzona,$idfecha);
@@ -86,7 +108,7 @@ $resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles($id
 		  </div>
   <div style="display: none;" class="posiciones-wrapper section">
     	<div class="tabs-posiciones tabs-tablas">
-      	<div class="tab-tabla selected" id="tab-tabla-2097">Futbol 5 Jueves / Torneo Apertura 2015</div>
+      	<div class="tab-tabla selected" id="tab-tabla-2097"><?php echo $nombreTorneo; ?></div>
   	    	<!--<div class="tab-tabla " id="tab-tabla-2139">Copa de Oro</div>
   	    	<div class="tab-tabla " id="tab-tabla-2140">Copa de Plata</div>-->
   	    <div class="bottom-line"></div>
@@ -120,7 +142,7 @@ $resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles($id
     <div class="item odd-row">
     <?php } ?>
         <div class="col col1">
-            <a href="http://www.datafutbol.net/comunidad/equipo/2784" target="_top"><?php echo $row['nombre']; ?></a>
+            <?php echo $row['nombre']; ?>
         </div>
         <div class="col col2 col-number"><?php echo $row['partidos']; ?></div>
         <div class="col col3 col-number"><?php echo $row['ganados']; ?></div>
