@@ -40,7 +40,7 @@ $resHorarios = $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
 $tabla 			= "dbtorneoge";
 
 $lblCambio	 	= array("refgrupo","refequipo","reftorneo");
-$lblreemplazo	= array("Zonas","Equipos","Torneo");
+$lblreemplazo	= array("Categorias","Equipos","Torneo");
 
 $resTipoTorneo 	= $serviciosFunciones->TraerTorneosActivo($_SESSION['torneo_predio']);
 
@@ -99,7 +99,7 @@ if (mysql_num_rows($refultimaFecha)>0) {
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Zonas</th>
+$cabeceras 		= "	<th>Categorias</th>
 				<th>Equipos</th>
 				<th>Torneo</th>
 				<th>Prioridad</th>";
@@ -182,11 +182,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Zonas-Equipos</h3>
+<h3>Categorias-Equipos</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Zonas-Equipos</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Carga de Categorias-Equipos</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -312,7 +312,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Zonas-Equipos Cargados</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Categorias-Equipos Cargados</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -332,7 +332,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipo de la Zona">
     	<p class="alert alert-danger">
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el Equipo de la Zona?.<span id="proveedorEli"></span>
+            ¿Esta seguro que desea eliminar el Equipo de la Categoria?.<span id="proveedorEli"></span>
         </p>
 
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -475,7 +475,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Equipo a la Zona</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Equipo a la Categoria</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -541,7 +541,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Equipo a la Zona</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong>Equipo a la Categoria</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/

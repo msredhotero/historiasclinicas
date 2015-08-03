@@ -33,8 +33,8 @@ $resResultado = $serviciosGrupos->TraerIdGrupos($id);
 
 /////////////////////// Opciones de la pagina  ////////////////////
 
-$lblTitulosingular	= "Zona";
-$lblTituloplural	= "Zonas";
+$lblTitulosingular	= "Categoria";
+$lblTituloplural	= "Categorias";
 
 /////////////////////// Fin de las opciones /////////////////////
 
@@ -123,11 +123,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Zonas</h3>
+<h3>Categorias</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Modificar de Zonas</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar de Categorias</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -176,7 +176,7 @@ if ($_SESSION['refroll_predio'] != 1) {
 <div id="dialog2" title="Eliminar Equipos">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            No se pueden eliminar las zonas, solo se pueden modificar.
+            No se pueden eliminar las Categorias, solo se pueden modificar.
         </p>
 
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
@@ -272,7 +272,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Zona</strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Categoria</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/

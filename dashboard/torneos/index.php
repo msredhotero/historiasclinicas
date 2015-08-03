@@ -58,15 +58,24 @@ $refdescripcion = array(0 => $cadRef,1 => $cadRef2);
 $refCampo 	= array("reftipotorneo","refsede"); 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+/////////////////// Sedes ///////////////////////
 
+$resFechas = $serviciosFunciones->traerSedes();
+
+$cadSedes = '<ul class="list-inline">';
+while ($rowFS = mysql_fetch_array($resFechas)) {
+	$cadSedes = $cadSedes."<li>".'<input id="sede'.$rowFS[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="sede'.$rowFS[0].'"><p>'.$rowFS[1].'</p>'."</li>";
+}
+$cadSedes = $cadSedes."</ul>";
+
+/////////////////////////////////////////////////////////////////
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
 $cabeceras 		= "	<th>Nombre</th>
 				<th>Fecha Creación</th>
 				<th>Activo</th>
-				<th>Tipo Torneo</th>
-				<th>Sede</th>";
+				<th>Tipo Torneo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -75,7 +84,7 @@ $cabeceras 		= "	<th>Nombre</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarTorneo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->TraerTorneos(),5);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->TraerTorneos(),4);
 
 
 
@@ -157,7 +166,16 @@ if ($_SESSION['refroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
         	<?php echo $formulario; ?>
             
+            <hr>
             
+            <div class="row">
+            	<div class="form-group col-md-12">
+                	<label class="control-label" style="text-align:left" for="fechas">Sedes</label>
+                    <div class="input-group col-md-12">
+                    	<?php echo $cadSedes; ?>
+                    </div>
+                </div>
+            </div>
             
             <div class='row'>
                 <div class='alert'>

@@ -984,11 +984,15 @@ return $res;
 		THEN  '1'
 		ELSE  '0'
 		END
-		) AS activo ,tt.descripciontorneo,ss.nombre from dbtorneos t
+		) AS activo ,tt.descripciontorneo from dbtorneos t
 				inner join
 				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
-				inner join
-				tbsedes ss on ss.idsede = t.refsede
+				left
+				join	dbtorneossedes ts
+				on		ts.reftorneo = t.idtorneo
+				left join
+				tbsedes ss on ss.idsede = ts.refsede
+				group by t.idtorneo,t.nombre,t.fechacreacion, t.activo,tt.descripciontorneo
 				order by idtorneo desc";
 		return $this-> query($sql,0);
 	}
@@ -999,7 +1003,7 @@ return $res;
 				THEN  '1'
 				ELSE  '0'
 				END
-				) AS activo,reftipotorneo,refsede FROM dbtorneos where idtorneo = ".$id;
+				) AS activo,reftipotorneo FROM dbtorneos where idtorneo = ".$id;
 		return $this-> query($sql,0);
 	}
 	
@@ -1071,11 +1075,11 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 	}
 	
 	
-	function insertarTorneo($nombre,$fechacrea,$activo,$reftipotorneo,$refsede) {
+	function insertarTorneo($nombre,$fechacrea,$activo,$reftipotorneo) {
 		$nombre = str_replace("'","",$nombre);
 		$nombre = utf8_decode($nombre);
 
-		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo,refsede) values ('','".$nombre."', '".$fechacrea."', '".$activo."',".$reftipotorneo.",".$refsede.")";
+		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo,refsede) values ('','".$nombre."', '".$fechacrea."', '".$activo."',".$reftipotorneo.")";
 		//return $sql;
 		$res = $this-> query($sql,1);
 		
@@ -1084,7 +1088,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		return $res;
 	}
 	
-	function modificarTorneo($idtorneo,$nombre,$fechacrea,$activo,$reftipotorneo,$refsede) {
+	function modificarTorneo($idtorneo,$nombre,$fechacrea,$activo,$reftipotorneo) {
 		
 		$nombre = str_replace("'","",$nombre);
 		$nombre = utf8_decode($nombre);
@@ -1094,7 +1098,6 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 					set 
 						nombre = '".$nombre."', 
 						activo =".$activo.",
-						refsede=".$refsede.",
 						";
 		if ($fechacrea != '') {				
 			$sql = $sql."   fechacreacion = '".$fechacrea."',";
@@ -1551,6 +1554,20 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function traerSedesPorTorneo($reftorneo) {
+	$sql = "select s.idsede,s.nombre,s.direccion 
+			from tbsedes s
+			inner
+			join dbtorneossedes ts
+			on	ts.refsede = s.idsede
+			inner
+			join dbtorneos t
+			on	t.idtorneo = ts.reftorneo
+			where t.idtorneo =".$reftorneo;
+$res = $this->query($sql,0);
+return $res;
+}
+
 /* Fin */	
 
 
@@ -1600,7 +1617,89 @@ return $res;
 /* Fin */
 
 	
+	/* PARA TipoTorneo */
+
+	function insertarTipoTorneo($descripciontorneo) {
+		$sql = "insert into tbtipotorneo(idtipotorneo,descripciontorneo)
+		values ('','".utf8_decode($descripciontorneo)."')";
+		$res = $this->query($sql,1);
+		return $res;
+	}
 	
+	
+	function modificarTipoTorneo($id,$descripciontorneo) {
+		$sql = "update tbtipotorneo
+		set
+		descripciontorneo = '".utf8_decode($descripciontorneo)."'
+		where idtipotorneo =".$id;
+		$res = $this->query($sql,0);
+		return $res;
+	}
+	
+	
+	function eliminarTipoTorneo($id) {
+		$sql = "delete from tbtipotorneo where idtipotorneo =".$id;
+		$res = $this->query($sql,0);
+		return $res;
+	}
+	
+
+	
+	
+	function traerTipoTorneoPorId($id) {
+		$sql = "select idtipotorneo,descripciontorneo from tbtipotorneo where idtipotorneo =".$id;
+		$res = $this->query($sql,0);
+		return $res;
+	}
+	
+	/* Fin */
+	/* PARA TorneosSedes */
+
+function insertarTorneosSedes($reftorneo,$refsede) {
+$sql = "insert into dbtorneossedes(idtorneosede,reftorneo,refsede)
+values ('',".$reftorneo.",".$refsede.")";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarTorneosSedes($id,$reftorneo,$refsede) {
+$sql = "update dbtorneossedes
+set
+reftorneo = ".$reftorneo.",refsede = ".$refsede."
+where idtorneosede =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarTorneosSedes($id) {
+$sql = "delete from dbtorneossedes where idtorneosede =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function eliminarTorneosSedesPorTorneos($refTorneo) {
+$sql = "delete from dbtorneossedes where reftorneo =".$refTorneo;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTorneosSedes() {
+$sql = "select idtorneosede,reftorneo,refsede from dbtorneossedes order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTorneosSedesPorId($id) {
+$sql = "select idtorneosede,reftorneo,refsede from dbtorneossedes where idtorneosede =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+/* Fin */
 	function query($sql,$accion) {
 		
 		require_once 'appconfig.php';
