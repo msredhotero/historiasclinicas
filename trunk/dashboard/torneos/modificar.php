@@ -38,8 +38,8 @@ $accionEliminar		= "eliminarTorneo";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "dbtorneos";
 
-$lblCambio	 	= array("reftipotorneo","FechaCreacion","refsede");
-$lblreemplazo	= array("Tipo Torneo","Fecha Creación","Sede");
+$lblCambio	 	= array("reftipotorneo","FechaCreacion");
+$lblreemplazo	= array("Tipo Torneo","Fecha Creación");
 
 $resTipoTorneo 	= $serviciosFunciones->traerTipoTorneo();
 
@@ -53,19 +53,10 @@ while ($rowTT = mysql_fetch_array($resTipoTorneo)) {
 }
 
 
-$resSede 	= $serviciosFunciones->traerSedes();
 
-$cadRef2 = '';
-while ($rowS = mysql_fetch_array($resSede)) {
-	if (mysql_result($resResultado,0,'refsede') == $rowS[0]) {
-		$cadRef2 = $cadRef2.'<option value="'.$rowS[0].'" selected>'.$rowS[1].'</option>';
-	} else {
-		$cadRef2 = $cadRef2.'<option value="'.$rowS[0].'">'.$rowS[1].'</option>';
-	}
-}
 
-$refdescripcion = array(0 => $cadRef,1 => $cadRef2);
-$refCampo 	= array("reftipotorneo","refsede"); 
+$refdescripcion = array(0 => $cadRef);
+$refCampo 	= array("reftipotorneo"); 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
@@ -79,7 +70,39 @@ $cabeceras 		= "	<th>Nombre</th>
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+/////////////////// Fechas para Suspender ///////////////////////
 
+$resFechas = $serviciosFunciones->traerSedes();
+
+$resFS = $serviciosFunciones->traerSedesPorTorneo( $id);
+
+
+	while ($subrow = mysql_fetch_array($resFS)) {
+			$arrayFS[] = $subrow;
+	}
+
+
+
+$cadSedes = '<ul class="list-inline">';
+while ($rowFS = mysql_fetch_array($resFechas)) {
+	$check = '';
+	if (mysql_num_rows($resFS)>0) {
+		foreach ($arrayFS as $item) {
+			if (stripslashes($item['idsede']) == $rowFS[0]) {
+				$check = 'checked';	
+			}
+		}
+	}
+	$cadSedes = $cadSedes."<li>".'<input id="sede'.$rowFS[0].'" '.$check.' class="form-control" type="checkbox" required="" style="width:50px;" name="sede'.$rowFS[0].'"><p>'.$rowFS[1].'</p>'."</li>";
+
+
+}
+
+
+
+$cadSedes = $cadSedes."</ul>";
+
+/////////////////////////////////////////////////////////////////
 
 
 $formulario 	= $serviciosFunciones->camposTablaModificar($id, "idtorneo","modificarTorneo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
@@ -167,6 +190,14 @@ if ($_SESSION['refroll_predio'] != 1) {
 			<?php echo $formulario; ?>
             </div>
             
+            <div class="row">
+            	<div class="form-group col-md-12">
+                	<label class="control-label" style="text-align:left" for="fechas">Sedes</label>
+                    <div class="input-group col-md-12">
+                    	<?php echo $cadSedes; ?>
+                    </div>
+                </div>
+            </div>
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>

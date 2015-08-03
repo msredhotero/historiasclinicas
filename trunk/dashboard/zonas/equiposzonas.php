@@ -30,8 +30,8 @@ $resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Zonas",$_SESSION['re
 
 /////////////////////// Opciones de la pagina  ////////////////////
 
-$lblTitulosingular	= "Zona";
-$lblTituloplural	= "Zonas";
+$lblTitulosingular	= "Categoria";
+$lblTituloplural	= "Categorias";
 
 /////////////////////// Fin de las opciones /////////////////////
 
@@ -105,11 +105,11 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <div id="content">
 
-<h3>Zonas-Equipos</h3>
+<h3>Categorias-Equipos</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Seleccione el equipo para cargar datos por zonas</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Seleccione el equipo para cargar datos por Categorias</p>
         	
         </div>
     	<div class="cuerpoBox">

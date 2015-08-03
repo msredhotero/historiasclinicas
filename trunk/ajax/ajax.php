@@ -49,6 +49,32 @@ switch ($accion) {
 		modificarCliente($serviciosUsuarios);
 		break;
 
+/* PARA TorneosSedes */
+case 'insertarTorneosSedes':
+insertarTorneosSedes($serviciosFunciones);
+break;
+case 'modificarTorneosSedes':
+modificarTorneosSedes($serviciosFunciones);
+break;
+case 'eliminarTorneosSedes':
+eliminarTorneosSedes($serviciosFunciones);
+break;
+
+/* Fin */
+
+/* PARA TipoTorneo */
+case 'insertarTipoTorneo':
+insertarTipoTorneo($serviciosFunciones);
+break;
+case 'modificarTipoTorneo':
+modificarTipoTorneo($serviciosFunciones);
+break;
+case 'eliminarTipoTorneo':
+eliminarTipoTorneo($serviciosFunciones);
+break;
+
+/* Fin */
+
 /* PARA PlayOff */
 case 'insertarPlayOff':
 insertarPlayOff($serviciosPlayOff);
@@ -396,6 +422,35 @@ function toArray($query)
     }
     return $res;
 }
+
+
+/* PARA TipoTorneo */
+function insertarTipoTorneo($serviciosTipoTorneo) {
+$descripciontorneo = $_POST['descripciontorneo'];
+$res = $serviciosTipoTorneo->insertarTipoTorneo($descripciontorneo);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarTipoTorneo($serviciosTipoTorneo) {
+$id = $_POST['id'];
+$descripciontorneo = $_POST['descripciontorneo'];
+$res = $serviciosTipoTorneo->modificarTipoTorneo($id,$descripciontorneo);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarTipoTorneo($serviciosTipoTorneo) {
+$id = $_POST['id'];
+$res = $serviciosTipoTorneo->eliminarTipoTorneo($id);
+echo $res;
+}
+
+/* Fin */ 
 
 
 /* PARA PlayOff */
@@ -1368,12 +1423,18 @@ function insertarTorneo($serviciosFunciones) {
 	}
 
 	$reftipotorneo	=	$_POST['reftipotorneo'];
-	$refsede		=	$_POST['refsede'];
 	
-	$res = $serviciosFunciones->insertarTorneo($nombre,$fechacreacion,$activo,$reftipotorneo,$refsede);
+	$res = $serviciosFunciones->insertarTorneo($nombre,$fechacreacion,$activo,$reftipotorneo);
 	//echo $res;
 	
 	if ((integer)$res > 0) {
+		$resFechas = $serviciosFunciones->traerSedes();
+		$cad = 'sede';
+		while ($rowFS = mysql_fetch_array($resFechas)) {
+			if (isset($_POST[$cad.$rowFS[0]])) {
+				$serviciosFunciones->insertarTorneosSedes($res,$rowFS[0]);
+			}
+		}
 		echo '';
 	} else {
 		echo "Huvo un error al insertar datos";	
@@ -1393,13 +1454,20 @@ function modificarTorneo($serviciosFunciones) {
 	}
 
 	$reftipotorneo	=	$_POST['reftipotorneo'];
-	$refsede		=	$_POST['refsede'];
 	
-	$res = $serviciosFunciones->modificarTorneo($id,$nombre,$fechacreacion,$activo,$reftipotorneo,$refsede);
+	$res = $serviciosFunciones->modificarTorneo($id,$nombre,$fechacreacion,$activo,$reftipotorneo);
 	
 	
 
 	if ($res == true) {
+		$serviciosFunciones->eliminarTorneosSedesPorTorneos($res);
+			$resFechas = $serviciosFunciones->traerSedes();
+			$cad = 'sede';
+			while ($rowFS = mysql_fetch_array($resFechas)) {
+				if (isset($_POST[$cad.$rowFS[0]])) {
+					$serviciosFunciones->insertarTorneosSedes($id,$rowFS[0]);
+				}
+			}
 		echo '';
 	} else {
 		echo 'Huvo un error al modificar datos';

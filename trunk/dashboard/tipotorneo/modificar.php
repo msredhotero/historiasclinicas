@@ -12,37 +12,31 @@ if (!isset($_SESSION['usua_predio']))
 include ('../../includes/funciones.php');
 include ('../../includes/funcionesUsuarios.php');
 include ('../../includes/funcionesHTML.php');
-include ('../../includes/funcionesGrupos.php');
-include ('../../includes/funcionesDATOS.php');
+include ('../../includes/funcionesEquipos.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
-$serviciosGrupos 	= new ServiciosG();
-$serviciosDatos		= new ServiciosDatos();
+$serviciosEquipos 	= new ServiciosE();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Zonas",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
+//$resProductos = $serviciosProductos->traerProductosLimite(6);
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"TipoTorneo",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
 
-/////////////////////// Opciones de la pagina  ////////////////////
+$id = $_GET['id'];
 
-$lblTitulosingular	= "Categoria";
-$lblTituloplural	= "Categorias";
-
-/////////////////////// Fin de las opciones /////////////////////
-
+$resResultado = $serviciosFunciones->traerTipoTorneoPorId($id);
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "dbgrupos";
+$tabla 			= "tbtipotorneo";
 
-$lblCambio	 	= array("");
-$lblreemplazo	= array("");
-
-$resTipoTorneo 	= '';
+$lblCambio[]	 	= "descripciontorneo";
+$lblreemplazo[]	= "Tipo Torneo";
 
 $cadRef = '';
+
 
 $refdescripcion = array(0 => $cadRef);
 $refCampo[] 	= ""; 
@@ -51,19 +45,11 @@ $refCampo[] 	= "";
 
 
 
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Nombre</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, "idtipotorneo", "modificarTipoTorneo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$formulario 	= $serviciosFunciones->camposTabla("insertarGrupo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
-
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosGrupos->TraerGrupos(),1);
-
-$resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_predio']);
 
 if ($_SESSION['refroll_predio'] != 1) {
 
@@ -104,12 +90,8 @@ if ($_SESSION['refroll_predio'] != 1) {
 	<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <!-- Latest compiled and minified JavaScript -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
-
-	<style type="text/css">
-		
-  
-		
-	</style>
+<link rel="stylesheet" href="../../css/bootstrap-timepicker.css">
+    <script src="../../js/bootstrap-timepicker.min.js"></script>
     
    
    <link href="../../css/perfect-scrollbar.css" rel="stylesheet">
@@ -126,44 +108,43 @@ if ($_SESSION['refroll_predio'] != 1) {
 
 <body>
 
- 
-<?php echo $resMenu; ?>
+ <?php echo $resMenu; ?>
 
 <div id="content">
 
-<h3><?php echo $lblTituloplural; ?></h3>
+<h3>Tipo Torneo</h3>
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Cargar <?php echo $lblTituloplural; ?></p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Modificar los Tipo Torneo</p>
         	
         </div>
     	<div class="cuerpoBox">
-        	<div class="row" align="center">
-            	<ul class="list-inline">
-                	<li>
-                    	Seleccione una Categoria para cargar datos de los jugadores y los equipos
-                    </li>
-                </ul>
+        	<form class="form-inline formulario" role="form">
+        	
+			<div class="row">
+			<?php echo $formulario; ?>
             </div>
-            <div class="row" align="center">
-                <ul class="list-inline">
-                	<?php while ($row = mysql_fetch_array($resZonasTorneos)) { ?>
-                	<li>
-                    	<a href="equiposzonas.php?zona=<?php echo $row[0]; ?>"><button type="button" class="btn btn-info" style="margin-left:0px;"><?php echo $row[1]; ?></button></a>
-                    </li>
-					<?php } ?>
-                </ul>
+            
+            
+            <div class='row' style="margin-left:25px; margin-right:25px;">
+                <div class='alert'>
+                
+                </div>
+                <div id='load'>
+                
+                </div>
             </div>
-            <div class="row">
-    		<form class="form-inline formulario" role="form">
-        	<?php echo $formulario; ?>
-            </div>
+            
             <div class="row">
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Guardar</button>
+                        <button type="button" class="btn btn-warning" id="cargar" style="margin-left:0px;">Modificar</button>
+                    </li>
+
+                    <li>
+                        <button type="button" class="btn btn-default volver" style="margin-left:0px;">Volver</button>
                     </li>
                 </ul>
                 </div>
@@ -171,17 +152,6 @@ if ($_SESSION['refroll_predio'] != 1) {
             </form>
     	</div>
     </div>
-    
-    <div class="boxInfoLargo">
-        <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;"><?php echo $lblTituloplural; ?> Cargados</p>
-        	
-        </div>
-    	<div class="cuerpoBox">
-        	<?php echo $lstCargados; ?>
-    	</div>
-    </div>
-
     
     
    
@@ -191,32 +161,38 @@ if ($_SESSION['refroll_predio'] != 1) {
 </div>
 
 
-
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+$('#timepicker2').timepicker({
+		minuteStep: 15,
+		showSeconds: false,
+		showMeridian: false,
+		defaultTime: false
+		});
+		
+	$('.volver').click(function(event){
+		 
+		url = "index.php";
+		$(location).attr('href',url);
+	});//fin del boton modificar
 	
-	 $( '#dialogDetalle' ).dialog({
-		autoOpen: false,
-		resizable: false,
-		width:800,
-		height:740,
-		modal: true,
-		buttons: {
-			"Ok": function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
 
-	 <?php 
+	
+	
+	<?php 
 		echo $serviciosHTML->validacion($tabla);
 	
 	?>
 	
+
+	
+	
 	//al enviar el formulario
     $('#cargar').click(function(){
-
+		
 		if (validador() == "")
         {
 			//información del formulario
@@ -244,7 +220,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Se cargo exitosamente el <strong><?php echo $lblTitulosingular; ?></strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Se modifico exitosamente la <strong>Cancha</strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -252,8 +228,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											url = "index.php";
-											$(location).attr('href',url);
+											//url = "index.php";
+											//$(location).attr('href',url);
                                             
 											
                                         } else {
@@ -271,7 +247,6 @@ $(document).ready(function(){
 			});
 		}
     });
-	
 
 });
 </script>

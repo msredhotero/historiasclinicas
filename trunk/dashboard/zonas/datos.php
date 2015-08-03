@@ -44,8 +44,8 @@ else{
 
 /////////////////////// Opciones de la pagina  ////////////////////
 
-$lblTitulosingular	= "Zona";
-$lblTituloplural	= "Zonas";
+$lblTitulosingular	= "Categoria";
+$lblTituloplural	= "Categorias";
 
 /////////////////////// Fin de las opciones /////////////////////
 
