@@ -28,6 +28,9 @@ $fecha = date('Y-m-d');
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
 $resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Armar PlayOff",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
+$id = $_GET['id'];
+
+$resRseultado = $serviciosPlayOff->traerArmarPlayOffPorId($id);
 
 $idTorneo = $_GET['idtorneo'];
 $idZona = $_GET['idzona'];
@@ -40,10 +43,26 @@ $lblCambio	 	= array("refplayoffequipo_a","refplayoffresultado_a","refplayoffequ
 $lblreemplazo	= array("Equipo 1","Resultado 1","Equipo 2","Resultado 2","Fecha Juego","Cancha","Etapa","Penales A","Penales B");
 
 $resEquiposA = $serviciosPlayOff->traerPlayOffPorTorneoZona($idTorneo,$idZona);
+$resEquiposB = $serviciosPlayOff->traerPlayOffPorTorneoZona($idTorneo,$idZona);
 
 $cadRef = '';
 while ($rowTT = mysql_fetch_array($resEquiposA)) {
-	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].'</option>';
+	if (mysql_result($resResultado,0,'refplayoffequipo_a') == $rowTT[0]) {
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'" selected>'.$rowTT[1].' - '.$rowTT[2].'</option>';
+	} else {
+		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.$rowTT[1].' - '.$rowTT[2].'</option>';	
+	}
+	
+}
+
+
+$cadRefB = '';
+while ($rowTTB = mysql_fetch_array($resEquiposB)) {
+	if (mysql_result($resResultado,0,'refplayoffequipo_b') == $rowTTB[0]) {
+		$cadRefB = $cadRefB.'<option value="'.$rowTTB[0].'" selected>'.$rowTTB[1].' - '.$rowTTB[2].'</option>';
+	} else {
+		$cadRefB = $cadRefB.'<option value="'.$rowTTB[0].'">'.$rowTTB[1].' - '.$rowTTB[2].'</option>';	
+	}
 	
 }
 
@@ -52,16 +71,22 @@ $resEtapas 	= $serviciosPlayOff->traerEtapas();
 
 $cadRef2 = '';
 while ($rowZ = mysql_fetch_array($resEtapas)) {
-	$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.$rowZ[1].'</option>';
-	
+	if (mysql_result($resResultado,0,'refetapa') == $rowZ[0]) {
+		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'" selected>'.$rowZ[1].'</option>';
+	} else {
+		$cadRef2 = $cadRef2.'<option value="'.$rowZ[0].'">'.$rowZ[1].'</option>';
+	}
 }
 
 $resCanchas 	= $serviciosFunciones->TraerCanchas();
 
 $cadRef3 = '';
 while ($rowC = mysql_fetch_array($resCanchas)) {
-	$cadRef3 = $cadRef3.'<option value="'.$rowC[0].'">'.$rowC[1].'</option>';
-	
+	if (mysql_result($resResultado,0,'refcancha') == $rowC[0]) {
+		$cadRef3 = $cadRef3.'<option value="'.$rowC[0].'" selected>'.$rowC[1].'</option>';
+	} else {
+		$cadRef3 = $cadRef3.'<option value="'.$rowC[0].'">'.$rowC[1].'</option>';
+	}
 }
 
 
@@ -69,8 +94,11 @@ $resHorarios 	= $serviciosFunciones->TraerHorarios($_SESSION['torneo_predio']);
 
 $cadRef4 = '';
 while ($rowH = mysql_fetch_array($resHorarios)) {
-	$cadRef4 = $cadRef4.'<option value="'.$rowH[0].'">'.$rowH[1].'</option>';
-	
+	if (mysql_result($resResultado,0,'hora') == $rowC[1]) {
+		$cadRef4 = $cadRef4.'<option value="'.$rowH[0].'" selected>'.$rowH[1].'</option>';
+	} else {
+		$cadRef4 = $cadRef4.'<option value="'.$rowH[0].'">'.$rowH[1].'</option>';
+	}
 }
 
 
@@ -101,7 +129,7 @@ $cabeceras 		= "	<th>Equipo 1</th>
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarArmarPlayOff",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPlayOff->traerArmarPlayOff($idTorneo,$idZona),97);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosPlayOff->traerArmarPlayOff($idTorneo,$idZona),11);
 
 if ($_SESSION['refroll_predio'] != 1) {
 
@@ -305,17 +333,6 @@ $(document).ready(function(){
 		  }
 	});//fin del boton modificar
 
-
-	$("#example").on("click",'.varmodificarplayoff', function(){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			
-			url = "modificararmarplayoff.php?idtorneo="+<?php echo $idTorneo; ?>+"&idzona="+<?php echo $idZona; ?>+"&id=" + usersid;
-			$(location).attr('href',url);
-		  } else {
-			alert("Error, vuelva a realizar la acción.");	
-		  }
-	});//fin del boton modificar
 
 	function buscarEquipo(idTorneo,idZona) {
 		$.ajax({
