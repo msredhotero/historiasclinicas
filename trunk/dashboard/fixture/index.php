@@ -91,7 +91,8 @@ $cabeceras 		= "	<th>Equipo 1</th>
 				<th>Zona</th>
 				<th>Fecha Juego</th>
 				<th>Fecha</th>
-				<th>Hora</th>";
+				<th>Hora</th>
+				<th>Chequeado</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -192,7 +193,7 @@ $resZonasTorneos = $serviciosDatos->traerZonasPorTorneo($_SESSION['idtorneo_pred
                         <button type="button" class="btn btn-success" id="chequearF" style="margin-left:0px;">Chequear Fixture</button>
                     </li>
                     <li>
-                        <button type="button" class="btn btn-success" id="conductaF" style="margin-left:0px;">Cargar Conducta al Fixture</button>
+                        <button type="button" class="btn btn-success" id="conductaF" style="margin-left:0px;">Cargar de FairPlay al Fixture</button>
                     </li>
                 </ul>
                 </div>

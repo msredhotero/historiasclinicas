@@ -350,6 +350,7 @@ class ServiciosZonasEquipos {
 			fi.fechajuego,
 			f.tipofecha as fecha,
 			fi.hora,
+			fi.chequeado,
 			g.nombre
 					from dbfixture as fi
 					        inner 
