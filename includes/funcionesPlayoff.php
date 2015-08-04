@@ -126,18 +126,28 @@ return $res;
 
 /* PARA ArmarPlayOff */
 
-function insertarArmarPlayOff($refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa) {
-$sql = "insert into tbplayoff(idplayoff,refplayoffequipo_a,refplayoffresultado_a,refplayoffequipo_b,refplayoffresultado_b,fechajuego,hora,refcancha,chequeado,refetapa)
-values ('',".$refplayoffequipo_a.",".$refplayoffresultado_a.",".$refplayoffequipo_b.",".$refplayoffresultado_b.",'".utf8_decode($fechajuego)."',".$hora.",".$refcancha.",".$chequeado.",".$refetapa.")";
+function insertarArmarPlayOff($refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa,$penalesa,$penalesb) {
+
+$sqlH = "select
+				h.idhorario,h.horario
+				from tbhorarios h
+				where		h.idhorario = ".$hora;
+		$resH = mysql_result($this-> query($sqlH,0),0,1);
+		$horario = $resH;
+		
+			
+$sql = "insert into tbplayoff(idplayoff,refplayoffequipo_a,refplayoffresultado_a,refplayoffequipo_b,refplayoffresultado_b,fechajuego,hora,refcancha,chequeado,refetapa,penalesa,penalesb)
+values ('',".$refplayoffequipo_a.",".$refplayoffresultado_a.",".$refplayoffequipo_b.",".$refplayoffresultado_b.",'".utf8_decode($fechajuego)."','".$horario."',".$refcancha.",".$chequeado.",".$refetapa.", ".($penalesa == '' ? 'null' : $penalesa).", ".($penalesb == '' ? 'null' : $penalesb).")";
+//return $sql;
 $res = $this->query($sql,1);
 return $res;
 }
 
 
-function modificarArmarPlayOff($id,$refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa) {
+function modificarArmarPlayOff($id,$refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa,$penalesa,$penalesb) {
 $sql = "update tbplayoff
 set
-refplayoffequipo_a = ".$refplayoffequipo_a.",refplayoffresultado_a = ".$refplayoffresultado_a.",refplayoffequipo_b = ".$refplayoffequipo_b.",refplayoffresultado_b = ".$refplayoffresultado_b.",fechajuego = '".utf8_decode($fechajuego)."',hora = ".$hora.",refcancha = ".$refcancha.",chequeado = ".$chequeado.",refetapa = ".$refetapa."
+refplayoffequipo_a = ".$refplayoffequipo_a.",refplayoffresultado_a = ".$refplayoffresultado_a.",refplayoffequipo_b = ".$refplayoffequipo_b.",refplayoffresultado_b = ".$refplayoffresultado_b.",fechajuego = '".utf8_decode($fechajuego)."',hora = ".$hora.",refcancha = ".$refcancha.",chequeado = ".$chequeado.",refetapa = ".$refetapa.", penalesa = ".($penalesa == '' ? 'null' : $penalesa).", penalesb = ".($penalesb == '' ? 'null' : $penalesb)."
 where idplayoff =".$id;
 $res = $this->query($sql,0);
 return $res;
@@ -178,9 +188,12 @@ $sql = "select
 			fechajuego,
 			e.descripcion,
 			p.hora,
+			penalesa,
+			penalesb,
 			refcancha,
 			chequeado,
 			refetapa
+			
 		from
 			tbplayoff p
 				inner join
@@ -200,8 +213,62 @@ return $res;
 }
 
 
+
+function traerArmarPlayOffPorEtapa($idTorneo, $idZona, $idEtapa) {
+$sql = "select 
+			p.idplayoff,
+			(select 
+					eq.nombre
+				from
+					dbequipos eq
+						inner join
+					dbplayoff pl ON eq.idequipo = pl.refequipo
+				where
+					pl.idplayoff = p.refplayoffequipo_a) as refplayoffequipo_a,
+			refplayoffresultado_a,
+			refplayoffresultado_b,
+			(select 
+					eq.nombre
+				from
+					dbequipos eq
+						inner join
+					dbplayoff pl ON eq.idequipo = pl.refequipo
+				where
+					pl.idplayoff = p.refplayoffequipo_b) as refplayoffequipo_b,
+			
+			t.nombre,
+			g.nombre,
+			fechajuego,
+			e.descripcion,
+			p.hora,
+			refcancha,
+			chequeado,
+			refetapa,
+			penalesa,
+			penalesb
+		from
+			tbplayoff p
+				inner join
+			dbplayoff pp ON p.refplayoffequipo_a = pp.idplayoff
+				inner join
+			dbtorneos t ON t.idtorneo = pp.reftorneo
+				inner join
+			dbgrupos g ON g.idgrupo = pp.refzona
+				inner join
+			tbetapas e ON p.refetapa = e.idetapa
+				inner join
+			tbcanchas c ON p.refcancha = c.idcancha
+		where pp.refzona = ".$idZona." and pp.reftorneo = ".$idTorneo." and p.refetapa = ".$idEtapa."
+		order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
 function traerArmarPlayOffPorId($id) {
-$sql = "select idplayoff,refplayoffequipo_a,refplayoffresultado_a,refplayoffequipo_b,refplayoffresultado_b,fechajuego,hora,refcancha,chequeado,refetapa from tbplayoff where idplayoff =".$id;
+$sql = "select idplayoff,refplayoffequipo_a,refplayoffresultado_a,refplayoffequipo_b,refplayoffresultado_b,fechajuego,hora,refcancha,chequeado,refetapa,
+			penalesa,
+			penalesb from tbplayoff where idplayoff =".$id;
 $res = $this->query($sql,0);
 return $res;
 }

@@ -508,18 +508,21 @@ $refplayoffresultado_b = $_POST['refplayoffresultado_b'];
 $fechajuego = $_POST['fechajuego'];
 $hora = $_POST['hora'];
 $refcancha = $_POST['refcancha'];
+$penalesa = $_POST['penalesa'];
+$penalesb = $_POST['penalesb'];
 if (isset($_POST['chequeado'])) {
 $chequeado = 1;
 } else {
 $chequeado = 0;
 }
 $refetapa = $_POST['refetapa'];
-$res = $serviciosArmarPlayOff->insertarArmarPlayOff($refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa);
+$res = $serviciosArmarPlayOff->insertarArmarPlayOff($refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa,$penalesa,$penalesb);
 if ((integer)$res > 0) {
 echo '';
 } else {
 echo 'Huvo un error al insertar datos';
 }
+//echo $res;
 }
 function modificarArmarPlayOff($serviciosArmarPlayOff) {
 $id = $_POST['id'];
@@ -527,6 +530,8 @@ $refplayoffequipo_a = $_POST['refplayoffequipo_a'];
 $refplayoffresultado_a = $_POST['refplayoffresultado_a'];
 $refplayoffequipo_b = $_POST['refplayoffequipo_b'];
 $refplayoffresultado_b = $_POST['refplayoffresultado_b'];
+$penalesa = $_POST['penalesa'];
+$penalesb = $_POST['penalesb'];
 $fechajuego = $_POST['fechajuego'];
 $hora = $_POST['hora'];
 $refcancha = $_POST['refcancha'];
@@ -536,7 +541,7 @@ $chequeado = 1;
 $chequeado = 0;
 }
 $refetapa = $_POST['refetapa'];
-$res = $serviciosArmarPlayOff->modificarArmarPlayOff($id,$refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa);
+$res = $serviciosArmarPlayOff->modificarArmarPlayOff($id,$refplayoffequipo_a,$refplayoffresultado_a,$refplayoffequipo_b,$refplayoffresultado_b,$fechajuego,$hora,$refcancha,$chequeado,$refetapa,$penalesa,$penalesb);
 if ($res == true) {
 echo '';
 } else {

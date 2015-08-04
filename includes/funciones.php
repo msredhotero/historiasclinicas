@@ -44,6 +44,13 @@ class Servicios {
                                         <a href="javascript:void(0)" class="estadistica" id="****">Cargar Estadist.</a>
                                         </li>';
 				break;
+			case 97:
+				$cantidad = 11;
+				$classMod = 'varmodificarplayoff';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				$adicional = '';
+				break;
 			default:
 				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
