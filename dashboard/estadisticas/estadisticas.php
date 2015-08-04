@@ -106,11 +106,13 @@ if (mysql_num_rows($resJugadoresA)>0) {
 		$eAmarillasA 	= mysql_result($refPuntosEquiposA,0,'amarillas');
 		$eRojasA 		= mysql_result($refPuntosEquiposA,0,'rojas');
 		$eAzulesA 		= mysql_result($refPuntosEquiposA,0,'azules');	
+		$eObservacionA 	= mysql_result($refPuntosEquiposA,0,'observacion');
 	} else {
 		$ePuntosA 		= '';
 		$eAmarillasA 	= '';
 		$eRojasA 		= '';
-		$eAzulesA 		= '';	
+		$eAzulesA 		= '';
+		$eObservacionA 	= '';	
 	}
 }
 if (mysql_num_rows($resJugadoresB)>0) {
@@ -123,11 +125,13 @@ if (mysql_num_rows($resJugadoresB)>0) {
 		$eAmarillasB 	= mysql_result($refPuntosEquiposB,0,'amarillas');
 		$eRojasB 		= mysql_result($refPuntosEquiposB,0,'rojas');
 		$eAzulesB 		= mysql_result($refPuntosEquiposB,0,'azules');	
+		$eObservacionB 	= mysql_result($refPuntosEquiposB,0,'observacion');
 	} else {
 		$ePuntosB 		= '';
 		$eAmarillasB 	= '';
 		$eRojasB 		= '';
 		$eAzulesB 		= '';	
+		$eObservacionB 	= '';
 	}
 }
 
@@ -222,7 +226,16 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
     	<div class="cuerpoBox" style="padding-right:10px;">
     		<form class="form-inline formulario" role="form">
         	<div class="row">
-				
+				<div align="center">
+                <ul class="list-inline">
+                	<li>
+                    	<button type="button" class="btn btn-success marcar" style="margin-left:0px;">Marcar Todos</button>
+                	</li>
+                    <li>
+                    	<button type="button" class="btn btn-danger desmarcar" style="margin-left:0px;">Desmarcar Todos</button>
+                    </li>
+                </ul>
+                </div>
                 <table class="table table-striped" style="margin:10px;">
                 	<caption style="font-size:1.5em; font-style:italic;">Equipo A: <?php echo $equipoA; ?></caption>
                     <thead>
@@ -231,7 +244,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         	<th>Jugador</th>
                             <th>DNI</th>
                             <th><div align="center"><img src="../../imagenes/pelotaweb.png"></div></th>
-                            <th><div align="center"><img src="../../imagenes/cancha.png"></div></th>
+                            <!--<th><div align="center"><img src="../../imagenes/cancha.png"></div></th>-->
                             <th><div align="center"><img src="../../imagenes/pelotaerro.png"></div></th>
                             <th><div align="center"><img src="../../imagenes/icoAmarilla.png"></div></th>
                             <th><div align="center"><img src="../../imagenes/azul.png"></div></th>
@@ -264,9 +277,9 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                                 	<input type="number" class="form-control input-sm" name="goles<?php echo $row[0]; ?>" id="goles<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["goles"]; ?>"/>
                                 </div>
                             </th>
-                            <th>
+                            <th class="hidden">
                             	<div align="center">
-                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $row[0]; ?>" id="cancha<?php echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["cancha"]; ?>"/>
+                                	<input type="number" class="form-control input-sm" name="cancha<?php echo $row[0]; ?>" id="cancha<?php  echo $row[0]; ?>" style="width:45px;" value="<?php echo $row["cancha"]; ?>"/>
                                 </div>
                             </th>
                             <th>
@@ -321,7 +334,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     <div class="form-group col-md-2">
                      <label class="control-label" style="text-align:left" for="reftorneo">Punto Bonus</label>
                         <div class="input-group col-md-8">
-                            <input type="text" id="puntobonusa" name="puntobonusa" class="form-control" value="<?php echo $ePuntosA; ?>" required/>
+                            <input type="text" id="puntobonusa" name="puntobonusa" class="form-control" value="<?php echo $ePuntosA == '' ? 1 : $ePuntosA; ?>" required/>
                         </div>
                     </div>
                     
@@ -332,20 +345,28 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2" align="center">
+                    <div class="form-group col-md-2 hidden" align="center">
                      <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/azul.png"></label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equipoazulesa" name="equipoazulesa" value="<?php echo $eAzulesA; ?>" class="form-control" required/>
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2" align="center">
+                    <div class="form-group col-md-2 hidden" align="center">
                      <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equiporojasa" name="equiporojasa" value="<?php echo $eRojasA; ?>" class="form-control" required/>
                         </div>
                         
+                    </div>-
+                    <div class="form-group col-md-6" align="center">
+                     <label class="control-label" style="text-align:left" for="reftorneo">Observación</label>
+                        <div class="input-group col-md-12">
+                            <input type="text" id="equipoobservaciona" name="equipoobservaciona" value="<?php echo $eObservacionA; ?>" class="form-control" required/>
+                        </div>
+                        
                     </div>
+                    
                     
                     <div class="form-group col-md-12" align="left">
                     	<button type="button" class="btn btn-primary guardarpuntosA" id="<?php echo $IdequipoA; ?>" style="margin-left:0px;">Guardar Puntos</button>
@@ -365,7 +386,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         	<th>Jugador</th>
                             <th>DNI</th>
                             <th><div align="center"><img src="../../imagenes/pelotaweb.png"></div></th>
-                            <th><div align="center"><img src="../../imagenes/cancha.png"></div></th>
+                            <!--<th><div align="center"><img src="../../imagenes/cancha.png"></div></th>-->
                             <th><div align="center"><img src="../../imagenes/pelotaerro.png"></div></th>
                             <th><div align="center"><img src="../../imagenes/icoAmarilla.png"></div></th>
                             <th><div align="center"><img src="../../imagenes/azul.png"></div></th>
@@ -398,7 +419,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                                 	<input type="number" class="form-control input-sm" name="goles<?php echo $rowB[0]; ?>" id="goles<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["goles"]; ?>"/>
                                 </div>
                             </th>
-                            <th>
+                            <th class="hidden">
                             	<div align="center">
                                 	<input type="number" class="form-control input-sm" name="cancha<?php echo $rowB[0]; ?>" id="cancha<?php echo $rowB[0]; ?>" style="width:45px;" value="<?php echo $rowB["cancha"]; ?>"/>
                                 </div>
@@ -456,7 +477,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     <div class="form-group col-md-2">
                      <label class="control-label" style="text-align:left" for="reftorneo">Punto Bonus</label>
                         <div class="input-group col-md-8">
-                            <input type="text" id="puntobonusb" name="puntobonusb" value="<?php echo $ePuntosB; ?>" class="form-control" required/>
+                            <input type="text" id="puntobonusb" name="puntobonusb" value="<?php echo $ePuntosB == '' ? 1 : $ePuntosB; ?>" class="form-control" required/>
                         </div>
                     </div>
                     
@@ -467,17 +488,24 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2" align="center">
+                    <div class="form-group col-md-2 hidden" align="center">
                      <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/azul.png"></label>
                         <div class="input-group col-md-8">
-                            <input type="text" id="equipoazulesb" name="equipoazulesb" value="<?php echo $eAzulesB; ?>" class="form-control" required/>
+                            <input type="text" id="equipoazulesb" name="equipoazulesb" value="<?php //echo $eAzulesB; ?>" class="form-control" required/>
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2" align="center">
+                    <div class="form-group col-md-2 hidden" align="center">
                      <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
                         <div class="input-group col-md-8">
-                            <input type="text" id="equiporojasb" name="equiporojasb" value="<?php echo $eRojasB; ?>" class="form-control" required/>
+                            <input type="text" id="equiporojasb" name="equiporojasb" value="<?php //echo $eRojasB; ?>" class="form-control" required/>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-6" align="center">
+                     <label class="control-label" style="text-align:center" for="reftorneo">Observación</label>
+                        <div class="input-group col-md-12">
+                            <input type="text" id="equipoobservacionb" name="equipoobservacionb" value="<?php echo $eObservacionB; ?>" class="form-control" required/>
                         </div>
                         
                     </div>
@@ -515,6 +543,12 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
 
 					<li>
                         <button type="button" class="btn btn-success" id="cargarjugador">Agregar Jugador</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-primary" id="cargamasiva">Guardar Masivo</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default volver">Volver</button>
                     </li>
                 </ul>
                 </div>
@@ -657,6 +691,7 @@ $(document).ready(function(){
 				data:  {rojas: 		$('#equiporojasa').val(),
 						azules: 	$('#equipoazulesa').val(),
 						amarillas: 	$('#equipoamarillasa').val(),
+						observacion:$('#equipoobservaciona').val(),
 						puntos: 	$('#puntobonusa').val(),
 						reffixture:	<?php echo $idFixture; ?>,
 						reffecha:	<?php echo $refFecha; ?>,
@@ -698,6 +733,7 @@ $(document).ready(function(){
 				data:  {rojas: 		$('#equiporojasb').val(),
 						azules: 	$('#equipoazulesb').val(),
 						amarillas: 	$('#equipoamarillasb').val(),
+						observacion:$('#equipoobservacionb').val(),
 						puntos: 	$('#puntobonusb').val(),
 						reffixture:	<?php echo $idFixture; ?>,
 						reffecha:	<?php echo $refFecha; ?>,
@@ -836,6 +872,13 @@ $(document).ready(function(){
 		  }
 	});//fin del boton modificar
 	
+	$('.volver').click(function(event){
+		  
+		url = "../fixture/";
+		$(location).attr('href',url);
+		  
+	});//fin del boton modificar
+	
 	
 	$('#vergoleadores').click(function(event){
 
@@ -856,6 +899,45 @@ $(document).ready(function(){
 		$("#crearFjugador").show(100);
 
 	});//fin del boton abrir
+	
+	$('.marcar').click(function(event){
+
+		$("input:checkbox").each(function(){
+			//cada elemento seleccionado
+			var cad = $(this).attr("id");
+
+			if (cad.indexOf('jugo')>=0) {
+				$(this).prop("checked", "checked");
+			}
+		});
+
+	});//fin del boton abrir
+	
+	$('.desmarcar').click(function(event){
+
+		$("input:checkbox").each(function(){
+			//cada elemento seleccionado
+			var cad = $(this).attr("id");
+
+			if (cad.indexOf('jugo')>=0) {
+				$(this).prop("checked", "");
+			}
+		});
+
+	});//fin del boton abrir
+	
+	$('#cargamasiva').click(function(e) {
+        
+		$("button:button").each(function(){
+			//cada elemento seleccionado
+			var cad = $(this).attr("id");
+			
+			if (parseInt(cad)>0) {
+				//$(this).prop("checked", "");
+				$(this).click();
+			}
+		});
+    });
 	
 	$('#cerrar').click(function(event){
 

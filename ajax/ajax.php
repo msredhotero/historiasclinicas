@@ -11,6 +11,7 @@ include ('../includes/funcionesNoticias.php');
 include ('../includes/funcionesDATOS.php');
 include ('../includes/funcionesPlayoff.php');
 include ('../includes/funcionesPagos.php');
+include ('../includes/funcionesImportar.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosFunciones = new Servicios();
@@ -23,6 +24,7 @@ $serviciosNoticias = new ServiciosNoticias();
 $serviciosDatos = new ServiciosDatos();
 $serviciosPlayOff = new ServiciosPlayOff();
 $serviciosPagos = new ServiciosPagos();
+$serviciosImportar = new ServiciosImportar();
 
 $accion = $_POST['accion'];
 
@@ -48,7 +50,10 @@ switch ($accion) {
 	case 'modificarCliente':
 		modificarCliente($serviciosUsuarios);
 		break;
-
+		
+	case 'ImportarExcel':
+		ImportarExcel($serviciosImportar);
+		break;
 /* PARA TorneosSedes */
 case 'insertarTorneosSedes':
 insertarTorneosSedes($serviciosFunciones);
@@ -423,6 +428,15 @@ function toArray($query)
     return $res;
 }
 
+
+function ImportarExcel($serviciosImportar){
+	$nombrearchivo	= $_POST['nombrearchivo'];
+	$token 			= $_POST['reffecha'];
+	
+	$res = $serviciosImportar->ImportarExcel($token,$nombrearchivo);
+	
+	echo "<a href='../archivos/".$nombrearchivo.".xlsx'>Descargar</a>";
+}
 
 /* PARA TipoTorneo */
 function insertarTipoTorneo($serviciosTipoTorneo) {
@@ -874,6 +888,7 @@ function TraerFixturePorZonaTorneo($serviciosDatos) {
                             <th>GC</th>
                             <th>DIF</th>
                             <th>F.P.</th>
+							<th>Pts Bonus</th>
                         </tr>
 						</thead><tbody>';
 
@@ -895,6 +910,7 @@ function TraerFixturePorZonaTorneo($serviciosDatos) {
 								<td>'.$row1['golesencontra'].'</td>
 								<td>'.$row1['diferencia'].'</td>
 								<td>'.$row1['puntos'].'</td>
+								<td>'.$row1['bonus'].'</td>
 							</tr>';
 					
 							$i = $i + 1;
@@ -1605,6 +1621,7 @@ function insertarPuntosEquipos($serviciosPuntosEquipos) {
 $refequipo = $_POST['refequipo'];
 $puntos = $_POST['puntos'];
 $amarillas = $_POST['amarillas'];
+$observacion = $_POST['observacion'];
 $azules = $_POST['azules'];
 $rojas = $_POST['rojas'];
 $reffixture = $_POST['reffixture'];
@@ -1614,14 +1631,14 @@ $reftorneo = $_POST['reftorneo'];
 $resExiste = $serviciosPuntosEquipos->traerPuntosEquiposPorFixtureEquipoFechaTorneo($reffixture,$refequipo,$reffecha,$reftorneo);
 
 	if (mysql_num_rows($resExiste)<1) {
-		$res = $serviciosPuntosEquipos->insertarPuntosEquipos($refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+		$res = $serviciosPuntosEquipos->insertarPuntosEquipos($refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo,$observacion);
 		if ((integer)$res > 0) {
 			echo '';
 		} else {
 			echo 'Huvo un error al insertar datos ';
 		}
 	} else {
-		$res = $serviciosPuntosEquipos->modificarPuntosEquipos(mysql_result($resExiste,0,0) ,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+		$res = $serviciosPuntosEquipos->modificarPuntosEquipos(mysql_result($resExiste,0,0) ,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo,$observacion);
 		if ($res == true) {
 			echo '';
 		} else {
@@ -1634,12 +1651,13 @@ $id = $_POST['id'];
 $refequipo = $_POST['refequipo'];
 $puntos = $_POST['puntos'];
 $amarillas = $_POST['amarillas'];
+$observacion = $_POST['observacion'];
 $azules = $_POST['azules'];
 $rojas = $_POST['rojas'];
 $reffixture = $_POST['reffixture'];
 $reffecha = $_POST['reffecha'];
 $reftorneo = $_POST['reftorneo'];
-$res = $serviciosPuntosEquipos->modificarPuntosEquipos($id,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo);
+$res = $serviciosPuntosEquipos->modificarPuntosEquipos($id,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo,$observacion);
 if ($res == true) {
 echo '';
 } else {

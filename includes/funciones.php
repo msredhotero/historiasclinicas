@@ -36,7 +36,7 @@ class Servicios {
 				$adicional = "";
 				break;
 			case 98:
-				$cantidad = 8;
+				$cantidad = 9;
 				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";

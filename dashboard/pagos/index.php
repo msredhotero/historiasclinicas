@@ -17,6 +17,7 @@ include ('../../includes/funcionesGrupos.php');
 include ('../../includes/funcionesZonasEquipos.php');
 include ('../../includes/funcionesDATOS.php');
 include ('../../includes/funcionesPagos.php');
+include ('../../includes/funcionesImportar.php');
 
 $serviciosUsuario 	= new ServiciosUsuarios();
 $serviciosHTML 		= new ServiciosHTML();
@@ -208,6 +209,53 @@ if ($_SESSION['refroll_predio'] != 1) {
     	</div>
     </div>
 
+	<div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Exportar</p>
+        	
+        </div>
+    	<div class="cuerpoBox2">
+        	<div class="row" style="padding-left:10px; padding-top:8px;">
+            	<div class="col-md-11">
+                <div class="alert alert-info"><strong>Importante:</strong> Una vez generado el archivo debera descargarlo!!.</div>
+            	</div>
+                <div class="col-md-6">
+                	
+                    <label class="control-label" for="asd">Nombre del archivo <span id="resultado"></span></label>
+                    <div class="form-group col-md-12">
+                    	<input type="text" name="nombrearchivo" id="nombrearchivo" class="form-control"/>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                	
+                    <label class="control-label" for="asd">Seleccione Fecha Hasta</label>
+                    <div class="form-group col-md-12">
+                    	<select id="reffechab" name="reffechab" class="form-control">
+                        	<?php echo $cadRefFF; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>            
+            
+            <div class="row">
+                <div class="col-md-12" align="center">
+                <ul class="list-inline" style="margin-top:15px;">
+                    <li>
+                        <button type="button" class="btn btn-primary exportarexcel" id="cargar" style="margin-left:0px;">Generar</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+
+
+            
+            <div id="load">
+            
+            </div>
+    	</div>
+    </div>
+    
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Pagos Cargados</p>
@@ -374,7 +422,30 @@ $(document).ready(function(){
     });
 	
 	
-	
+$('.exportarexcel').click(function(e) {
+
+
+	if ($('#nombrearchivo').val() != '') 
+	{
+		$.ajax({
+			data:  {nombrearchivo:	$("#nombrearchivo").val(),
+					reffecha: $("#reffechab").val(),
+					accion:	'ImportarExcel'},
+			url:   '../../ajax/ajax.php',
+			type:  'post',
+			beforeSend: function () {
+					$("#load").html('<img src="../imagenes/load13.gif" width="50" height="50" />');
+			},
+			success:  function (response) {
+				$('#resultado').html(': <a href="../../archivos/'+$("#nombrearchivo").val()+'.xlsx">Descargar</a>');
+				$("#load").html('');
+			}
+		});
+	} else {
+		alert('Debe seleccionar un nombre para el archivo que se va a generar');	
+	}
+
+});	
 	
 
 });
