@@ -23,7 +23,7 @@ $serviciosEquipos = new ServiciosE();
 
 $fecha = date('Y-m-d');
 
-$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Jugadores",$_SESSION['refroll_predio'],"Fútbol 7");
+$resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Jugadores",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
 
 //// autocompletar /////////
