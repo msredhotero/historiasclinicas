@@ -435,7 +435,7 @@ function ImportarExcel($serviciosImportar){
 	
 	$res = $serviciosImportar->ImportarExcel($token,$nombrearchivo);
 	
-	echo "<a href='../archivos/".$nombrearchivo.".xlsx'>Descargar</a>";
+	echo $res;
 }
 
 /* PARA TipoTorneo */

@@ -28,12 +28,14 @@ $serviciosGrupos	= new ServiciosG();
 $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosDatos		= new ServiciosDatos();
 $serviciosPagos		= new ServiciosPagos();
+$serviciosImportar  = new ServiciosImportar();
 
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
 $resMenu = $serviciosHTML->menu($_SESSION['nombre_predio'],"Pagos",$_SESSION['refroll_predio'],$_SESSION['torneo_predio']);
 
+//$hacer = $serviciosImportar->ImportarExcel(23,'asdas');
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
@@ -422,7 +424,7 @@ $(document).ready(function(){
     });
 	
 	
-$('.exportarexcel').click(function(e) {
+$('.exportarexcel33').click(function(e) {
 
 
 	if ($('#nombrearchivo').val() != '') 
@@ -446,6 +448,19 @@ $('.exportarexcel').click(function(e) {
 	}
 
 });	
+
+$('.exportarexcel').click(function(e) {
+
+alert('asd');
+	if ($('#nombrearchivo').val() != '') 
+	{
+		url = "generar.php?nombrearchivo="+$('#nombrearchivo').val()+"&reffecha="+$("#reffechab").val();
+		$(location).attr('href',url);
+	} else {
+		alert('Debe seleccionar un nombre para el archivo que se va a generar');	
+	}
+
+});
 	
 
 });

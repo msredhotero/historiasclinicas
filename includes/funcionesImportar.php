@@ -462,15 +462,32 @@ function ImportarExcel($reffecha,$nombrearchivo) {
 		//$objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(0,12);
 		
 		// Se manda el archivo al navegador web, con el nombre que se indica, en formato 2007
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="Reportedepagos.xlsx"');
-		header('Cache-Control: max-age=0');
+		//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		//header('Content-Disposition: attachment;filename="Reportedepagos.xlsx"');
+		//header('Cache-Control: max-age=0');
+		 
+		//$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2003');
+		//$objWriter->save('../archivos/'.$nombrearchivo.'.xlsx');
+		//$objWriter->save('php://output');
+		//exit;
+		// We'll be outputting an excel file
+//header('Content-type: application/vnd.ms-excel');
+
+// It will be called file.xls
+//header('Content-Disposition: attachment; filename="file.xls"');
+
+// Write file to the browser
+//$objWriter->save('php://output');
+
+/*header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="Reportedealumnos.xlsx"');
+		header('Cache-Control: max-age=0');*/
 		 
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-		$objWriter->save('../archivos/'.$nombrearchivo.'.xlsx');
+		$objWriter->save('../../archivos/'.$nombrearchivo.'.xlsx');
 		exit;
 		
-		return 'Archivo Generado';
+		//return 'Archivo Generado';
 	}
 	
 	
