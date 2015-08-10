@@ -352,7 +352,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2 hidden" align="center">
+                    <div class="form-group col-md-2" align="center">
                      <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equiporojasa" name="equiporojasa" value="<?php echo $eRojasA; ?>" class="form-control" required/>
@@ -495,7 +495,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         </div>
                         
                     </div>
-                    <div class="form-group col-md-2 hidden" align="center">
+                    <div class="form-group col-md-2" align="center">
                      <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equiporojasb" name="equiporojasb" value="<?php //echo $eRojasB; ?>" class="form-control" required/>

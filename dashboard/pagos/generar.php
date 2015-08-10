@@ -325,13 +325,13 @@ require_once '../../excelClass/PHPExcel.php';
 	} else {
 		$cad = '<table id="Exportar_a_Excel">
 					<tr>
-						<td>Torneo</td>
-						<td>Equipo</td>
-						<td>Categoria</td>
-						<td>Fecha</td>
-						<td>Importe</td>
-						<td>Obs.</td>
-						<td>Fecha Pago</td>
+						<th>Torneo</th>
+						<th>Equipo</th>
+						<th>Categoria</th>
+						<th>Fecha</th>
+						<th>Importe</th>
+						<th>Obs.</th>
+						<th>Fecha Pago</th>
 					</tr>';
 		$i = 4; //Numero de fila donde se va a comenzar a rellenar
 		 while ($fila = mysql_fetch_array($res)) {
@@ -407,16 +407,51 @@ require_once '../../excelClass/PHPExcel.php';
 // Write file to the browser
 //$objWriter->save('php://output');
 
-		header("Content-type: application/vnd.ms-excel; name='excel'");
-		header("Content-Disposition: filename=ficheroExcel.xls");
-		header("Pragma: no-cache");
-		header("Expires: 0");
-		echo $cad;
+		
+		
 }
 
 
 ?>
+<!DOCTYPE HTML>
+<html>
 
-<?php } ?>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+
+<title>Gesti&oacute;n: Tres Sesenta F&uacute;tbol</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style type="text/css">
+		table {  color: #333; font-family: Helvetica, Arial, sans-serif; width: 640px; border-collapse: collapse;}
+td, th { border: 1px solid #333; height: 30px; }
+th { background: #D3D3D3; font-weight: bold; }
+td { background: #FAFAFA; text-align: center; }
+tr:nth-child(even) td { background: #F1F1F1; }  
+tr:nth-child(odd) td { background: #FEFEFE; } 
+tr td:hover { background: #666; color: #FFF; }
+  
+		
+	</style>
+    
+    </head>
+
+<body>
+<?php 
+
+header("Content-type: application/vnd.ms-excel; name='excel'");
+		header("Content-Disposition: filename=ficheroExcel.xls");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		
+		echo $cad; ?>
 </body>
 </html>
+<?php } ?>
+
+
