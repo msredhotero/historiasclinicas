@@ -29,22 +29,22 @@ body {
 	color: white;
 }
 .section-tabs .item.posiciones {
-	background-image: url('/iguana/images/tablas/estadistica.png');
+	background-image: url('../../images/tablas/estadistica.png');
 }
 .section-tabs .item.goleadores {
-	background-image: url('/iguana/images/tablas/pelota.png');
+	background-image: url('../../images/tablas/pelota.png');
 }
 .section-tabs .item.fairplay {
-	background-image: url('/iguana/images/tablas/tarjetas.png');
+	background-image: url('../../images/tablas/tarjetas.png');
 }
 .section-tabs .item.vallamenosvencida {
-	background-image: url('/iguana/images/tablas/guante.png');
+	background-image: url('../../images/tablas/guante.png');
 }
 .section-tabs .item.fixture {
-	background-image: url('/iguana/images/tablas/calendario.png');
+	background-image: url('../../images/tablas/calendario.png');
 }
 .section-tabs .item.comunidad {
-	background-image: url('/iguana/images/tablas/df.png');
+	background-image: url('../../images/tablas/df.png');
 }
 
 .section {

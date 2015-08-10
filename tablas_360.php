@@ -8,7 +8,7 @@ include ('includes/funcionesGrupos.php');
 include ('includes/funcionesZonasEquipos.php');
 include ('includes/generadorfixturefijo.php');
 include ('includes/funcionesDATOS.php');
-include ('includes/funcionesPlayOff.php');
+include ('includes/funcionesPlayoff.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosJugadores = new ServiciosJ();
@@ -18,10 +18,11 @@ $serviciosZonasEquipos	= new ServiciosZonasEquipos();
 $serviciosDatos = new ServiciosDatos();
 $serviciosPlayOff = new ServiciosPlayOff();
 
+
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
 } else {
-	$idTipoTorneo = 3;
+	$idTipoTorneo = 2;
 }
 
 if (isset($_GET["zona"])) {
@@ -255,6 +256,7 @@ $idTab += 1;
 
 							$cadCuerpo .= '</div>
 							<div class="instructions">
+
 								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
 					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
 					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
@@ -441,7 +443,6 @@ $idTab += 1;
 			break;
 	}
 }
-
 ///////////////////////   FIN PLAYOFF //////////////////////////////////////////////
 
 ?>

@@ -1042,6 +1042,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 				inner join
 				tbtipotorneo tt on t.reftipotorneo = tt.idtipotorneo
 				where tt.idtipotorneo = '".$tipotorneo."' and t.activo = 1";
+		//return $sql;
 		return $this-> query($sql,0);
 	}
 	
@@ -1086,7 +1087,7 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		$nombre = str_replace("'","",$nombre);
 		$nombre = utf8_decode($nombre);
 
-		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo,refsede) values ('','".$nombre."', '".$fechacrea."', '".$activo."',".$reftipotorneo.")";
+		$sql = "insert into dbtorneos(idtorneo,nombre,fechacreacion,activo,reftipotorneo) values ('','".$nombre."', '".$fechacrea."', '".$activo."',".$reftipotorneo.")";
 		//return $sql;
 		$res = $this-> query($sql,1);
 		
