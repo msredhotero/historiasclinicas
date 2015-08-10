@@ -138,7 +138,7 @@ function MM_preloadImages() { //v3.0
             </iframe>-->
             <iframe src="datahtml/iguana_tablas.php?id=2&zona=19&fecha=23" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
             <p>Tu browser no permite mostrar estas tablas.</p>
-            </iframe>-->
+            </iframe>
           <br />
         </div>
       </div>

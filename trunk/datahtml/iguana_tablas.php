@@ -8,7 +8,7 @@ include ('../includes/funcionesGrupos.php');
 include ('../includes/funcionesZonasEquipos.php');
 include ('../includes/generadorfixturefijo.php');
 include ('../includes/funcionesDATOS.php');
-include ('../includes/funcionesPlayOff.php');
+include ('../includes/funcionesPlayoff.php');
 
 $serviciosFunciones = new Servicios();
 $serviciosJugadores = new ServiciosJ();
@@ -21,9 +21,9 @@ $serviciosPlayOff = new ServiciosPlayOff();
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
 } else {
-	$idTipoTorneo = 3;
+	$idTipoTorneo = 6;
 }
-
+//$idTipoTorneo = 2;
 if (isset($_GET["zona"])) {
 	$idzona = $_GET['zona'];
 } else {
@@ -39,7 +39,7 @@ if (isset($_GET["fecha"])) {
 }
 
 $torneo = $serviciosFunciones->TraerTorneosActivoPorTipo($idTipoTorneo);
-
+//echo $torneo;
 $nombreTorneo = mysql_result($torneo,0,'descripciontorneo')." / ".mysql_result($torneo,0,'nombre');
 
 $idfecha = $serviciosFunciones->UltimaFechaPorTorneoZona($idTipoTorneo,$idzona);
