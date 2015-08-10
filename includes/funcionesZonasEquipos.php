@@ -978,6 +978,31 @@ function traerCalculoPorFechaTorneoEquipo($refequipo,$reffecha,$idtorneo) {
 		return $res;
 }
 
+function traerCalcularCanilleras($refequipo,$reffecha,$idtorneo) {
+	$sql = 'select
+				sum(pe.amarillas) as cantidad
+			from tbpuntosequipos pe
+			where pe.refequipo = '.$refequipo.' and pe.reffecha = '.$reffecha.' and pe.reftorneo = '.$idtorneo.'  and (pe.amarillas is not null or pe.amarillas <>0)';	
+	$res = $this->query($sql,0);
+	if (mysql_num_rows($res)>0) {
+		return mysql_result($res,0,0);
+	}
+	return 0;
+}
+
+
+function traerCalcularAusentes($refequipo,$reffecha,$idtorneo) {
+	$sql = 'select
+				sum(pe.rojas)*3 as cantidad
+			from tbpuntosequipos pe
+			where pe.refequipo = '.$refequipo.' and pe.reffecha = '.$reffecha.' and pe.reftorneo = '.$idtorneo.' and (pe.rojas is not null or pe.rojas <>0)';	
+	$res = $this->query($sql,0);
+	if (mysql_num_rows($res)>0) {
+		return mysql_result($res,0,0);
+	}
+	return 0;
+}
+
 function traerPuntosConductaPorFechaEquipo($refequipo,$reffecha,$idtorneo) {
 	$sql = "select c.puntos,e.idequipo from tbconducta c
 			inner join dbequipos e on e.idequipo = c.refequipo 
@@ -1062,15 +1087,21 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 			while ($row6 = mysql_fetch_array($res)) {
 				if (($reffecha - 1) == 22) {
 					$resPuntosB = $this->traerCalculoPorFechaTorneoEquipo($row6[0],$reffecha,$row6[3]);
+					$Canilleras = $this->traerCalcularCanilleras($row6[0],$reffecha,$row6[3]);
+					$Ausentes 	= $this->traerCalcularAusentes($row6[0],$reffecha,$row6[3]);
+					
 					if (mysql_num_rows($resPuntosB)>0) {
 						$puntosB = mysql_result($resPuntosB,0,2);	
 					} else {
 						$puntosB = 0;	
 					}
-					$puntos = 0 + (integer)$puntosB;
+					$puntos = 0 + (integer)$puntosB + (integer)$Canilleras + (integer)$Ausentes;
 				} else {
 					$resPuntosA = $this->traerPuntosConductaPorFechaEquipo($row6[0],$reffecha-1,$row6[3]);
 					$resPuntosB = $this->traerCalculoPorFechaTorneoEquipo($row6[0],$reffecha,$row6[3]);
+					$Canilleras = $this->traerCalcularCanilleras($row6[0],$reffecha,$row6[3]);
+					$Ausentes 	= $this->traerCalcularAusentes($row6[0],$reffecha,$row6[3]);
+					
 					if (mysql_num_rows($resPuntosA)>0) {
 						$puntosA = mysql_result($resPuntosA,0,0);	
 					} else {
@@ -1081,7 +1112,7 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 					} else {
 						$puntosB = 0;	
 					}
-					$puntos = (integer)$puntosA + (integer)$puntosB;
+					$puntos = (integer)$puntosA + (integer)$puntosB + (integer)$Canilleras + (integer)$Ausentes;
 				}
 				$this->insertarConducta($row6[0],$puntos,$reffecha,$row6[3]);				
 			}
@@ -1135,6 +1166,15 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 		return $this->query($sql,0);	
 	}
 
+	function modificarFixtureChequeado($idFixture,$chequeado) {
+		$sql = "update dbfixture
+		set
+		chequeado = ".$chequeado." 
+		where Idfixture =".$idFixture;
+		
+		$res = $this->query($sql,0);
+		return $res;
+	}
 	
 	function reemplazarEquipos($equipoReemplazado,$equipoQueReemplaza,$pts,$golesencontra,$ptsfairplay,$reffecha) {
 		

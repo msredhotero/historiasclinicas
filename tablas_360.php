@@ -59,12 +59,388 @@ $resVallaMenosVencida = $serviciosDatos->TraerFixturePorZonaTorneoMenosGoles($id
 
 
 /////////////////////// PARA EL PLAYOFF /////////////////////////////////////////////
-$resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa(39,$idzona,3);
-$resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa(39,$idzona,4);
-$resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa(39,$idzona,5);
-$resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa(39,$idzona,6);
+
+$idTorneo = mysql_result($serviciosFunciones->TraerTorneosActivoPorTipo($idTipoTorneo),0,0);
+
+
+
+$etapas = $serviciosPlayOff->TraerEtaposPorTorneosZonas($idTorneo,$idzona);
+
+//var_dump($etapas);
+//die;
+$resPlayOff = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,1); //PlayOff
+$resOctavos = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,2); //Octavos
+$resCuartos = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,3); //Cuartos
+$resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,4); //SemiFinal
+$resTercer = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,5); //Tercer puesto
+$resFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa($idTorneo,$idzona,6); //Final
 //traerArmarPlayOffPorEtapa($idTorneo, $idZona, $idEtapa)
 
+
+
+$idTab = 2097;
+$cadCab = '';
+$cadCuerpo = '';
+
+while ($rowEtapas = mysql_fetch_array($etapas)) { 
+$idTab += 1;	
+	switch ($rowEtapas['1']) {
+		case 'PlayOff':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resPlayOff)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+		case 'Octavos':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resOctavos)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+		case 'Cuartos':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resCuartos)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+		case 'SemiFinal':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resSemiFinal)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+		case 'Tercer':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resTercer)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+		case 'Final':
+			$cadCab .= '<div class="tab-tabla " id="tab-tabla-'.$idTab.'">'.$rowEtapas['1'].'</div>';
+			$cadCuerpo .= '<div class="posiciones list" id="tabla-posiciones-'.$idTab.'">
+							<div class="titles">
+								<div class="col col1"></div>
+								<div class="col col2 col-number">EQUIPO A</div>
+								<div class="col col3 col-number">RESULT. A</div>
+								<div class="col col4 col-number">HORARIO</div>
+								<div class="col col5 col-number">RESULT. B</div>
+								<div class="col col6 col-number">EQUIPO B</div>
+								<div class="col col7 col-number">FECHA</div>
+							</div>
+							<div class="items">';
+
+						
+								$cant = 1;
+								
+								while ($rowSF = mysql_fetch_array($resFinal)) {
+	
+								
+								if (($cant % 2) != 0) {
+								$cadCuerpo .= '<div class="item pair-row">';
+								} else {
+								$cadCuerpo .= '<div class="item odd-row">';
+								}
+									$cadCuerpo .= '<div class="col col1">
+										
+									</div>
+									<div class="col col2 col-number">'.$rowSF['refplayoffequipo_a'].'</div>
+									<div class="col col3 col-number">'.$rowSF['refplayoffresultado_a']; 
+									if ($rowSF['penalesa'] != '') { 
+										$cadCuerpo .= " (".$rowSF['penalesa'].")";
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col4 col-number">'.$rowSF['hora'].'</div>
+									<div class="col col5 col-number">'.$rowSF['refplayoffresultado_b'];
+									if ($rowSF['penalesb'] != '') { 
+									$cadCuerpo .= " (".$rowSF['penalesb'].")"; 
+									}
+									
+									$cadCuerpo .= '</div>
+									<div class="col col6 col-number">'.$rowSF['refplayoffequipo_b'].'</div>
+									<div class="col col7 col-number">'.$rowSF['fechajuego'].'</div>
+					
+								</div>';
+
+									$cant = $cant + 1;
+									} 
+
+							$cadCuerpo .= '</div>
+							<div class="instructions">
+								<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
+					empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
+					contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
+					puntos.</p>
+							</div>
+						</div>';
+			break;
+	}
+}
 
 ///////////////////////   FIN PLAYOFF //////////////////////////////////////////////
 
@@ -125,9 +501,8 @@ $resSemiFinal = $serviciosPlayOff->traerArmarPlayOffPorEtapa(39,$idzona,6);
   <div style="display: none;" class="posiciones-wrapper section">
     	<div class="tabs-posiciones tabs-tablas">
       	<div class="tab-tabla selected" id="tab-tabla-2097"><?php echo $nombreTorneo; ?></div>
-  	    	<div class="tab-tabla " id="tab-tabla-2139">SemiFinal</div>
-  	    	<div class="tab-tabla " id="tab-tabla-2140">Tercer Puesto</div>
-            <div class="tab-tabla " id="tab-tabla-2141">Final</div>
+  	    	<!-- otras etapas -->
+            <?php echo $cadCab; ?>
   	    <div class="bottom-line"></div>
 </div>
 <div class="tablas-posiciones">
@@ -188,218 +563,7 @@ contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P:
 puntos.</p>
         </div>
 	</div>
-		<div class="posiciones list" id="tabla-posiciones-2139">
-    	<div class="titles">
-    		<div class="col col1"></div>
-    		<div class="col col2 col-number">EQUIPO A</div>
-    		<div class="col col3 col-number">RESULT. A</div>
-    		<div class="col col4 col-number">HORARIO</div>
-    		<div class="col col5 col-number">RESULT. B</div>
-    		<div class="col col6 col-number">EQUIPO B</div>
-    		<div class="col col7 col-number">FECHA</div>
-    	</div>
-    	<div class="items">
-    		<?php
-	
-			$cant = 1;
-			
-			while ($rowSF = mysql_fetch_array($resSemiFinal)) {
-			?>
-			
-			<?php if (($cant % 2) != 0) { ?>
-			<div class="item pair-row">
-			<?php } else { ?>
-			<div class="item odd-row">
-			<?php } ?>
-				<div class="col col1">
-					
-                </div>
-				<div class="col col2 col-number"><?php echo $rowSF['refplayoffequipo_a']; ?> </div>
-				<div class="col col3 col-number"><?php echo $rowSF['refplayoffresultado_a']; ?> <?php if ($rowSF['penalesa'] != '') { echo "(".$rowSF['penalesa'].")"; } ?></div>
-				<div class="col col4 col-number"><?php echo $rowSF['hora']; ?></div>
-				<div class="col col5 col-number"><?php echo $rowSF['refplayoffresultado_b']; ?>  <?php if ($rowSF['penalesb'] != '') { echo "(".$rowSF['penalesb'].")"; } ?></div>
-				<div class="col col6 col-number"><?php echo $rowSF['refplayoffequipo_b']; ?></div>
-				<div class="col col7 col-number"><?php echo $rowSF['fechajuego']; ?></div>
-
-			</div>
-			
-			<?php 
-				$cant = $cant + 1;
-				} 
-			?>
-    	</div>
-    	<div class="instructions">
-        	<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
-empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
-contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
-puntos.</p>
-        </div>
-	</div>
-		<div class="posiciones list" id="tabla-posiciones-2140">
-    	<div class="titles">
-    		<div class="col col1"></div>
-    		<div class="col col2 col-number">PJ</div>
-    		<div class="col col3 col-number">PG</div>
-    		<div class="col col4 col-number">PE</div>
-    		<div class="col col5 col-number">PP</div>
-    		<div class="col col6 col-number">GF</div>
-    		<div class="col col7 col-number">GC</div>
-    		<div class="col col8 col-number">GD</div>
-    		<div class="col col9 col-number">PB</div>
-    		    			<div class="col col-fp col-number">FP</div>
-    		    		<div class="col col10 col-number">P</div>
-    	</div>
-    	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    	</div>
-    	<div class="instructions">
-        	<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
-empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
-contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
-puntos.</p>
-        </div>
-       </div>
-        <div class="posiciones list" id="tabla-posiciones-2141">
-    	<div class="titles">
-    		<div class="col col1"></div>
-    		<div class="col col2 col-number">PJ</div>
-    		<div class="col col3 col-number">PG</div>
-    		<div class="col col4 col-number">PE</div>
-    		<div class="col col5 col-number">PP</div>
-    		<div class="col col6 col-number">GF</div>
-    		<div class="col col7 col-number">GC</div>
-    		<div class="col col8 col-number">GD</div>
-    		<div class="col col9 col-number">PB</div>
-    		    			<div class="col col-fp col-number">FP</div>
-    		    		<div class="col col10 col-number">P</div>
-    	</div>
-    	<div class="items">
-    		    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2786" target="_top">Atlético Vermú</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2728" target="_top">Las Gualeyas</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item pair-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2609" target="_top">Limpiafondos</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    			<div class="item odd-row">
-    				<div class="col col1">
-    					    						<a href="http://www.datafutbol.net/comunidad/equipo/2411" target="_top">TNT</a>
-    					    				</div>
-    				<div class="col col2 col-number">0</div>
-    				<div class="col col3 col-number">0</div>
-    				<div class="col col4 col-number">0</div>
-    				<div class="col col5 col-number">0</div>
-    				<div class="col col6 col-number">0</div>
-    				<div class="col col7 col-number">0</div>
-    				<div class="col col8 col-number">0</div>
-    				<div class="col col9 col-number">0</div>
-    				    					<div class="col col-fp col-number">0</div>
-    				    				<div class="col col10 col-number">0</div>
-    			</div>
-    			    		    	</div>
-    	<div class="instructions">
-        	<p>PJ: partidos jugados, PG: partidos ganados, PE: partidos 
-empatados, PP: partidos perdidos, GF: goles a favor, GC: goles en 
-contra, GD: diferencia de goles, PB: puntos bonus, FP: fair play, P: 
-puntos.</p>
-        </div>
+		<?php echo $cadCuerpo; ?>
         
         
         
@@ -451,7 +615,7 @@ puntos.</p>
 	<div class="fairplay equipos list" id="tabla-fairplay-equipos">
     	<div class="titles">
     		<div class="col col1">Equipo</div>
-    		<div class="col col3"></div>
+    		<div class="col col3">Puntos</div>
 
     	</div>
     	<div class="items">
@@ -481,9 +645,9 @@ puntos.</p>
     	<div class="titles">
     		<div class="col col1">Jugador</div>
     		<div class="col col2">Equipo</div>
-    		<div class="col col3"></div>
-    		<div class="col col4"></div>
-    		<div class="col col5"></div>
+    		<div class="col col3"><img src="../imagenes/icoAmarilla.png" /></div>
+    		<div class="col col4"><img src="../imagenes/azul.png" /></div>
+    		<div class="col col5"><img src="../imagenes/icoRoja.png" /></div>
     	</div>
     	<div class="items">
         	<?php
@@ -575,858 +739,7 @@ puntos.</p>
     		</div>
 	</div>
   </div>
-  <div class="fixture-wrapper section">
-  		<div class="tabs-fixture tabs-tablas">
-	  	  	  	<div class="tab-tabla selected" id="tab-tabla-2097">Futbol 5 Jueves / Torneo Apertura 2015</div>
-	  		  	  	<div class="tab-tabla " id="tab-tabla-2139">Copa de Oro</div>
-	  		  	  	<div class="tab-tabla " id="tab-tabla-2140">Copa de Plata</div>
-	  		  	  <div class="bottom-line"></div>
-	</div>
-	<div class="tablas-fixture">
-		<div class="fixture list" id="tabla-fixture-2097">
-			<div class="fechas-selectores">
-				<div class="texto">Fechas: </div>
-																						<div class="fecha-selector selected" id="fecha-selector-1">1</div>
-																			<div class="fecha-selector " id="fecha-selector-2">2</div>
-																			<div class="fecha-selector " id="fecha-selector-3">3</div>
-																			<div class="fecha-selector " id="fecha-selector-4">4</div>
-																			<div class="fecha-selector " id="fecha-selector-5">5</div>
-																			<div class="fecha-selector " id="fecha-selector-6">6</div>
-																			<div class="fecha-selector " id="fecha-selector-7">7</div>
-																</div>
-    	<div class="items">
-    		    			    			    				    					<div class="fecha" id="fecha-1">
-	        			<div class="sub-header">
-	        				<p>Fecha 1</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/31559" target="_top">
-	            								6 - 5	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">09-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32171" target="_top">
-	            								2 - 1	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">09-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">Las Gualeyas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32172" target="_top">
-	            								1 - 15	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">09-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Yendo</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32173" target="_top">
-	            								7 - 1	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">4 de Copas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">04-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-2">
-	        			<div class="sub-header">
-	        				<p>Fecha 2</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32174" target="_top">
-	            								4 - 1	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Atlético Vermú</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">23-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Las Gualeyas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32175" target="_top">
-	            								0 - 5	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">04-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">Yendo</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32176" target="_top">
-	            								5 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">11-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32177" target="_top">
-	            								5 - 2	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">11-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-3">
-	        			<div class="sub-header">
-	        				<p>Fecha 3</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Yendo</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32179" target="_top">
-	            								4 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Atlético Vermú</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">30-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">TNT</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32181" target="_top">
-	            								15 - 2	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">30-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32180" target="_top">
-	            								3 - 2	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">30-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32178" target="_top">
-	            								6 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">30-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-4">
-	        			<div class="sub-header">
-	        				<p>Fecha 4</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32182" target="_top">
-	            								0 - 6	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">21-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">TNT</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32183" target="_top">
-	            								5 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Atlético Vermú</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">04-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32184" target="_top">
-	            								13 - 2	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">23-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Limpiafondos</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32185" target="_top">
-	            								3 - 4	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">23-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-5">
-	        			<div class="sub-header">
-	        				<p>Fecha 5</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Limpiafondos</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32188" target="_top">
-	            								2 - 4	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">16-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">TNT</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32186" target="_top">
-	            								4 - 4	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">4 de Copas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">16-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Pura Pinta</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32187" target="_top">
-	            								4 - 2	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Atlético Vermú</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">16-04-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-6">
-	        			<div class="sub-header">
-	        				<p>Fecha 6</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Limpiafondos</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32193" target="_top">
-	            								2 - 6	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">4 de Copas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">21-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Pura Pinta</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32192" target="_top">
-	            								2 - 6	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">11-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32191" target="_top">
-	            								5 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">21-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32190" target="_top">
-	            								5 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">11-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-7">
-	        			<div class="sub-header">
-	        				<p>Fecha 7</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Las Gualeyas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32196" target="_top">
-	            								0 - 18	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">28-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Arsenalgas</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32194" target="_top">
-	            								4 - 1	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">04-06-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item pair-row">
-	            				<div class="col col1">Pura Pinta</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32197" target="_top">
-	            								5 - 0	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">28-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      
-	            				    	<a href="http://www.datafutbol.net/comunidad/partido/32195" target="_top">
-	            								4 - 3	            							</a>
-	            							            				 		            				</div>
-	            				<div class="col col3">4 de Copas</div>
-	            					            					<div class="col col4 closed view-more"></div>
-	            					<div class="more">
-	            						<div class="row">
-	                						<div class="title">Sede:</div>
-	                						<div class="text">Grun Fútbol</div>
-	                					</div>
-	                						                					<div class="row">
-	                						<div class="title">Fecha:</div>
-	                						<div class="text">28-05-2015</div>
-	                					</div>
-	                					<div class="row">
-	                						<div class="title">Hora:</div>
-	                						<div class="text">---</div>
-	                					</div>
-	            					</div>
-	            					            			</div>
-	            				            		            	</div>
-        		        		        	
-    	</div>
-	</div>
-		<div class="fixture list" id="tabla-fixture-2139">
-			<div class="fechas-selectores">
-				<div class="texto">Fechas: </div>
-																						<div class="fecha-selector selected" id="fecha-selector-1">1</div>
-																			<div class="fecha-selector " id="fecha-selector-2">2</div>
-																			<div class="fecha-selector " id="fecha-selector-3">3</div>
-																</div>
-    	<div class="items">
-    		    			    			    				    					<div class="fecha" id="fecha-1">
-	        			<div class="sub-header">
-	        				<p>Fecha 1</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Arsenalgas</div>
-
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-2">
-	        			<div class="sub-header">
-	        				<p>Fecha 2</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Arsenalgas</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Pura Pinta</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Yendo</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-3">
-	        			<div class="sub-header">
-	        				<p>Fecha 3</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">4 de Copas</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Pura Pinta</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Yendo</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Arsenalgas</div>
-	            					            			</div>
-	            				            		            	</div>
-        		        		        	
-    	</div>
-	</div>
-		<div class="fixture list" id="tabla-fixture-2140">
-			<div class="fechas-selectores">
-				<div class="texto">Fechas: </div>
-																						<div class="fecha-selector selected" id="fecha-selector-1">1</div>
-																			<div class="fecha-selector " id="fecha-selector-2">2</div>
-																			<div class="fecha-selector " id="fecha-selector-3">3</div>
-																</div>
-    	<div class="items">
-    		    			    			    				    					<div class="fecha" id="fecha-1">
-	        			<div class="sub-header">
-	        				<p>Fecha 1</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Las Gualeyas</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-2">
-	        			<div class="sub-header">
-	        				<p>Fecha 2</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">Limpiafondos</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">TNT</div>
-	            					            			</div>
-	            				            		            	</div>
-        		    				    					<div class="fecha" id="fecha-3">
-	        			<div class="sub-header">
-	        				<p>Fecha 3</p>
-	        			</div>
-	            			            			<div class="item pair-row">
-	            				<div class="col col1">Atlético Vermú</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Limpiafondos</div>
-	            					            			</div>
-	            				            			            			<div class="item odd-row">
-	            				<div class="col col1">TNT</div>
-	            				<div class="col col2">
-	            						            				      -
-	            				  	            				</div>
-	            				<div class="col col3">Las Gualeyas</div>
-	            					            			</div>
-	            				            		            	</div>
-        		        		        	
-    	</div>
-	</div>
-		</div>
+  
   </div>
 </body>
 </html>

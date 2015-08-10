@@ -33,6 +33,7 @@ $idFixture = $_GET['id'];
 $resFix = $serviciosZonasEquipos->TraerFixturePorId($idFixture);
 
 $refFecha = mysql_result($resFix,0,6);
+$refChequeado = mysql_result($resFix,0,'chequeado');
 
 $resEquipos = $serviciosEquipos->TraerEquipos();
 
@@ -339,7 +340,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     </div>
                     
                     <div class="form-group col-md-2" align="center">
-                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoAmarilla.png"></label>
+                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoAmarilla.png">Canilleras</label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equipoamarillasa" name="equipoamarillasa" value="<?php echo $eAmarillasA; ?>" class="form-control" required/>
                         </div>
@@ -353,12 +354,12 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         
                     </div>
                     <div class="form-group col-md-2" align="center">
-                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
+                     <label class="control-label" style="text-align:left" for="reftorneo"><img src="../../imagenes/icoRoja.png">Ausente</label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equiporojasa" name="equiporojasa" value="<?php echo $eRojasA; ?>" class="form-control" required/>
                         </div>
                         
-                    </div>-
+                    </div>
                     <div class="form-group col-md-6" align="center">
                      <label class="control-label" style="text-align:left" for="reftorneo">Observación</label>
                         <div class="input-group col-md-12">
@@ -482,7 +483,7 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     </div>
                     
                     <div class="form-group col-md-2" align="center">
-                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoAmarilla.png"></label>
+                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoAmarilla.png">Canilleras</label>
                         <div class="input-group col-md-8">
                             <input type="text" id="equipoamarillasb" name="equipoamarillasb" value="<?php echo $eAmarillasB; ?>" class="form-control" required/>
                         </div>
@@ -496,9 +497,9 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                         
                     </div>
                     <div class="form-group col-md-2" align="center">
-                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoRoja.png"></label>
+                     <label class="control-label" style="text-align:center" for="reftorneo"><img src="../../imagenes/icoRoja.png">Ausente</label>
                         <div class="input-group col-md-8">
-                            <input type="text" id="equiporojasb" name="equiporojasb" value="<?php //echo $eRojasB; ?>" class="form-control" required/>
+                            <input type="text" id="equiporojasb" name="equiporojasb" value="<?php echo $eRojasB; ?>" class="form-control" required/>
                         </div>
                         
                     </div>
@@ -516,11 +517,20 @@ $resJugadoresB = $serviciosJugadores->traerJugadoresPorFixtureB($idFixture);
                     </div>
                     
                 </div>
-              
+              	
+                
             
             </div>
             
+            <div class='row' style="margin-left:15px; margin-right:15px;">
+                <div class="form-group col-md-2">
+                 <label class="control-label" style="text-align:left" for="reftorneo">Chequeado</label>
+                    <div class="input-group col-md-8">
+                        <input type="checkbox" class="form-control input-sm" id="chequeado" name="chequeado" style="width:30px;" <?php if ($refChequeado == 1) { echo "checked"; } ?>/>
+                    </div>
+                </div>
             
+            </div>
             
             
             
@@ -926,6 +936,24 @@ $(document).ready(function(){
 
 	});//fin del boton abrir
 	
+	$('#chequeado').click(function() {
+		$.ajax({
+				data:  {id: <?php echo $idFixture; ?>, chequeado: $('#chequeado').is(':checked') ? 1 : 0, accion: 'modificarFixtureChequeado'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$('.'+$('#idEliminar').val()).fadeOut( "slow", function() {
+							$(this).remove();
+						});
+						
+				}
+		});	
+	});
+	
+	
 	$('#cargamasiva').click(function(e) {
         
 		$("button:button").each(function(){
@@ -935,9 +963,14 @@ $(document).ready(function(){
 			if (parseInt(cad)>0) {
 				//$(this).prop("checked", "");
 				$(this).click();
+				
+				
 			}
 		});
+		
+		$('#chequeado').click();
     });
+
 	
 	$('#cerrar').click(function(event){
 

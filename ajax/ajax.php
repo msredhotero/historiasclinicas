@@ -272,6 +272,9 @@ break;
 	
 	
 	/* para los torneo-zonas-equipos */
+	case 'modificarFixtureChequeado':
+		modificarFixtureChequeado($serviciosZonasEquipos);
+		break;
 	case 'insertarZonasEquipos':
 		insertarZonasEquipos($serviciosZonasEquipos);
 		break;
@@ -2135,6 +2138,21 @@ function eliminarReemplazos($serviciosReemplazos) {
 }
 
 /* Fin */ 
+
+
+function modificarFixtureChequeado($serviciosZonasEquipos) {
+	$id = $_POST['id'];
+	
+	$chequeado = $_POST['chequeado'];
+	
+	$res = $serviciosZonasEquipos->modificarFixtureChequeado($id,$chequeado);
+	
+	if ($res == true) {
+		echo '';
+	} else {
+		echo 'Huvo un error al modificar datos';
+	}	
+}
 
 function insertarZonasEquipos($serviciosZonasEquipos) {
 	$refgrupo 		= $_POST['refgrupo'];
