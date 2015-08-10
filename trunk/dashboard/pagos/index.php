@@ -451,7 +451,6 @@ $('.exportarexcel33').click(function(e) {
 
 $('.exportarexcel').click(function(e) {
 
-alert('asd');
 	if ($('#nombrearchivo').val() != '') 
 	{
 		url = "generar.php?nombrearchivo="+$('#nombrearchivo').val()+"&reffecha="+$("#reffechab").val();
