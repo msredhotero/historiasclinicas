@@ -1,3 +1,23 @@
+<?php
+
+
+include ('includes/funciones.php');
+include ('includes/funcionesUsuarios.php');
+include ('includes/funcionesHTML.php');
+include ('includes/funcionesGrupos.php');
+include ('includes/funcionesDATOS.php');
+
+$serviciosFunciones = new Servicios();
+$serviciosUsuario 	= new ServiciosUsuarios();
+$serviciosHTML 		= new ServiciosHTML();
+$serviciosGrupos 	= new ServiciosG();
+$serviciosDatos		= new ServiciosDatos();
+
+
+$resZonasTorneos = $serviciosDatos->traerZonasPorTorneo(6);
+
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -127,9 +147,12 @@ datafutbol {
           <iframe src="http://www.datafutbol.net/comunidad/campeonato/tablas/670" name="Campeonato-396" width="780" height="600" scrolling="No" frameborder="0" id="Campeonato-2">
           <p>Tu browser no permite mostrar estas tablas.</p>
           </iframe>-->
-          <iframe src="datahtml/iguana_tablas.php" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
+          <?php while ($row = mysql_fetch_array($resZonasTorneos)) { ?>
+          <iframe src="datahtml/iguana_tablas.php?id=6&zona=<?php echo $row[0]; ?>&fecha=23" name="Campeonato-396" height="500" width="780" scrolling="no" frameborder="0"> 
             <p>Tu browser no permite mostrar estas tablas.</p>
             </iframe>
+            <?php } ?>
+
 <br />
         </div>
 </div>
