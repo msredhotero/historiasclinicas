@@ -397,7 +397,7 @@ $(document).ready(function(){
 				    "Eliminar": function() {
 	
 						$.ajax({
-									data:  {id: $('#idEliminar').val(), accion: 'eliminarPlayOff'},
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarArmarPlayOff'},
 									url:   '../../ajax/ajax.php',
 									type:  'post',
 									beforeSend: function () {
