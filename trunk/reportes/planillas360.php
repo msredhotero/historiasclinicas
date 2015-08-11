@@ -53,20 +53,26 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 	$pdf->AddPage();
 	/***********************************    PRIMER CUADRANTE ******************************************/
 	$pdf->Rect(5,5,200,281,'');
-	$pdf->Image('../imagenes/logo360b.png',7,15,0);
-	$pdf->Rect(5,45,200,241,'');
-	$pdf->SetFont('Arial','U',15);
-	$pdf->SetXY(17,6);
-	$pdf->Cell(30,7,'Tres Sesenta Fútbol',0,0,'C',false);
-	$pdf->SetFont('Arial','',15);
-	$pdf->SetXY(60,5);
+	$pdf->Image('../imagenes/logo360nuevo.png',7,10,0);
+	//$pdf->Rect(5,45,200,241,'');
+	$pdf->SetFont('Arial','B',9);
+	$pdf->SetXY(12,5);
+	$pdf->Cell(22,5,'#Planilla de partido',0,0,'C',false);
+	$pdf->SetFont('Arial','',12);
+	/*$pdf->SetXY(60,5);
 	$pdf->Cell(30,20,strtoupper($rowE['zona']),1,0,'C',false);
 	$pdf->Cell(115,20,strtoupper($rowE['descripciontorneo']),1,0,'C',false);
 	$pdf->Ln();
 	$pdf->SetX(60);
 	$pdf->Cell(30,20,strtoupper($rowE['tipofecha']),1,0,'C',false);
 	$pdf->Cell(50,20,strtoupper($rowE['cancha']),1,0,'C',false);
-	$pdf->Cell(65,20,'HORARIO '.strtoupper($rowE['hora']),1,0,'C',false);
+	$pdf->Cell(65,20,'HORARIO '.strtoupper($rowE['hora']),1,0,'C',false);*/
+	$pdf->SetXY(45,15);
+	$pdf->Cell(22,5,'equipo',0,0,'C',false);
+	$pdf->SetXY(45,22);
+	$pdf->Cell(22,5,'capitán',0,0,'C',false);
+	$pdf->SetXY(45,29);
+	$pdf->Cell(22,5,'teléfono',0,0,'C',false);
 	/***********************************    FIN ******************************************/
 	
 	/***********************************    SEGUNDO CUADRANTE ******************************************/
