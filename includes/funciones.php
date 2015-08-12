@@ -1396,7 +1396,8 @@ function traerSuspendidosPorFechas($refjugador,$refequipo,$idSuspendido) {
 						ff.tipofecha,
 						f.cancha,
 						DATE_FORMAT(f.Hora,'%k:%i') AS hora,
-						ff.idfecha
+						ff.idfecha,
+						f.fechajuego
 					
 						from		dbtorneoge tge
 						inner
@@ -1443,7 +1444,8 @@ function traerSuspendidosPorFechas($refjugador,$refequipo,$idSuspendido) {
 							ff.tipofecha,
 							f.cancha,
 							DATE_FORMAT(f.Hora, '%k:%i') AS hora,
-							ff.idfecha
+							ff.idfecha,
+							f.fechajuego
 					
 					from		dbtorneoge tge
 					inner

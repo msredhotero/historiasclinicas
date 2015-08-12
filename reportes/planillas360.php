@@ -67,101 +67,47 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 	$pdf->Cell(30,20,strtoupper($rowE['tipofecha']),1,0,'C',false);
 	$pdf->Cell(50,20,strtoupper($rowE['cancha']),1,0,'C',false);
 	$pdf->Cell(65,20,'HORARIO '.strtoupper($rowE['hora']),1,0,'C',false);*/
-	$pdf->SetXY(45,15);
+	$pdf->SetXY(100,7);
+	$pdf->Cell(100,5,strtoupper($rowE['descripciontorneo']),0,0,'R',false);
+	$pdf->SetXY(45,14);
 	$pdf->Cell(22,5,'equipo',0,0,'C',false);
-	$pdf->SetXY(45,22);
+	$pdf->Cell(80,5,'',1,0,'C',false);
+	$pdf->Cell(53,5,'Fecha: '.$rowE['fechajuego'],0,0,'R',false);
+	$pdf->SetXY(45,21);
 	$pdf->Cell(22,5,'capitán',0,0,'C',false);
-	$pdf->SetXY(45,29);
+	$pdf->Cell(80,5,'',1,0,'C',false);
+	$pdf->SetXY(45,28);
 	$pdf->Cell(22,5,'teléfono',0,0,'C',false);
+	$pdf->Cell(80,5,'',1,0,'C',false);
+	
+	$pdf->SetFont('Arial','',10);
+	$pdf->SetXY(163,20);
+	$pdf->Cell(35,5,'Seguí el torneo en',0,0,'L',false);
+	$pdf->SetXY(163,25);
+	$pdf->Image('../imagenes/imgfacebookplanillas.jpg',163,25,32);
+	$pdf->SetXY(161,33);
+	$pdf->Cell(35,4,'/tressesentafutbol',0,0,'R',false);
+	$pdf->SetXY(5,37);
+	$pdf->SetFont('Arial','',9);
+	$pdf->Cell(180,7,'* el capitán debe ser responsable de hcequear las estadisticas computadas y firmar la planilla. No se aceptarán reclamos posteriores.',0,0,'L',false);
 	/***********************************    FIN ******************************************/
 	
 	/***********************************    SEGUNDO CUADRANTE ******************************************/
-	$pdf->SetXY(5,45);
-	$pdf->Cell(180,7,'PLANILLA DE INCRIPCIÓN - BUENA FE',0,0,'C',false);
-	$pdf->Ln();
-	$pdf->SetFont('Arial','',8);
-	$pdf->SetX(5);
-	$pdf->MultiCell(200,4,'IMPORTANTE:  El "Tres Sesenta Fútbol” canchas de fútbol, denominado también “La Organización” no se responsabiliza por lesiones ocasionadas en uso de las instalaciones, prácticas de juego, y/o hechos de fuerza mayor y/o caso fortuito, agresiones personales u otros hechos que causen perjuicios material y/o lesiones corporales, como asimismo tampoco se responsabiliza por extravío y/o pérdida de objetos personales, reservándose el derecho de admisión a la totalidad de canchas y/o establecimiento.',1,'L',false);
-	$pdf->SetFont('Arial','B',8);
-	$pdf->SetX(5);
-	$pdf->MultiCell(200,4,'Con la firma del presente, expresamente desiste de cualquier reclamo y acción al respecto. Los DNI y firmas pueden ser completados en la 1º fecha en el Predio.',1,'L',false);
-	
-	$pdf->SetFillColor(255,10,12);
-	$pdf->SetFont('Arial','',10);
-	$pdf->SetX(5);
-	$pdf->Cell(200,5,'COMPLETAR TODOS LOS DATOS CON MAYUSCULAS',1,0,'C',true);
-	
-	//////////////////// Aca arrancan a cargarse los datos de los equipos  /////////////////////////
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'NOMBRE DEL EQUIPO:',1,0,'C',false);
-	$pdf->SetFont('Arial','B',10);
-	$pdf->Cell(152.5,5,strtoupper($rowE['nombre']),1,0,'C',false);
-	
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->SetFont('Arial','',9);
 	$pdf->SetFillColor(155,155,155);
-	$pdf->Cell(47.5,5,'Nombre capitan del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(52.5,5,strtoupper($rowE['nombrecapitan']),1,0,'L',false);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Nombre sub-cap. del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(52.5,5,strtoupper($rowE['nombresubcapitan']),1,0,'L',false);
-	
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Teléfono capitan del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(52.5,5,strtoupper($rowE['telefonocapitan']),1,0,'L',false);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Teléfono sub-cap. del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(52.5,5,strtoupper($rowE['telefonosubcapitan']),1,0,'L',false);
-	
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Email capitan del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',7);
-	$pdf->Cell(52.5,5,strtoupper($rowE['emailcapitan']),1,0,'L',false);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Email sub-cap. del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',7);
-	$pdf->Cell(52.5,5,strtoupper($rowE['emailsubcapitan']),1,0,'L',false);
-	
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Facebook capitan del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',7);
-	$pdf->Cell(52.5,5,strtoupper($rowE['facebookcapitan']),1,0,'L',false);
-	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(47.5,5,'Facebook sub-cap. del equipo:',1,0,'L',true);
-	$pdf->SetFont('Arial','',7);
-	$pdf->Cell(52.5,5,strtoupper($rowE['facebooksubcapitan']),1,0,'L',false);
-	
-	$pdf->SetFont('Arial','B',10);
-	$pdf->Ln();
-	$pdf->SetX(5);
-	$pdf->Cell(200,5,'JUGADORES',1,0,'C',false);
-	$pdf->SetFont('Arial','',9);
 	$resJugadores = $serviciosJugadores->TraerJugadoresPorEquipoPlanillas($rowE['idequipo'],$reffecha);
 	
 	$pdf->Ln();
 	$pdf->SetX(5);
-	$pdf->Cell(49.5,5,'APELLIDO Y NOMBRE',1,0,'C',true);
-	$pdf->Cell(20,5,'DNI',1,0,'C',true);
-	$pdf->Cell(25,5,'FIRMA',1,0,'C',true);
-	$pdf->Cell(17.5,5,'N°CAMIS.',1,0,'C',true);
-	$pdf->Cell(15,5,'GOLES',1,0,'C',true);
-	$pdf->Cell(20,5,'AMARILLAS',1,0,'C',true);
-	$pdf->Cell(20,5,'AZULES',1,0,'C',true);
-	$pdf->Cell(20,5,'ROJAS',1,0,'C',true);
-	$pdf->Cell(13,5,'JUGO',1,0,'C',true);
+	$pdf->Cell(49.5,5,'#NOMBRE Y APELLIDO',1,0,'C',false);
+	$pdf->Cell(15,5,'#nro',1,0,'C',false);
+	$pdf->Cell(20,5,'#DNI',1,0,'C',false);
+	$pdf->Cell(25,5,'FIRMA',1,0,'C',false);
+	$pdf->Cell(16,5,'TA',1,0,'C',false);
+	$pdf->Cell(16,5,'Taz',1,0,'C',false);
+	$pdf->Cell(16,5,'TR',1,0,'C',false);
+	$pdf->Cell(16,5,'GOLES',1,0,'C',false);
+	$pdf->Cell(13.5,5,'MEJOR',1,0,'C',false);
+	$pdf->Cell(13,5,'JUGO',1,0,'C',false);
 	
 	$i = 0;
 	while ($rowJ = mysql_fetch_array($resJugadores))
@@ -173,23 +119,26 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 		$pdf->SetFont('Arial','',7);
 		if ($rowJ['suspendido'] == '0') {
 			$pdf->Cell(49.5,5,strtoupper($rowJ['apyn']),1,0,'L',false);
+			$pdf->Cell(15,5,'',1,0,'C',false);
 			$pdf->Cell(20,5,$rowJ['dni'],1,0,'C',false);
 			$pdf->Cell(25,5,'',1,0,'C',false);
-			$pdf->Cell(17.5,5,'',1,0,'C',false);
-			$pdf->Cell(15,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(13.5,5,'',1,0,'C',false);
 			$pdf->Cell(13,5,'Si/No',1,0,'C',false);
+			
 		} else {
 			$pdf->Cell(49.5,5,strtoupper($rowJ['apyn']),1,0,'L',true);
+			$pdf->Cell(15,5,'',1,0,'C',true);
 			$pdf->Cell(20,5,$rowJ['dni'],1,0,'C',true);
 			$pdf->Cell(25,5,'',1,0,'C',true);
-			$pdf->Cell(17.5,5,'',1,0,'C',true);
-			$pdf->Cell(15,5,'',1,0,'C',true);
-			$pdf->Cell(20,5,'',1,0,'C',true);
-			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',true);
+			$pdf->Cell(16,5,'',1,0,'C',true);
+			$pdf->Cell(16,5,'',1,0,'C',true);
+			$pdf->Cell(16,5,'',1,0,'C',true);
+			$pdf->Cell(16,5,'',1,0,'C',true);
+			$pdf->Cell(13.5,5,'',1,0,'C',true);
 			$pdf->Cell(13,5,'(Susp.)',1,0,'C',true);	
 		}
 		if ($i == 24) {
@@ -197,23 +146,33 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 		}
 	}
 	
-	if ($i < 29) {
+	if ($i < 19) {
 		for ($j=$i+1;$j<29;$j++) {
 			$pdf->Ln();
 			$pdf->SetX(5);
 			$pdf->Cell(49.5,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(25,5,'',1,0,'C',false);
-			$pdf->Cell(17.5,5,'',1,0,'C',false);
 			$pdf->Cell(15,5,'',1,0,'C',false);
 			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
-			$pdf->Cell(20,5,'',1,0,'C',false);
+			$pdf->Cell(25,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(16,5,'',1,0,'C',false);
+			$pdf->Cell(13.5,5,'',1,0,'C',false);
 			$pdf->Cell(13,5,'',1,0,'C',false);
 		}
 	}
 	$pdf->Ln();
 	$pdf->SetX(5);
+	$pdf->Image('../imagenes/pelotaweb.png',10,191,0);
+	$pdf->SetXY(18,192);
+	
+	$pdf->SetFont('Arial','',12);
+	
+	$pdf->Cell(25,5,'#Depósito',0,0,'L',false);
+	
+	$pdf->Line(18,197,85,197);
+	/*
 	$pdf->Cell(56,5,'Total Goles:',1,0,'L',false);
 	$pdf->Cell(56,5,'Total Amarillas y Azules:',1,0,'L',false);
 	$pdf->Cell(55,5,'Total Rojas:',1,0,'L',false);
@@ -241,22 +200,22 @@ while ($rowE = mysql_fetch_array($resEquipos)) {
 	$pdf->SetX(172);
 	$pdf->Cell(16.5,5,'',1,0,'L',false);
 	$pdf->Cell(16.5,5,'',1,0,'L',false);
-	
+	*/
 
 	
 	
 	/********* LA FECHA **************////////////////
-	$pdf->SetXY(5,260);
+	/*$pdf->SetXY(5,260);
 	$pdf->SetFont('Arial','',10);
 	$pdf->Cell(90,6,'FECHA:',0,0,'L',false);
-	
+	*/
 	
 	
 	/********* LAS FIRMAS **************////////////////
-	$pdf->SetXY(20,278);
+	/*$pdf->SetXY(20,278);
 	$pdf->SetFont('Arial','',12);
 	$pdf->Cell(90,6,'FIRMA DELEGADO:',0,0,'L',false);
-	$pdf->Cell(50,6,'ACLARACION:',0,0,'L',false);
+	$pdf->Cell(50,6,'ACLARACION:',0,0,'L',false);*/
 }
 //120 x 109
 
