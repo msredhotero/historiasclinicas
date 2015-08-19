@@ -122,7 +122,7 @@ if ($_SESSION['refroll_predio'] != 1) {
         	<form class="form-inline formulario" role="form">
             
             <div class="row" style="margin-left:15px;" align="center">
-            	<div class="form-group col-md-6">
+            	<div class="form-group col-md-4">
                     <label class="control-label" style="text-align:left" for="idequipo">Fecha</label>
                     <div class="input-group col-md-12">
                         <select id="reffecha" class="form-control" name="reffecha">
@@ -131,11 +131,21 @@ if ($_SESSION['refroll_predio'] != 1) {
                     </div>
                 </div>
 
-            	<div class="form-group col-md-6">
+            	<div class="form-group col-md-4">
                     <label class="control-label" style="text-align:left" for="idequipo">Torneos</label>
                     <div class="input-group col-md-12">
                         <select id="reftorneo" class="form-control" name="reftorneo">
                             <?php echo $cadTorneo; ?>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group col-md-4">
+                    <label class="control-label" style="text-align:left" for="idequipo">Sexo</label>
+                    <div class="input-group col-md-12">
+                        <select id="sexo" class="form-control" name="sexo">
+                            <option value="0">Masculino</option>
+                            <option value="1">Femenino</option>
                         </select>
                     </div>
                 </div>
@@ -178,7 +188,7 @@ $(document).ready(function(){
 	
 	$('#cargar').click(function(event){
 		
-		url = "../../reportes/planillas360.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val();
+		url = "../../reportes/planillas360.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val()+"&sexo="+$('#sexo').val();
 		//$(location).attr('href',url);
 		window.open(url, '_blank');
       	return false;
