@@ -350,7 +350,11 @@ class ServiciosZonasEquipos {
 			fi.fechajuego,
 			f.tipofecha as fecha,
 			fi.hora,
-			fi.chequeado,
+			(CASE WHEN fi.chequeado =1
+					THEN  '1'
+					ELSE  '0'
+					END
+					) AS chequeado,
 			g.nombre
 					from dbfixture as fi
 					        inner 
