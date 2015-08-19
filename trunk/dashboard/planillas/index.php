@@ -188,7 +188,11 @@ $(document).ready(function(){
 	
 	$('#cargar').click(function(event){
 		
-		url = "../../reportes/planillas360.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val()+"&sexo="+$('#sexo').val();
+		if ($('#sexo').val() == 0) {
+			url = "../../reportes/planillas360.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val();
+		} else {
+			url = "../../reportes/planillas360f.php?reffecha="+$('#reffecha').val()+"&reftorneo="+$('#reftorneo').val();
+		}
 		//$(location).attr('href',url);
 		window.open(url, '_blank');
       	return false;
