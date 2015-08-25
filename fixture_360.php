@@ -19,7 +19,7 @@ $serviciosDatos = new ServiciosDatos();
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
 } else {
-	$idTipoTorneo = 1;
+	$idTipoTorneo = 6;
 }
 
 if (isset($_GET["zona"])) {
