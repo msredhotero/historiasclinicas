@@ -9,6 +9,23 @@ date_default_timezone_set('America/Buenos_Aires');
 //session_start();
 class ServiciosZonasEquipos {
 	
+	function traerFechasJugadas($idTorneo, $idZona) {
+		$sql = "select distinct
+					f.reffecha
+				from
+					dbfixture f
+						inner join
+					dbtorneoge tge ON tge.idtorneoge = f.reftorneoge_a
+						or tge.idtorneoge = f.reftorneoge_b
+						inner join
+					dbtorneos t ON t.idtorneo = tge.reftorneo
+				where
+					t.reftipotorneo = ".$idTorneo."
+						and tge.refgrupo = ".$idZona."
+				order by f.reffecha";
+		return $this-> query($sql,0);	
+	}
+	
 	function TraerGruposActivos() {
 		$sql = "SELECT
 			distinct	g.idgrupo,g.nombre
