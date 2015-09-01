@@ -27,6 +27,8 @@ class Servicios {
 		$cadView = '';
 		$cadRows = '';
 		
+		$cantAux = $cantidad;
+		
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 5;
@@ -69,47 +71,112 @@ class Servicios {
 				$idresultados = "resultados";
 			}
 			*/
+			$primero = '';
 		while ($row = mysql_fetch_array($datos)) {
 			$cadsubRows = '';
-			$cadRows = $cadRows.'
+			
+			
+			if ($cantAux == 98) {
+				
+				if ($primero != $row[7]) {
+					$primero = $row[7];
+					$cadRows = $cadRows.'
+			
+					<tr style="height:40px;">
+                        	';
+					for ($i=1;$i<=$cantidad;$i++) {
+						
+						$cadsubRows = $cadsubRows.'<td style="max-width:130px;"></td>';	
+					}
+
+					$cadRows = $cadRows.'
+									'.$cadsubRows.'
+									<td>
+									</td>
+								</tr>
+					';
+					
+					
+				} else {
+					$cadRows = $cadRows.'
 			
 					<tr class="'.$row[0].'">
                         	';
-			
-			
-			for ($i=1;$i<=$cantidad;$i++) {
+							
+					for ($i=1;$i<=$cantidad;$i++) {
+					
+						$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
+					}
+					
+					$cadRows = $cadRows.'
+									'.$cadsubRows.'
+									<td>
+										
+										<div class="btn-group">
+											<button class="btn btn-success" type="button">Acciones</button>
+											
+											<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+											<span class="caret"></span>
+											<span class="sr-only">Toggle Dropdown</span>
+											</button>
+											
+											<ul class="dropdown-menu" role="menu">
+												<li>
+												<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
+												</li>
+		
+												<li>
+												<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+												</li>
+												'.str_replace("****",$row[0],$adicional).'
+											</ul>
+										</div>
+									</td>
+								</tr>
+					';	
+					
+				}
 				
-				$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
+				
+			} else {
+			
+				for ($i=1;$i<=$cantidad;$i++) {
+					
+					$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
+				}
+				
+				$cadRows = $cadRows.'
+								'.$cadsubRows.'
+								<td>
+									
+									<div class="btn-group">
+										<button class="btn btn-success" type="button">Acciones</button>
+										
+										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										
+										<ul class="dropdown-menu" role="menu">
+											<li>
+											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
+											</li>
+	
+											<li>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											</li>
+											'.str_replace("****",$row[0],$adicional).'
+										</ul>
+									</div>
+								</td>
+							</tr>
+				';
 			}
 			
 			
 			
-			$cadRows = $cadRows.'
-                            '.$cadsubRows.'
-							<td>
-								
-                                <div class="btn-group">
-                                    <button class="btn btn-success" type="button">Acciones</button>
-                                    
-                                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li>
-                                        <a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
-                                        </li>
-
-                                        <li>
-                                        <a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
-                                        </li>
-										'.str_replace("****",$row[0],$adicional).'
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-			';
+			
+			
 		}
 		
 		$cadView = $cadView.'
@@ -1224,9 +1291,9 @@ function deshactivarTorneos($idtorneo,$idtipotorneo) {
 		return $this-> query($sql,0);
 	}
 	
-	function insertarConducta($refequipo,$puntos,$reffecha) {
-$sql = "insert into tbconducta(idconducta,refequipo,puntos,reffecha)
-values ('',".$refequipo.",".$puntos.",".$reffecha.")";
+	function insertarConducta($refequipo,$puntos,$reffecha,$reftorneo) {
+$sql = "insert into tbconducta(idconducta,refequipo,puntos,reffecha,reftorneo)
+values ('',".$refequipo.",".$puntos.",".$reffecha.", ".$reftorneo.")";
 $res = $this->query($sql,1);
 return $res;
 }
@@ -1241,29 +1308,29 @@ $res = $this->query($sql,0);
 return $res;
 }
 
-function traerConductaPorFechaEquipo($refequipo,$reffecha) {
+function traerConductaPorFechaEquipo($refequipo,$reffecha,$reftorneo) {
 	$sql = "select c.idconducta,e.nombre,c.puntos,e.idequipo from tbconducta c
 			inner join dbequipos e on e.idequipo = c.refequipo 
-			where c.refequipo =".$refequipo." and c.reffecha =".$reffecha;
+			where c.refequipo =".$refequipo." and c.reffecha =".$reffecha." and c.reftorneo = ".$reftorneo;
 	$res = $this->query($sql,0);
 	return $res;
 }
 
-function modificarConductaPorEquipo($refequipo,$puntos,$reffecha) {
+function modificarConductaPorEquipo($refequipo,$puntos,$reffecha,$reftorneo) {
 
-	$existe = $this->traerConductaPorFechaEquipo($refequipo,$reffecha);
+	$existe = $this->traerConductaPorFechaEquipo($refequipo,$reffecha,$reftorneo);
 	
 	if (mysql_num_rows($existe)>0) {
 		//si existe le sumo
 		$sql = "update tbconducta
 		set
 		puntos = puntos + ".$puntos."
-		where refequipo =".$refequipo;
+		where refequipo =".$refequipo." and reftorneo =".$reftorneo;
 		$res = $this->query($sql,0);
 		
 	} else {
 		//sino existe lo inserto
-		$res = $this->insertarConducta($refequipo,$puntos,$reffecha);
+		$res = $this->insertarConducta($refequipo,$puntos,$reffecha,$reftorneo);
 	}
 	
 	return $res;

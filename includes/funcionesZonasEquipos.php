@@ -1143,6 +1143,78 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 		
 	}
 	
+	function borrarTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo) {
+		$sql = "delete from tbconducta 
+				where reffecha = ".$reffecha." and refequipo = ".$refequipo." and reftorneo = ".$reftorneo;	
+		$res = $this->query($sql,0);
+		return $res;	
+	}
+	
+	function calcularTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo) {
+		$sql  = "select 
+					e.idequipo, e.nombre,ff.tipofecha, t.idtorneo
+				from
+					dbtorneoge tge
+						inner join
+					dbgrupos g ON tge.refgrupo = g.idgrupo
+						inner join
+					dbtorneos t ON tge.reftorneo = t.idtorneo
+						and t.activo = 1
+						inner join
+					tbtipotorneo tp ON t.reftipotorneo = tp.idtipotorneo
+						inner join
+					dbequipos e ON e.idequipo = tge.refequipo
+						inner join
+					dbfixture fix ON fix.reftorneoge_a = tge.idtorneoge or fix.reftorneoge_b = tge.idtorneoge
+						left join
+					tbconducta cc ON cc.reffecha = fix.reffecha and cc.refequipo = e.idequipo and cc.reftorneo = t.idtorneo
+						inner join
+					tbfechas ff ON ff.idfecha = fix.reffecha
+				where fix.reffecha = ".$reffecha." and e.idequipo = ".$refequipo." and t.idtorneo = ".$reftorneo." and cc.idconducta is null
+				group by	e.idequipo, e.nombre,ff.tipofecha";
+		
+		//return $sql;
+		$res = $this->query($sql,0);
+		
+		if (mysql_num_rows($res)>0) {
+			while ($row6 = mysql_fetch_array($res)) {
+				if (($reffecha - 1) == 22) {
+					$resPuntosB = $this->traerCalculoPorFechaTorneoEquipo($row6[0],$reffecha,$row6[3]);
+					$Canilleras = $this->traerCalcularCanilleras($row6[0],$reffecha,$row6[3]);
+					$Ausentes 	= $this->traerCalcularAusentes($row6[0],$reffecha,$row6[3]);
+					
+					if (mysql_num_rows($resPuntosB)>0) {
+						$puntosB = mysql_result($resPuntosB,0,2);	
+					} else {
+						$puntosB = 0;	
+					}
+					$puntos = 0 + (integer)$puntosB + (integer)$Canilleras + (integer)$Ausentes;
+				} else {
+					$resPuntosA = $this->traerPuntosConductaPorFechaEquipo($row6[0],$reffecha-1,$row6[3]);
+					$resPuntosB = $this->traerCalculoPorFechaTorneoEquipo($row6[0],$reffecha,$row6[3]);
+					$Canilleras = $this->traerCalcularCanilleras($row6[0],$reffecha,$row6[3]);
+					$Ausentes 	= $this->traerCalcularAusentes($row6[0],$reffecha,$row6[3]);
+					
+					if (mysql_num_rows($resPuntosA)>0) {
+						$puntosA = mysql_result($resPuntosA,0,0);	
+					} else {
+						$puntosA = 0;	
+					}
+					if (mysql_num_rows($resPuntosB)>0) {
+						$puntosB = mysql_result($resPuntosB,0,2);	
+					} else {
+						$puntosB = 0;	
+					}
+					$puntos = (integer)$puntosA + (integer)$puntosB + (integer)$Canilleras + (integer)$Ausentes;
+				}
+				$this->insertarConducta($row6[0],$puntos,$reffecha,$row6[3]);				
+			}
+		}
+		
+		return true;
+		
+	}
+	
 	
 	function TraerZonaPorTorneoEquipoNuevo($idTorneo,$idEquipo) {
 		$sql  = "select g.idgrupo, g.nombre
@@ -1184,6 +1256,15 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 					) AS chequeado
 				FROM dbfixture 
 				where idfixture = ".$id;
+		return $this->query($sql,0);	
+	}
+	
+	function TraerFixturePorIdGral($id) {
+		$sql = "SELECT distinct f.idfixture, tge.reftorneo, f.reffecha
+				FROM dbfixture f
+				inner join dbtorneoge tge 
+				on			tge.idtorneoge = f.reftorneoge_a or tge.idtorneoge = f.reftorneoge_b
+				where f.idfixture = ".$id;
 		return $this->query($sql,0);	
 	}
 

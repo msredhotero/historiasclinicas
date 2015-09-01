@@ -297,10 +297,38 @@ if ($_SESSION['refroll_predio'] != 1) {
 </div>
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
 <script src="../../js/bootstrap-datetimepicker.es.js"></script>
-
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+	$('#example').dataTable({
+		"order": [[ 0, "asc" ]],
+		"language": {
+			"emptyTable":     "No hay datos cargados",
+			"info":           "Mostrar _START_ hasta _END_ del total de _TOTAL_ filas",
+			"infoEmpty":      "Mostrar 0 hasta 0 del total de 0 filas",
+			"infoFiltered":   "(filtrados del total de _MAX_ filas)",
+			"infoPostFix":    "",
+			"thousands":      ",",
+			"lengthMenu":     "Mostrar _MENU_ filas",
+			"loadingRecords": "Cargando...",
+			"processing":     "Procesando...",
+			"search":         "Buscar:",
+			"zeroRecords":    "No se encontraron resultados",
+			"paginate": {
+				"first":      "Primero",
+				"last":       "Ultimo",
+				"next":       "Siguiente",
+				"previous":   "Anterior"
+			},
+			"aria": {
+				"sortAscending":  ": activate to sort column ascending",
+				"sortDescending": ": activate to sort column descending"
+			}
+		  }
+	} );
+	
 	
 	$('#refequipo').change(function() {
 		$.ajax({

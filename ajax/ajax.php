@@ -183,13 +183,13 @@ break;
 		break; 
 		
 	case 'insertarPuntosEquipos':
-	insertarPuntosEquipos($serviciosEquipos);
+	insertarPuntosEquipos($serviciosEquipos, $serviciosZonasEquipos);
 	break;
 	case 'modificarPuntosEquipos':
-	modificarPuntosEquipos($serviciosEquipos);
+	modificarPuntosEquipos($serviciosEquipos, $serviciosZonasEquipos);
 	break;
 	case 'eliminarPuntosEquipos':
-	eliminarPuntosEquipos($serviciosEquipos);
+	eliminarPuntosEquipos($serviciosEquipos, $serviciosZonasEquipos);
 	break; 
 	
 	case 'traerEquipoPorZonaTorneos':
@@ -252,7 +252,7 @@ break;
 		break; 
 	
 	case 'insertarEstadisticaPorJugador':
-		insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones);
+		insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones, $serviciosZonasEquipos);
 		break;
 	/* fin jugadores */
 	
@@ -1599,7 +1599,9 @@ function insertarConducta($serviciosFunciones) {
 	$refequipo = $_POST['refequipo'];
 	$puntos = $_POST['puntos'];
 	$reffecha =$_POST['reffecha'];
-	$res = $serviciosFunciones->modificarConductaPorEquipo($refequipo,$puntos,$reffecha);
+	$reftorneo = $_POST['reftorneo'];
+	
+	$res = $serviciosFunciones->modificarConductaPorEquipo($refequipo,$puntos,$reffecha,$reftorneo);
 	if ($res == true) {
 		echo '';
 	} else {
@@ -1625,7 +1627,7 @@ function eliminarConducta($serviciosFunciones) {
 
 
 
-function insertarPuntosEquipos($serviciosPuntosEquipos) {
+function insertarPuntosEquipos($serviciosPuntosEquipos, $serviciosZonasEquipos) {
 $refequipo = $_POST['refequipo'];
 $puntos = $_POST['puntos'];
 $amarillas = $_POST['amarillas'];
@@ -1653,26 +1655,37 @@ $resExiste = $serviciosPuntosEquipos->traerPuntosEquiposPorFixtureEquipoFechaTor
 			echo 'Huvo un error al modificar datos';
 		}
 	}
+	
+	///////////   BORRO Y CREO EL FAIRPLAY /////////////////////////////////////////////////
+	$resTorneo  = $serviciosZonasEquipos->TraerFixturePorIdGral($reffixture);
+	$reffecha	= mysql_result($resTorneo,0,2);
+	$reftorneo	= mysql_result($resTorneo,0,1);
+	
+	$serviciosZonasEquipos->borrarTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo);
+	$serviciosZonasEquipos->calcularTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo);
+	//////////     FIN
 }
-function modificarPuntosEquipos($serviciosPuntosEquipos) {
-$id = $_POST['id'];
-$refequipo = $_POST['refequipo'];
-$puntos = $_POST['puntos'];
-$amarillas = $_POST['amarillas'];
-$observacion = $_POST['observacion'];
-$azules = $_POST['azules'];
-$rojas = $_POST['rojas'];
-$reffixture = $_POST['reffixture'];
-$reffecha = $_POST['reffecha'];
-$reftorneo = $_POST['reftorneo'];
-$res = $serviciosPuntosEquipos->modificarPuntosEquipos($id,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo,$observacion);
-if ($res == true) {
-echo '';
-} else {
-echo 'Huvo un error al modificar datos';
+function modificarPuntosEquipos($serviciosPuntosEquipos, $serviciosZonasEquipos) {
+	$id = $_POST['id'];
+	$refequipo = $_POST['refequipo'];
+	$puntos = $_POST['puntos'];
+	$amarillas = $_POST['amarillas'];
+	$observacion = $_POST['observacion'];
+	$azules = $_POST['azules'];
+	$rojas = $_POST['rojas'];
+	$reffixture = $_POST['reffixture'];
+	$reffecha = $_POST['reffecha'];
+	$reftorneo = $_POST['reftorneo'];
+	$res = $serviciosPuntosEquipos->modificarPuntosEquipos($id,$refequipo,$puntos,$amarillas,$azules,$rojas,$reffixture,$reffecha,$reftorneo,$observacion);
+	
+	if ($res == true) {
+		  
+		echo '';
+	} else {
+		echo 'Huvo un error al modificar datos';
+	}
 }
-}
-function eliminarPuntosEquipos($serviciosPuntosEquipos) {
+function eliminarPuntosEquipos($serviciosPuntosEquipos, $serviciosZonasEquipos) {
 $id = $_POST['id'];
 $res = $serviciosPuntosEquipos->eliminarPuntosEquipos($id);
 echo $res;
@@ -1685,7 +1698,7 @@ echo $res;
 
 /* para los jugadores */
 
-function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones) {
+function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones, $serviciosZonasEquipos) {
 	
 	$refjugador		= $_POST['refjugador'];
 	$refequipo		= $_POST['refequipo'];
@@ -1738,6 +1751,14 @@ function insertarEstadisticaPorJugador($serviciosJugadores, $serviciosFunciones)
 			echo 'La estadistica ha sido eliminada, ya que el jugador no jugó';	
 		}
 	}
+	///////////   BORRO Y CREO EL FAIRPLAY /////////////////////////////////////////////////
+	$resTorneo  = $serviciosZonasEquipos->TraerFixturePorIdGral($reffixture);
+	$reffecha	= mysql_result($resTorneo,0,2);
+	$reftorneo	= mysql_result($resTorneo,0,1);
+	
+	$serviciosZonasEquipos->borrarTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo);
+	$serviciosZonasEquipos->calcularTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo);
+	//////////     FIN                    //////////////////////////////////////////////////
 }
 
 

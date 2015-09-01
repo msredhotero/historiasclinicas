@@ -803,7 +803,7 @@ left join dbreemplazo rrr on rrr.refequipo = fix.idequipo and rrr.reffecha <= '.
 				from
 				(
 				select
-				concat(j.apellido,", ",j.nombre) as apyn, e.nombre, ss.motivos, ss.cantidadfechas,min(sp.reffecha) - 1 as reffecha, ss.refjugador, ss.refequipo,sp.refsuspendido,
+				j.apyn, e.nombre, ss.motivos, ss.cantidadfechas,min(sp.reffecha) - 1 as reffecha, ss.refjugador, ss.refequipo,sp.refsuspendido,
 (case when rr.idreemplazo is null then 0 else 1 end) as reemplzado,
 (case when rrr.idreemplazo is null then 0 else 1 end) as volvio
 				from		tbsuspendidos ss
@@ -816,22 +816,18 @@ left join dbreemplazo rrr on rrr.refequipo = fix.idequipo and rrr.reffecha <= '.
 				inner
 				join	dbequipos e
 				on		e.idequipo = ss.refequipo
-				inner
-				join	dbtorneoge tge
-				on		tge.refequipo = ss.refequipo
-				inner 
-									join dbtorneos t
-									on tge.reftorneo = t.idtorneo and t.activo = 1
-				
-									inner 
-									join tbtipotorneo tp
-									on t.reftipotorneo = tp.idtipotorneo
+				inner join (select distinct ff.Idfixture from dbfixture ff
+				inner join dbtorneoge tge ON tge.idtorneoge = ff.reftorneoge_a or tge.idtorneoge = ff.reftorneoge_b
+				inner join dbtorneos t ON tge.reftorneo = t.idtorneo
+				inner join tbtipotorneo tp ON t.reftipotorneo = tp.idtipotorneo
+				where t.activo = 1 and t.reftipotorneo = '.$idtorneo.' and tge.refgrupo = '.$zona.') d
+				on			d.idfixture = ss.reffixture
 									
 left join dbreemplazo rr on rr.refequiporeemplazado = e.idequipo and rr.reffecha <= '.$reffecha.'
 left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= '.$reffecha.' and rrr.reftorneo = '.$idtorneo.'									
 									
-				where	tp.idtipotorneo = '.$idtorneo.' and tge.refgrupo = '.$zona.' and sp.reffecha <= '.$reffecha.' +1
-				group by concat(j.apellido,", ",j.nombre), e.nombre, ss.motivos, ss.cantidadfechas, ss.refjugador, ss.refequipo,sp.refsuspendido,j.expulsado
+				where	sp.reffecha <= '.$reffecha.' +1
+				group by j.apyn, e.nombre, ss.motivos, ss.cantidadfechas, ss.refjugador, ss.refequipo,sp.refsuspendido,j.expulsado
 				) r
 				
 				order by r.cantidadfechas desc';
