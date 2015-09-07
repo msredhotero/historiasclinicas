@@ -43,7 +43,8 @@ $refCampo[] 	= "";
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Tipo Torneo</th>";
+$cabeceras 		= "	<th>Tipo Torneo</th>
+					<th>ID Torneo</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -52,7 +53,7 @@ $cabeceras 		= "	<th>Tipo Torneo</th>";
 
 $formulario 	= $serviciosFunciones->camposTabla("insertarTipoTorneo",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->traerTipoTorneo(),1);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosFunciones->traerTipoTorneo(),2);
 
 
 

@@ -11,7 +11,7 @@ class Servicios {
 	/* logica de negocios para los tipos de torneos */ 
 	
 	function traerTipoTorneo() {
-		$sql = "SELECT idtipotorneo,descripciontorneo FROM tbtipotorneo order by descripciontorneo";
+		$sql = "SELECT idtipotorneo,descripciontorneo, idtipotorneo FROM tbtipotorneo order by descripciontorneo";
 		$res 	=	$this->query($sql,0);
 		
 		return $res;
