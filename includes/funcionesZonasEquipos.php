@@ -1150,6 +1150,14 @@ function cargarTablaConducta($reffecha,$reftorneo,$refzona) {
 		return $res;	
 	}
 	
+	function borrarTablaConducta($reffecha,$reftorneo,$refzona) {
+		$sql = "delete c from tbconducta 
+				inner join dbtorneoge tge on c.refequipo = tge.refequipo and tge.reftorneo = ".$reftorneo." 
+				where c.reffecha = ".$reffecha." and tge.refgrupo = ".$refzona." and c.reftorneo = ".$reftorneo;	
+		$res = $this->query($sql,0);
+		return $res;	
+	}
+	
 	function calcularTablaConductaPorEquipo($reffecha, $refequipo, $reftorneo) {
 		$sql  = "select 
 					e.idequipo, e.nombre,ff.tipofecha, t.idtorneo

@@ -2369,6 +2369,9 @@ function calcularTablaConducta($serviciosZonasEquipos) {
 	$reftorneo		=	$_POST['reftorneo'];	
 	$refzona		=	$_POST['refzona'];	
 	
+	$serviciosZonasEquipos->borrarTablaConducta($reffecha,$reftorneo,$refzona);
+
+	
 	$res = $serviciosZonasEquipos->calcularTablaConducta($reffecha,$reftorneo,$refzona);
 	//echo $res;
 	
