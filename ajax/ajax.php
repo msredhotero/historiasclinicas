@@ -1327,6 +1327,10 @@ function FairPlay($serviciosDatos) {
 	$zona		= $_POST['zona'];
 	$idfecha	= $_POST['reffecha'];
 	
+	$amarillas 	= '';
+	$azules		= '';
+	$rojas		= '';
+	
 	$res2 = $serviciosDatos->fairplay($idtorneo,$idzona,$idfecha);
 	
 	$cad2 = '
@@ -1335,9 +1339,12 @@ function FairPlay($serviciosDatos) {
                         <thead>
 						<tr>
                             <th align="center">EQUIPO</th>
-                            <th align="center">PUNTOS</th>
-							<th align="center">AMARILLAS</th>
-							<th align="center">ROJAS</th>
+                            <th align="center" style="width:80px;">PUNTOS</th>
+							<th align="center" style="width:100px;"><img src="../imagenes/icoAmarilla.png"/> Equipo</th>
+							<th align="center" style="width:100px;"><img src="../imagenes/icoRoja.png"/> Equipo</th>
+							<th align="center" style="width:80px;"><img src="../imagenes/icoAmarilla.png"/> Jug.</th>
+							<th align="center" style="width:80px;"><img src="../imagenes/azul.png"/> Jug.</th>
+							<th align="center" style="width:80px;"><img src="../imagenes/icoRoja.png"/> Jug.</th>
 							<th align="center">OBS.</th>
                         </tr>
 						</thead>
@@ -1346,14 +1353,25 @@ function FairPlay($serviciosDatos) {
 						$i =1;
 						$puntos = 0;
 						while ($row1 = mysql_fetch_array($res2)) {
-						
-							
+							$resAmarillasJugadores = $serviciosDatos->traerAcumuladosAmarillasPorTorneoZonaEquipo($idtorneo,$idzona,$idfecha,$row1['idequipo']);
+							if (mysql_num_rows($resAmarillasJugadores)>0) {
+								$amarillas 	= mysql_result($resAmarillasJugadores,0,'cantidad');
+								$azules		= mysql_result($resAmarillasJugadores,0,'cantidadazules');
+								$rojas		= mysql_result($resAmarillasJugadores,0,'cantidadrojas');
+							} else {
+								$amarillas 	= '0';
+								$azules		= '0';
+								$rojas		= '0';
+							}
 				
 							$cad2 = $cad2.'<tr>
 								<td align="left">'.$row1['nombre'].'</td>
 								<td align="center">'.$row1['puntos'].'</td>
 								<td align="center">'.$row1['amarillas'].'</td>
 								<td align="center">'.$row1['rojas'].'</td>
+								<td align="center">'.$amarillas.'</td>
+								<td align="center">'.$azules.'</td>
+								<td align="center">'.$rojas.'</td>
 								<td align="left">'.$row1['observacion'].'</td>
 							</tr>';
 

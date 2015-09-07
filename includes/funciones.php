@@ -71,71 +71,78 @@ class Servicios {
 				$idresultados = "resultados";
 			}
 			*/
-			$primero = '';
+			$primero = 'Fecha 1';
+			$cadRowTotal = '';
 		while ($row = mysql_fetch_array($datos)) {
+			$cadRows = '';
 			$cadsubRows = '';
-			
+			$cadRowsAux = '';
+			$cadsubRowsAux = '';
 			
 			if ($cantAux == 98) {
 				
 				if ($primero != $row[7]) {
 					$primero = $row[7];
-					$cadRows = $cadRows.'
+					$cadRowsAux = $cadRowsAux.'
 			
 					<tr style="height:40px;">
                         	';
 					for ($i=1;$i<=$cantidad;$i++) {
 						
-						$cadsubRows = $cadsubRows.'<td style="max-width:130px;"></td>';	
+						$cadsubRowsAux = $cadsubRowsAux.'<td style="max-width:130px;"></td>';	
 					}
 
-					$cadRows = $cadRows.'
-									'.$cadsubRows.'
+					$cadRowsAux = $cadRowsAux.'
+									'.$cadsubRowsAux.'
 									<td>
 									</td>
 								</tr>
 					';
 					
 					
-				} else {
-					$cadRows = $cadRows.'
-			
-					<tr class="'.$row[0].'">
-                        	';
-							
-					for ($i=1;$i<=$cantidad;$i++) {
 					
-						$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
-					}
-					
-					$cadRows = $cadRows.'
-									'.$cadsubRows.'
-									<td>
-										
-										<div class="btn-group">
-											<button class="btn btn-success" type="button">Acciones</button>
-											
-											<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
-											<span class="caret"></span>
-											<span class="sr-only">Toggle Dropdown</span>
-											</button>
-											
-											<ul class="dropdown-menu" role="menu">
-												<li>
-												<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
-												</li>
+				} /*else {*/
+				
+				
+				$cadRows = $cadRows.'
 		
-												<li>
-												<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
-												</li>
-												'.str_replace("****",$row[0],$adicional).'
-											</ul>
-										</div>
-									</td>
-								</tr>
-					';	
-					
+				<tr class="'.$row[0].'">
+						';
+						
+				for ($i=1;$i<=$cantidad;$i++) {
+				
+					$cadsubRows = $cadsubRows.'<td style="max-width:130px;">'.$row[$i].'</td>';	
 				}
+				
+				$cadRows = $cadRows.'
+								'.$cadsubRows.'
+								<td>
+									
+									<div class="btn-group">
+										<button class="btn btn-success" type="button">Acciones</button>
+										
+										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										
+										<ul class="dropdown-menu" role="menu">
+											<li>
+											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
+											</li>
+	
+											<li>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											</li>
+											'.str_replace("****",$row[0],$adicional).'
+										</ul>
+									</div>
+								</td>
+							</tr>
+				';	
+					
+				$cadRowTotal .= $cadRowsAux.$cadRows;
+				/*}*/
 				
 				
 			} else {
@@ -171,6 +178,8 @@ class Servicios {
 								</td>
 							</tr>
 				';
+				
+				$cadRowTotal .= $cadRows;
 			}
 			
 			
@@ -189,7 +198,7 @@ class Servicios {
                 </thead>
                 <tbody id="'.$idresultados.'">
 
-                	'.$cadRows.'
+                	'.$cadRowTotal.'
                 </tbody>
             </table>
 			<div style="margin-bottom:85px; margin-right:60px;"></div>
