@@ -289,6 +289,18 @@ $goleadores7c = $serviciosFUNC->Amarillas(3,21);
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">Mejor Jugador</p>
+        	
+        </div>
+    	<div class="cuerpoBox" id="mejorjugador">
+        
+        </div>
+        
+    </div>
+    
+    
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
         	<p style="color: #fff; font-size:18px; height:16px;">Suspendidos</p>
         	
         </div>
@@ -414,6 +426,23 @@ $(document).ready(function(){
 				},
 				success:  function (response) {
 						$('#fairplay').html(response);
+						
+				}
+		});
+		
+		$.ajax({
+				data:  {reftorneo: $('#reftorneo').val(),
+						refzona: $('#refzona').val(),
+						reffecha: $('#reffecha').val(),
+						zona: $('#refzona option:selected').text(),
+						accion: 'MejorJugador'},
+				url:   '../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$('#mejorjugador').html(response);
 						
 				}
 		});

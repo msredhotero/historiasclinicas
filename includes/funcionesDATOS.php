@@ -803,7 +803,7 @@ left join dbreemplazo rrr on rrr.refequipo = fix.idequipo and rrr.reffecha <= '.
 				from
 				(
 				select
-				j.apyn, e.nombre, ss.motivos, ss.cantidadfechas,min(sp.reffecha) - 1 as reffecha, ss.refjugador, ss.refequipo,sp.refsuspendido,
+				concat(j.apellido,", ",j.nombre) as apyn, e.nombre, ss.motivos, ss.cantidadfechas,min(sp.reffecha) - 1 as reffecha, ss.refjugador, ss.refequipo,sp.refsuspendido,
 (case when rr.idreemplazo is null then 0 else 1 end) as reemplzado,
 (case when rrr.idreemplazo is null then 0 else 1 end) as volvio
 				from		tbsuspendidos ss
@@ -827,7 +827,7 @@ left join dbreemplazo rr on rr.refequiporeemplazado = e.idequipo and rr.reffecha
 left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= '.$reffecha.' and rrr.reftorneo = '.$idtorneo.'									
 									
 				where	sp.reffecha <= '.$reffecha.' +1
-				group by j.apyn, e.nombre, ss.motivos, ss.cantidadfechas, ss.refjugador, ss.refequipo,sp.refsuspendido,j.expulsado
+				group by j.apellido,j.nombre, e.nombre, ss.motivos, ss.cantidadfechas, ss.refjugador, ss.refequipo,sp.refsuspendido,j.expulsado
 				) r
 				
 				order by r.cantidadfechas desc';
@@ -1555,7 +1555,7 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$i
 	
 	function fairplay($idtipoTorneo,$idzona,$reffecha) {
 		$sql = "select
-				e.nombre, ss.puntos
+				e.nombre, ss.puntos, ppe.amarillas, ppe.rojas, pe.observacion
 				
 				from		tbconducta ss
 				
@@ -1573,13 +1573,57 @@ left join dbreemplazo rrr on rrr.refequipo = e.idequipo and rrr.reffecha <= ".$i
 				join tbtipotorneo tp
 				on t.reftipotorneo = tp.idtipotorneo
 				
+				inner join
+				tbpuntosequipos pe 
+				ON pe.refequipo = ss.refequipo and ss.reftorneo = pe.reftorneo and ss.reffecha = pe.reffecha
+
+				inner join
+				(select sum(COALESCE(amarillas,0)) as amarillas, sum(COALESCE(rojas,0)) as rojas,refequipo, reftorneo
+					from tbpuntosequipos 
+					group by refequipo, reftorneo) ppe 
+				ON ppe.refequipo = ss.refequipo and ppe.reftorneo = ss.reftorneo and ppe.reftorneo = t.idtorneo
+		
 				where	tp.idtipotorneo = ".$idtipoTorneo." and tge.refgrupo = ".$idzona." and ss.reffecha = ".$reffecha."
-				group by e.nombre, ss.puntos
+				group by e.nombre, ss.puntos, ppe.amarillas, ppe.rojas, pe.observacion
 				order by ss.puntos desc";
 		return $this-> query($sql,0);
 	}
 	
 	/* fin de las funciones de los suspendidos */
+	
+	function mejorJugador($idtipoTorneo,$idzona,$reffecha) {
+		$sql = "select 
+					a.idamonestado,
+					a.refjugador,
+					a.refequipo,
+					e.nombre,
+					concat(j.apellido, ', ', j.nombre) as apyn,
+					j.dni,
+					sum(COALESCE(a.puntos, 0)) as puntos
+				from
+					tbamonestados a
+						inner join
+					(select distinct
+						ff.Idfixture, ff.reffecha
+					from
+						dbfixture ff
+					inner join dbtorneoge tge ON tge.idtorneoge = ff.reftorneoge_a
+						or tge.idtorneoge = ff.reftorneoge_b
+					inner join dbtorneos t ON tge.reftorneo = t.idtorneo
+					inner join tbtipotorneo tp ON t.reftipotorneo = tp.idtipotorneo
+					where
+						t.activo = 1 and t.reftipotorneo = ".$idtipoTorneo."
+							and tge.refgrupo = ".$idzona.") d ON d.idfixture = a.reffixture
+						inner join
+					dbequipos e ON e.idequipo = a.refequipo
+						inner join
+					dbjugadores j ON j.idjugador = a.refjugador
+				where d.reffecha = ".$reffecha."
+				group by a.idamonestado , a.refjugador , a.refequipo , e.nombre , j.apellido , j.nombre , j.dni
+				order by sum(COALESCE(a.puntos, 0)) desc";
+		return $this-> query($sql,0);		
+	}
+	
 	
 	function query($sql,$accion) {
 		

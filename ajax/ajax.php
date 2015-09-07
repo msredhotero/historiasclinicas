@@ -404,6 +404,9 @@ break;
 	case 'FairPlay';
 		FairPlay($serviciosDatos);
 		break;
+	case 'MejorJugador':
+		MejorJugador($serviciosDatos);
+		break;
 	/* Fin reportes */
 	
 	/* PARA Pagos */
@@ -651,6 +654,47 @@ echo $res;
 
 
 /* Reportes */
+
+function MejorJugador($serviciosDatos) {
+	$idtorneo	= $_POST['reftorneo'];
+	$idzona		= $_POST['refzona'];
+	$idfecha	= $_POST['reffecha'];
+	$zona		= $_POST['zona'];	
+	
+	$res3 = $serviciosDatos->mejorJugador($idtorneo,$idzona,$idfecha);
+	
+	$cad3 = '
+	<div class="row" style="margin-top:20px;">
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;max-width:480px;">
+                        <thead>
+						<tr>
+                        	<th>NOMBRE Y APELLIDO</th>
+							<th>DNI</th>
+                            <th>EQUIPO</th>
+                            <th>PUNTOS</th>
+                        </tr>
+						</thead><tbody>';
+                        
+						$i =1;
+						while ($row1 = mysql_fetch_array($res3)) {
+
+                        $cad3 = $cad3.'<tr>
+                            <td>'.strtoupper($row1['apyn']).'</td>
+                            <td>'.$row1['dni'].'</td>
+							<td>'.$row1['nombre'].'</td>
+                            <td align="center">'.$row1['puntos'].'</td>
+ 
+                        </tr>';
+         
+						$i = $i + 1;
+
+						}
+                    $cad3 = $cad3.'</tbody></table>
+                
+                </div>';
+	echo $cad3;
+}
+
 function traerResultadosPorTorneoZonaFecha($serviciosDatos) {
 	$idtorneo	= $_POST['reftorneo'];
 	$idzona		= $_POST['refzona'];
@@ -1287,11 +1331,14 @@ function FairPlay($serviciosDatos) {
 	
 	$cad2 = '
 	<div class="row">
-                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;max-width:400px;">
+                	<table class="table table-responsive table-striped table3" style="margin:2px 20px;">
                         <thead>
 						<tr>
                             <th align="center">EQUIPO</th>
                             <th align="center">PUNTOS</th>
+							<th align="center">AMARILLAS</th>
+							<th align="center">ROJAS</th>
+							<th align="center">OBS.</th>
                         </tr>
 						</thead>
 						<tbody>';
@@ -1305,6 +1352,9 @@ function FairPlay($serviciosDatos) {
 							$cad2 = $cad2.'<tr>
 								<td align="left">'.$row1['nombre'].'</td>
 								<td align="center">'.$row1['puntos'].'</td>
+								<td align="center">'.$row1['amarillas'].'</td>
+								<td align="center">'.$row1['rojas'].'</td>
+								<td align="left">'.$row1['observacion'].'</td>
 							</tr>';
 
 						}
