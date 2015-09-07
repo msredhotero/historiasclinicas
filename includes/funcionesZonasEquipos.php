@@ -1003,7 +1003,7 @@ function traerCalcularCanilleras($refequipo,$reffecha,$idtorneo) {
 	$sql = 'select
 				sum(pe.amarillas) as cantidad
 			from tbpuntosequipos pe
-			where pe.refequipo = '.$refequipo.' and pe.reffecha = '.$reffecha.' and pe.reftorneo = '.$idtorneo.'  and (pe.amarillas is not null or pe.amarillas <>0)';	
+			where pe.refequipo = '.$refequipo.' and pe.reffecha <= '.$reffecha.' and pe.reftorneo = '.$idtorneo.'  and (pe.amarillas is not null or pe.amarillas <>0)';	
 	$res = $this->query($sql,0);
 	if (mysql_num_rows($res)>0) {
 		return mysql_result($res,0,0);
@@ -1016,7 +1016,7 @@ function traerCalcularAusentes($refequipo,$reffecha,$idtorneo) {
 	$sql = 'select
 				sum(pe.rojas)*3 as cantidad
 			from tbpuntosequipos pe
-			where pe.refequipo = '.$refequipo.' and pe.reffecha = '.$reffecha.' and pe.reftorneo = '.$idtorneo.' and (pe.rojas is not null or pe.rojas <>0)';	
+			where pe.refequipo = '.$refequipo.' and pe.reffecha <= '.$reffecha.' and pe.reftorneo = '.$idtorneo.' and (pe.rojas is not null or pe.rojas <>0)';	
 	$res = $this->query($sql,0);
 	if (mysql_num_rows($res)>0) {
 		return mysql_result($res,0,0);
