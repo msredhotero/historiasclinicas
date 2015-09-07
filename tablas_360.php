@@ -22,7 +22,7 @@ $serviciosPlayOff = new ServiciosPlayOff();
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
 } else {
-	$idTipoTorneo = 3;  /** Esto es lo unico que hay que modificar */
+	$idTipoTorneo = 6;  /** Esto es lo unico que hay que modificar */
 }
 
 if (isset($_GET["zona"])) {
