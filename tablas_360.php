@@ -616,8 +616,8 @@ puntos.</p>
 	<div class="fairplay equipos list" id="tabla-fairplay-equipos">
     	<div class="titles">
     		<div class="col col1">Equipo</div>
-    		<div class="col col3">Puntos</div>
-			<div class="col col4"><img src="../imagenes/icoAmarilla.png" /></div>
+    		<div class="col col13">Puntos</div>
+            <div class="col col3"><img src="../imagenes/icoAmarilla.png" /></div>
     		<div class="col col5"><img src="../imagenes/icoRoja.png" /></div>
     	</div>
     	<div class="items">
@@ -636,8 +636,8 @@ puntos.</p>
                 <div class="col col1">
                 	<?php echo $rowFP[0]; ?>
                 </div>
-                <div class="col col3"><?php echo $rowFP[1]; ?></div>
-                <div class="col col4"><?php echo $rowFP['amarillas']; ?></div>
+                <div class="col col13"><?php echo $rowFP['puntos']; ?></div>
+                <div class="col col3"><?php echo $rowFP['amarillas']; ?></div>
                 <div class="col col5"><?php echo $rowFP['rojas']; ?></div>
 
             </div>
