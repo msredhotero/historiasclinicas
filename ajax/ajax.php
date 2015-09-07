@@ -1340,8 +1340,8 @@ function FairPlay($serviciosDatos) {
 						<tr>
                             <th align="center">EQUIPO</th>
                             <th align="center" style="width:80px;">PUNTOS</th>
-							<th align="center" style="width:100px;"><img src="../imagenes/icoAmarilla.png"/> Equipo</th>
-							<th align="center" style="width:100px;"><img src="../imagenes/icoRoja.png"/> Equipo</th>
+							<th align="center" style="width:110px;"><img src="../imagenes/icoAmarilla.png"/> Equipo</th>
+							<th align="center" style="width:110px;"><img src="../imagenes/icoRoja.png"/> Equipo</th>
 							<th align="center" style="width:80px;"><img src="../imagenes/icoAmarilla.png"/> Jug.</th>
 							<th align="center" style="width:80px;"><img src="../imagenes/azul.png"/> Jug.</th>
 							<th align="center" style="width:80px;"><img src="../imagenes/icoRoja.png"/> Jug.</th>
