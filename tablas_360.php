@@ -22,7 +22,7 @@ $serviciosPlayOff = new ServiciosPlayOff();
 if (isset($_GET["id"])) {
 	$idTipoTorneo = $_GET["id"];
 } else {
-	$idTipoTorneo = 3;
+	$idTipoTorneo = 3;  /** Esto es lo unico que hay que modificar */
 }
 
 if (isset($_GET["zona"])) {
@@ -617,7 +617,8 @@ puntos.</p>
     	<div class="titles">
     		<div class="col col1">Equipo</div>
     		<div class="col col3">Puntos</div>
-
+			<div class="col col4"><img src="../imagenes/icoAmarilla.png" /></div>
+    		<div class="col col5"><img src="../imagenes/icoRoja.png" /></div>
     	</div>
     	<div class="items">
         	<?php
@@ -636,6 +637,8 @@ puntos.</p>
                 	<?php echo $rowFP[0]; ?>
                 </div>
                 <div class="col col3"><?php echo $rowFP[1]; ?></div>
+                <div class="col col4"><?php echo $rowFP['amarillas']; ?></div>
+                <div class="col col5"><?php echo $rowFP['rojas']; ?></div>
 
             </div>
 
